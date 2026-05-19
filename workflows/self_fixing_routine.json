@@ -70,7 +70,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Workflow Fixer\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonStr = match ? match[1] : content;\nreturn JSON.parse(jsonStr);"
+        "jsCode": "const content = $node[\"AI Workflow Fixer\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonStr = match ? match[1] : content;\nreturn JSON.parse(jsonStr.trim());"
       },
       "id": "parse-workflow-fix",
       "name": "Parse Workflow Fix",

@@ -64,7 +64,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Fix Generator\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1] : content;\n\n// Basic sanitization: prevent some dangerous commands\nconst dangerous = ['rm -rf /', 'mkfs', 'shutdown'];\nif (dangerous.some(d => command.includes(d))) {\n  throw new Error('Dangerous command detected');\n}\n\nreturn { command };"
+        "jsCode": "const content = $node[\"AI Fix Generator\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh|zsh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\n\n// Basic sanitization: prevent some dangerous commands\nconst dangerous = ['rm -rf /', 'mkfs', 'shutdown', 'poweroff', 'reboot'];\nif (dangerous.some(d => command.includes(d))) {\n  throw new Error('Dangerous command detected');\n}\n\nreturn { command };"
       },
       "id": "sanitize-fix",
       "name": "Sanitize Fix",
