@@ -82,10 +82,10 @@
     },
     {
       "parameters": {
-        "command": "cd /data/project && npm test"
+        "command": "cd /data/project && npm test && npm audit"
       },
-      "id": "npm-test",
-      "name": "NPM Test",
+      "id": "npm-test-audit",
+      "name": "NPM Test & Audit",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -95,10 +95,10 @@
     },
     {
       "parameters": {
-        "command": "cd /data/project && pytest"
+        "command": "cd /data/project && pytest && bandit -r ."
       },
-      "id": "pytest-run",
-      "name": "Pytest Run",
+      "id": "pytest-bandit",
+      "name": "Pytest & Bandit",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -129,18 +129,18 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for gaps, placeholders, and dead ends.\"}, {\"role\": \"user\", \"content\": \"Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for gaps, placeholders, and security issues. Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\\nTest Results: {{ JSON.stringify($json) }}\"}, {\"role\": \"user\", \"content\": \"Provide a comprehensive SDLC report.\"}]"
             }
           ]
         }
       },
-      "id": "ai-code-review",
-      "name": "AI Code Review",
+      "id": "ai-sdlc-report",
+      "name": "AI SDLC Report",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        1000,
-        300
+        1100,
+        0
       ]
     }
   ],
@@ -179,11 +179,6 @@
             "node": "is-python",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "ai-code-review",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -192,7 +187,7 @@
       "main": [
         [
           {
-            "node": "npm-test",
+            "node": "npm-test-audit",
             "type": "main",
             "index": 0
           }
@@ -203,7 +198,29 @@
       "main": [
         [
           {
-            "node": "pytest-run",
+            "node": "pytest-bandit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "npm-test-audit": {
+      "main": [
+        [
+          {
+            "node": "ai-sdlc-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pytest-bandit": {
+      "main": [
+        [
+          {
+            "node": "ai-sdlc-report",
             "type": "main",
             "index": 0
           }
