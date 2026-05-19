@@ -1,0 +1,48 @@
+{
+  "name": "RAG Context Indexer",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 4,
+        "unit": "hours"
+      },
+      "id": "trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "find /data/project -type f -not -path '*/.*' | xargs -I {} cat {}"
+      },
+      "id": "read-files",
+      "name": "Read Project Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://chroma:8000/api/v1/collections/sdlc/upsert",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "documents", "value": "={{ $json.stdout }}" },
+            { "name": "ids", "value": "={{ $json.fileName }}" }
+          ]
+        }
+      },
+      "id": "chroma-upsert",
+      "name": "Chroma Upsert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "read-files", "type": "main", "index": 0 }]] },
+    "read-files": { "main": [[{ "node": "chroma-upsert", "type": "main", "index": 0 }]] }
+  }
+}

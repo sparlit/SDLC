@@ -11,10 +11,10 @@
     },
     {
       "parameters": {
-        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project && python3 /data/project/src/tools/compliance_scanner.py /data/project"
       },
       "id": "scout-analyze",
-      "name": "Scout (Deep Analyze)",
+      "name": "Scout (Deep Analyze + Compliance)",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [ 200, 0 ]
@@ -23,72 +23,50 @@
       "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [ { "name": "Authorization", "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}" } ]
-        },
         "bodyParameters": {
           "parameters": [
             { "name": "model", "value": "google/gemini-2.0-flash-001" },
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes in ```. Results: {{ $json.stdout }}\"}]" }
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Critique findings and propose hardened bash fixes in ``` blocks. Results: {{ $json.stdout }}\"}]" }
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes and AUTOMATICALLY SYNTHESIZE TESTS. Return bash in ```. Issues: {{ $json.stdout }}\"}]" }
           ]
         }
       },
       "id": "devil-critique",
-      "name": "Devil (Critique)",
+      "name": "Devil (Critique + Test Synthesis)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [ 400, 0 ]
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"Devil (Critique)\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nreturn { command: match ? match[1].trim() : content.trim() };"
+        "chatId": "={{ $node[\"Chat Trigger\"].json.chatId }}",
+        "text": "Proposed changes detected. Approve deployment?",
+        "buttons": [
+          { "text": "Approve", "value": "approve" },
+          { "text": "Reject", "value": "reject" }
+        ]
+      },
+      "id": "hitl-gatekeeper",
+      "name": "HITL Gatekeeper",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [ 600, 0 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"Devil (Critique + Test Synthesis)\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nreturn { command: match ? match[1].trim() : content.trim() };"
       },
       "id": "sanitize-engine",
       "name": "Sanitize Engine",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [ 600, 0 ]
+      "position": [ 800, 0 ]
     },
     {
       "parameters": {
         "command": "={{ $json.command }} && (npm test || pytest || true)"
-        "command": "={{ $json.command }} && pytest /data/project"
       },
       "id": "architect-implement",
-      "name": "Architect (Implement)",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [ 800, 0 ]
-    },
-    {
-      "parameters": { "workflowId": "infrastructure_deploy" },
-      "id": "deploy-phase",
-      "name": "Deploy Phase",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [ 1000, 0 ]
-    },
-    {
-      "parameters": { "workflowId": "api_docs_routine" },
-      "id": "docs-phase",
-      "name": "Docs Phase",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [ 1200, 0 ]
-    },
-    {
-      "parameters": { "workflowId": "knowledge_routine" },
-      "id": "knowledge-phase",
-      "name": "Knowledge Phase",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [ 1400, 0 ]
-      "parameters": {
-        "command": "cd /data/project && git add . && git commit -m \"Atomic SDLC Update\" && git push"
-      },
-      "id": "finalize-git",
-      "name": "Finalize Git",
+      "name": "Architect (Implement + Verify)",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [ 1000, 0 ]
@@ -97,11 +75,8 @@
   "connections": {
     "trigger": { "main": [[{ "node": "scout-analyze", "type": "main", "index": 0 }]] },
     "scout-analyze": { "main": [[{ "node": "devil-critique", "type": "main", "index": 0 }]] },
-    "devil-critique": { "main": [[{ "node": "sanitize-engine", "type": "main", "index": 0 }]] },
-    "sanitize-engine": { "main": [[{ "node": "architect-implement", "type": "main", "index": 0 }]] },
-    "architect-implement": { "main": [[{ "node": "deploy-phase", "type": "main", "index": 0 }]] },
-    "deploy-phase": { "main": [[{ "node": "docs-phase", "type": "main", "index": 0 }]] },
-    "docs-phase": { "main": [[{ "node": "knowledge-phase", "type": "main", "index": 0 }]] }
-    "architect-implement": { "main": [[{ "node": "finalize-git", "type": "main", "index": 0 }]] }
+    "devil-critique": { "main": [[{ "node": "hitl-gatekeeper", "type": "main", "index": 0 }]] },
+    "hitl-gatekeeper": { "main": [[{ "node": "sanitize-engine", "type": "main", "index": 0 }]] },
+    "sanitize-engine": { "main": [[{ "node": "architect-implement", "type": "main", "index": 0 }]] }
   }
 }
