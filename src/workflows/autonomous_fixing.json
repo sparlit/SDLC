@@ -21,6 +21,7 @@
       },
       "id": "find-gaps",
       "name": "Find Code Gaps",
+      "name": "Find Gaps/Placeholders",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [

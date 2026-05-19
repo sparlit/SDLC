@@ -30,6 +30,7 @@
           "parameters": [
             { "name": "model", "value": "google/gemini-2.0-flash-001" },
             { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes in ```. Results: {{ $json.stdout }}\"}]" }
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Critique findings and propose hardened bash fixes in ``` blocks. Results: {{ $json.stdout }}\"}]" }
           ]
         }
       },
@@ -52,6 +53,7 @@
     {
       "parameters": {
         "command": "={{ $json.command }} && (npm test || pytest || true)"
+        "command": "={{ $json.command }} && pytest /data/project"
       },
       "id": "architect-implement",
       "name": "Architect (Implement)",
@@ -82,6 +84,14 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [ 1400, 0 ]
+      "parameters": {
+        "command": "cd /data/project && git add . && git commit -m \"Atomic SDLC Update\" && git push"
+      },
+      "id": "finalize-git",
+      "name": "Finalize Git",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 1000, 0 ]
     }
   ],
   "connections": {
@@ -92,5 +102,6 @@
     "architect-implement": { "main": [[{ "node": "deploy-phase", "type": "main", "index": 0 }]] },
     "deploy-phase": { "main": [[{ "node": "docs-phase", "type": "main", "index": 0 }]] },
     "docs-phase": { "main": [[{ "node": "knowledge-phase", "type": "main", "index": 0 }]] }
+    "architect-implement": { "main": [[{ "node": "finalize-git", "type": "main", "index": 0 }]] }
   }
 }
