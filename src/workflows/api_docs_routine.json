@@ -1,0 +1,114 @@
+{
+  "name": "Autonomous API Documentation",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "days"
+      },
+      "id": "daily-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "find /data/project -type f -maxdepth 3 -not -path '*/.*'"
+      },
+      "id": "list-files",
+      "name": "List Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a technical writer. Scan these files: {{ $json.stdout }}. Generate or update an OpenAPI/Swagger yaml file for the APIs found in the project. Return ONLY the yaml content.\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-doc-generator",
+      "name": "AI Doc Generator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        450,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo '{{ $json.choices[0].message.content }}' > /data/project/swagger.yaml"
+      },
+      "id": "save-docs",
+      "name": "Save Docs",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        700,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "daily-trigger": {
+      "main": [
+        [
+          {
+            "node": "list-files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list-files": {
+      "main": [
+        [
+          {
+            "node": "ai-doc-generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-doc-generator": {
+      "main": [
+        [
+          {
+            "node": "save-docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

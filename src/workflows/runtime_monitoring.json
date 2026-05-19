@@ -1,0 +1,100 @@
+{
+  "name": "Runtime Monitoring & Fixing",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "minutes"
+      },
+      "id": "poll-logs",
+      "name": "Poll Logs",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "docker logs --since 1m app_container 2>&1 | grep -iE \"error|exception|stacktrace\" || true"
+      },
+      "id": "get-runtime-errors",
+      "name": "Get Runtime Errors",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.stdout }}",
+              "operation": "notEmpty"
+            }
+          ]
+        }
+      },
+      "id": "has-error",
+      "name": "Has Error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "autonomous_fixing"
+      },
+      "id": "trigger-fix-loop",
+      "name": "Trigger Fix Loop",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "poll-logs": {
+      "main": [
+        [
+          {
+            "node": "get-runtime-errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-runtime-errors": {
+      "main": [
+        [
+          {
+            "node": "has-error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has-error": {
+      "main": [
+        [
+          {
+            "node": "trigger-fix-loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

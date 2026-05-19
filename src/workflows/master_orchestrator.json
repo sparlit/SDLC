@@ -1,0 +1,89 @@
+{
+  "name": "Ultimate Master SDLC Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "chat-trigger",
+      "name": "Chat Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cat /data/project/ARCHITECTURE.md || echo \"No architecture rules found.\""
+      },
+      "id": "get-arch-rules",
+      "name": "Get Arch Rules",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a lead architect. Create a plan aligned with these rules: {{ $node[\\\"Get Arch Rules\\\"].json.stdout }}. Return JSON array: [{file, action, description}]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "orchestrator-planning",
+      "name": "Orchestrator Planning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -200,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "chat-trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Arch Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Arch Rules": {
+      "main": [
+        [
+          {
+            "node": "Orchestrator Planning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

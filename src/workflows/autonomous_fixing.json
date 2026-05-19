@@ -1,0 +1,138 @@
+{
+  "name": "Autonomous Fixing Loop",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "hours"
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+      },
+      "id": "find-gaps",
+      "name": "Find Code Gaps",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes for found gaps. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-fix-loop",
+      "name": "AI Fix Loop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Fix Loop\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nreturn { command: match ? match[1].trim() : content.trim() };"
+      },
+      "id": "sanitize-fix",
+      "name": "Sanitize Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.command }} && cd /data/project && (npm test || pytest || true)"
+      },
+      "id": "apply-and-verify",
+      "name": "Apply and Verify",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "find-gaps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find-gaps": {
+      "main": [
+        [
+          {
+            "node": "ai-fix-loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-fix-loop": {
+      "main": [
+        [
+          {
+            "node": "sanitize-fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sanitize-fix": {
+      "main": [
+        [
+          {
+            "node": "apply-and-verify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

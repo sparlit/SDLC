@@ -1,0 +1,182 @@
+{
+  "name": "SDLC Task Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "chat-trigger",
+      "name": "Chat Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a lead architect. Break the user's request into a detailed development plan. Return ONLY a JSON array of objects: [{ 'file': 'path/to/file', 'action': 'create|modify', 'description': '...' }]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-planner",
+      "name": "AI Planner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Planner\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst plan = match ? JSON.parse(match[1]) : JSON.parse(content);\nreturn plan.map(task => ({ json: task }));"
+      },
+      "id": "parse-plan",
+      "name": "Parse Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an implementer. Write the code for the following task. Return ONLY the code in ``` blocks.\"}, {\"role\": \"user\", \"content\": \"{{ JSON.stringify($json) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-coder",
+      "name": "AI Coder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"ai-coder\"].json.choices[0].message.content;\nconst match = content.match(/```(?:[\\w]*)\\n([\\s\\S]*?)\\n```/);\nconst code = match ? match[1] : content;\nreturn { code, file: $json.file };"
+      },
+      "id": "extract-code",
+      "name": "Extract Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "=cat <<EOF > \"/data/project/{{ $json.file }}\"\n{{ $json.code }}\nEOF"
+      },
+      "id": "write-file",
+      "name": "Write File",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "chat-trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Planner": {
+      "main": [
+        [
+          {
+            "node": "Parse Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Plan": {
+      "main": [
+        [
+          {
+            "node": "ai-coder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-coder": {
+      "main": [
+        [
+          {
+            "node": "Extract Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Code": {
+      "main": [
+        [
+          {
+            "node": "Write File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

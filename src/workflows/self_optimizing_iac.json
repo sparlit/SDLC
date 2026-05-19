@@ -1,0 +1,90 @@
+{
+  "name": "Self-Optimizing Infrastructure",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 4,
+        "unit": "hours"
+      },
+      "id": "resource-trigger",
+      "name": "Resource Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "docker stats --no-stream --format '{{.Container}}: {{.MemUsage}}' | grep n8n"
+      },
+      "id": "get-resource-usage",
+      "name": "Get Resource Usage",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a DevOps engineer. Analyze this memory usage: {{ $json.stdout }}. If usage is above 80%, generate an OpenTofu (HCL) snippet to increase memory limits for the docker container. Return ONLY the HCL.\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-optimizer",
+      "name": "AI Optimizer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "resource-trigger": {
+      "main": [
+        [
+          {
+            "node": "get-resource-usage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-resource-usage": {
+      "main": [
+        [
+          {
+            "node": "ai-optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

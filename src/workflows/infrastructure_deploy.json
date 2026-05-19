@@ -1,0 +1,165 @@
+{
+  "name": "Infrastructure & Deployment Routine",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "ls /data/project/*.tf || echo \"none\""
+      },
+      "id": "check-tf-files",
+      "name": "Check TF Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.stdout }}",
+              "operation": "contains",
+              "value2": ".tf"
+            }
+          ]
+        }
+      },
+      "id": "has-tf",
+      "name": "Has TF?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && tofu init && tofu apply -auto-approve"
+      },
+      "id": "tofu-apply",
+      "name": "OpenTofu Apply",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Generate a main.tf file for a FOSS project using Docker provider based on this context: {{ JSON.stringify($node[\\\"Check TF Files\\\"].json) }}. Return ONLY the HCL code.\"}, {\"role\": \"user\", \"content\": \"Generate IaC.\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-tf-generator",
+      "name": "AI TF Generator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "command": "=cat <<EOF > /data/project/main.tf\n{{ $json.choices[0].message.content }}\nEOF"
+      },
+      "id": "write-tf",
+      "name": "Write TF File",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        150
+      ]
+    }
+  ],
+  "connections": {
+    "manual-trigger": {
+      "main": [
+        [
+          {
+            "node": "Check TF Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check TF Files": {
+      "main": [
+        [
+          {
+            "node": "has-tf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has-tf": {
+      "main": [
+        [
+          {
+            "node": "OpenTofu Apply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI TF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI TF Generator": {
+      "main": [
+        [
+          {
+            "node": "Write TF File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

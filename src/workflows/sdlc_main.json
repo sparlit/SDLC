@@ -1,0 +1,231 @@
+{
+  "name": "SDLC Main Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "chat-trigger",
+      "name": "Chat Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "find /data/project -maxdepth 2"
+      },
+      "id": "scan-project",
+      "name": "Scan Project Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const stdout = $node[\"Scan Project Files\"].json.stdout || '';\nconst files = stdout.split('\\n');\nlet language = 'unknown';\n\nif (files.some(f => f.includes('package.json'))) language = 'javascript';\nelse if (files.some(f => f.includes('requirements.txt') || f.includes('pyproject.toml'))) language = 'python';\nelse if (files.some(f => f.includes('go.mod'))) language = 'go';\n\nreturn { language, files };"
+      },
+      "id": "detect-language",
+      "name": "Polyglot Detection",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.language }}",
+              "value2": "javascript"
+            }
+          ]
+        }
+      },
+      "id": "is-javascript",
+      "name": "Is JS?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.language }}",
+              "value2": "python"
+            }
+          ]
+        }
+      },
+      "id": "is-python",
+      "name": "Is Python?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && npm test && npm audit"
+      },
+      "id": "npm-test-audit",
+      "name": "NPM Test & Audit",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -150
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && pytest && bandit -r ."
+      },
+      "id": "pytest-bandit",
+      "name": "Pytest & Bandit",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for gaps, placeholders, and security issues. Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\\nTest Results: {{ JSON.stringify($json) }}\"}, {\"role\": \"user\", \"content\": \"Provide a comprehensive SDLC report.\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-sdlc-report",
+      "name": "AI SDLC Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1100,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Scan Project Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scan Project Files": {
+      "main": [
+        [
+          {
+            "node": "Polyglot Detection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Polyglot Detection": {
+      "main": [
+        [
+          {
+            "node": "is-javascript",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is-python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is-javascript": {
+      "main": [
+        [
+          {
+            "node": "npm-test-audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is-python": {
+      "main": [
+        [
+          {
+            "node": "pytest-bandit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "npm-test-audit": {
+      "main": [
+        [
+          {
+            "node": "ai-sdlc-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pytest-bandit": {
+      "main": [
+        [
+          {
+            "node": "ai-sdlc-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

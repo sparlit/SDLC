@@ -1,0 +1,167 @@
+{
+  "name": "Workflow Self-Fixing Routine",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $json.workflow.id }}",
+        "authentication": "headerAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "={{ $env.N8N_API_KEY }}"
+            }
+          ]
+        }
+      },
+      "id": "get-workflow-json",
+      "name": "Get Workflow JSON",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an n8n expert. Fix the following workflow JSON based on the provided error. Return ONLY the valid JSON of the nodes and connections, wrapped in ```json blocks.\"}, {\"role\": \"user\", \"content\": \"Error: {{ $node[\\\"Error Trigger\\\"].json.execution.error.message }}\\nWorkflow: {{ JSON.stringify($json) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-workflow-fixer",
+      "name": "AI Workflow Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Workflow Fixer\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonStr = match ? match[1] : content;\nreturn JSON.parse(jsonStr.trim());"
+      },
+      "id": "parse-workflow-fix",
+      "name": "Parse Workflow Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $node[\\\"Error Trigger\\\"].json.workflow.id }}",
+        "authentication": "headerAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "={{ $env.N8N_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "nodes",
+              "value": "={{ $json.nodes }}"
+            },
+            {
+              "name": "connections",
+              "value": "={{ $json.connections }}"
+            }
+          ]
+        }
+      },
+      "id": "update-workflow",
+      "name": "Update Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        800,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "error-trigger": {
+      "main": [
+        [
+          {
+            "node": "get-workflow-json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-workflow-json": {
+      "main": [
+        [
+          {
+            "node": "ai-workflow-fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-workflow-fixer": {
+      "main": [
+        [
+          {
+            "node": "parse-workflow-fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse-workflow-fix": {
+      "main": [
+        [
+          {
+            "node": "update-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
