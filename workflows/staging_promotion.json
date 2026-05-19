@@ -1,0 +1,99 @@
+{
+  "name": "Staging & Promotion Routine",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "promote-trigger",
+      "name": "Promote Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && (npm test || pytest)"
+      },
+      "id": "verify-staging",
+      "name": "Verify Staging",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.exitCode }}",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "id": "staging-passed",
+      "name": "Staging Passed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && tofu apply -var=\"env=production\" -auto-approve"
+      },
+      "id": "promote-to-prod",
+      "name": "Promote to Prod",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    }
+  ],
+  "connections": {
+    "promote-trigger": {
+      "main": [
+        [
+          {
+            "node": "verify-staging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "verify-staging": {
+      "main": [
+        [
+          {
+            "node": "staging-passed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "staging-passed": {
+      "main": [
+        [
+          {
+            "node": "promote-to-prod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
