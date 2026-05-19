@@ -1,0 +1,45 @@
+{
+  "name": "Autonomous Fixing Loop",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "hours"
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+      },
+      "id": "find-gaps",
+      "name": "Find Gaps/Placeholders",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "find-gaps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

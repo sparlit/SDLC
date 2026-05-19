@@ -1,0 +1,80 @@
+{
+  "name": "IQ200 Unified SDLC Brain",
+  "nodes": [
+    {
+      "parameters": { "options": {} },
+      "id": "trigger",
+      "name": "Chat Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+      },
+      "id": "scout-analyze",
+      "name": "Scout (Deep Analyze)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [ { "name": "Authorization", "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}" } ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Critique findings and propose hardened bash fixes in ``` blocks. Results: {{ $json.stdout }}\"}]" }
+          ]
+        }
+      },
+      "id": "devil-critique",
+      "name": "Devil (Critique)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"Devil (Critique)\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nreturn { command: match ? match[1].trim() : content.trim() };"
+      },
+      "id": "sanitize-engine",
+      "name": "Sanitize Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 600, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.command }} && pytest /data/project"
+      },
+      "id": "architect-implement",
+      "name": "Architect (Implement)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 800, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && git add . && git commit -m \"Atomic SDLC Update\" && git push"
+      },
+      "id": "finalize-git",
+      "name": "Finalize Git",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 1000, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "scout-analyze", "type": "main", "index": 0 }]] },
+    "scout-analyze": { "main": [[{ "node": "devil-critique", "type": "main", "index": 0 }]] },
+    "devil-critique": { "main": [[{ "node": "sanitize-engine", "type": "main", "index": 0 }]] },
+    "sanitize-engine": { "main": [[{ "node": "architect-implement", "type": "main", "index": 0 }]] },
+    "architect-implement": { "main": [[{ "node": "finalize-git", "type": "main", "index": 0 }]] }
+  }
+}
