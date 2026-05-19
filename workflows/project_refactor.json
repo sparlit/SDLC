@@ -1,0 +1,117 @@
+{
+  "name": "Multi-threaded Project Refactor",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "trigger",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "find /data/project -type f -not -path '*/.*' | split -l 10 - chunks_"
+      },
+      "id": "chunk-project",
+      "name": "Chunk Project",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "ls chunks_*"
+      },
+      "id": "list-chunks",
+      "name": "List Chunks",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "process-chunks-parallel",
+      "name": "Process Chunks Parallel",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cat {{ $json.stdout }} | xargs -I {} grep -L \"Refactored\" {}"
+      },
+      "id": "refactor-logic",
+      "name": "Refactor Logic",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "trigger": {
+      "main": [
+        [
+          {
+            "node": "chunk-project",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chunk-project": {
+      "main": [
+        [
+          {
+            "node": "list-chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list-chunks": {
+      "main": [
+        [
+          {
+            "node": "process-chunks-parallel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "process-chunks-parallel": {
+      "main": [
+        [
+          {
+            "node": "refactor-logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "Stress Test Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /home/jules/self_created_tools/stress_tester.py"
+      },
+      "id": "run-stress-test",
+      "name": "Run Stress Test",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo \"Stress test completed at $(date). Results: {{ $json.stdout }}\" >> /data/project/SDLC_PERF.log"
+      },
+      "id": "log-performance",
+      "name": "Log Performance",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "manual-trigger": {
+      "main": [
+        [
+          {
+            "node": "run-stress-test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "run-stress-test": {
+      "main": [
+        [
+          {
+            "node": "log-performance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

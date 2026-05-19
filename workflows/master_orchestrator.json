@@ -10,7 +10,7 @@
       "type": "n8n-nodes-base.chatTrigger",
       "typeVersion": 1,
       "position": [
-        -400,
+        -600,
         0
       ]
     },
@@ -24,53 +24,21 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
       "position": [
-        -400,
+        -600,
         200
       ]
     },
     {
-      "parameters": {},
-      "id": "error-self-healing-trigger",
-      "name": "Error Self-Healing Trigger",
-      "type": "n8n-nodes-base.errorTrigger",
-      "typeVersion": 1,
+      "parameters": {
+        "jsCode": "return { loopCount: 0, maxLoops: 3 };"
+      },
+      "id": "init-recursive-loop",
+      "name": "Init Recursive Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         -400,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
-            }
-          ]
-        },
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "model",
-              "value": "google/gemini-2.0-flash-001"
-            },
-            {
-              "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Break request into tasks. Return JSON array [{file, action, description}]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
-            }
-          ]
-        }
-      },
-      "id": "orchestrator-planning",
-      "name": "Orchestrator Planning",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        -150,
-        0
+        200
       ]
     },
     {
@@ -82,7 +50,7 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -150,
+        -200,
         200
       ]
     },
@@ -96,7 +64,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 1,
       "position": [
-        100,
+        0,
         200
       ]
     },
@@ -120,36 +88,70 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Fix SDLC issues. Return bash command in ```. Issues: {{ $json.stdout }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Propose a fix. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
             }
           ]
         }
       },
-      "id": "ai-fix-loop",
-      "name": "AI Fix Loop",
+      "id": "ai-proposer-1",
+      "name": "AI Proposer 1",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        300,
-        200
+        200,
+        100
       ]
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Fix Loop\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\nreturn { command };"
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "meta-llama/llama-3-70b-instruct:free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Propose a fix. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
+            }
+          ]
+        }
       },
-      "id": "fix-sanitizer",
-      "name": "Fix Sanitizer",
+      "id": "ai-proposer-2",
+      "name": "AI Proposer 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const fix1 = $node[\"AI Proposer 1\"].json.choices[0].message.content;\nconst fix2 = $node[\"AI Proposer 2\"].json.choices[0].message.content;\nif (fix1 === fix2) return { consensus: fix1 };\n// Fallback to Proposer 1 for now, or add tie-breaker\nreturn { consensus: fix1 };"
+      },
+      "id": "consensus-check",
+      "name": "Consensus Check",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        500,
+        450,
         200
       ]
     },
     {
       "parameters": {
-        "command": "={{ $json.command }} && (npm test || pytest || true)"
+        "command": "={{ $json.consensus }} && (npm test || pytest || true)"
       },
       "id": "apply-and-verify",
       "name": "Apply and Verify",
@@ -159,69 +161,151 @@
         700,
         200
       ]
+    },
+    {
+      "parameters": {
+        "jsCode": "$node[\"Init Recursive Loop\"].json.loopCount++;\nreturn { \n  loopCount: $node[\"Init Recursive Loop\"].json.loopCount, \n  maxLoops: $node[\"Init Recursive Loop\"].json.maxLoops,\n  applied: true \n};"
+      },
+      "id": "increment-loop",
+      "name": "Increment Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.loopCount < $json.maxLoops }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "loop-again",
+      "name": "Loop Again?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        200
+      ]
     }
   ],
   "connections": {
-    "chat-trigger": {
-      "main": [
-        [
-          {
-            "node": "Orchestrator Planning",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "continuous-loop-trigger": {
       "main": [
         [
           {
-            "node": "Autonomous Gap Scan",
+            "node": "init-recursive-loop",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Autonomous Gap Scan": {
+    "init-recursive-loop": {
       "main": [
         [
           {
-            "node": "Parallel Batcher",
+            "node": "autonomous-gap-scan",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Parallel Batcher": {
+    "autonomous-gap-scan": {
       "main": [
         [
           {
-            "node": "AI Fix Loop",
+            "node": "parallel-batcher",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Fix Loop": {
+    "parallel-batcher": {
       "main": [
         [
           {
-            "node": "Fix Sanitizer",
+            "node": "ai-proposer-1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "ai-proposer-2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fix Sanitizer": {
+    "ai-proposer-1": {
       "main": [
         [
           {
-            "node": "Apply and Verify",
+            "node": "consensus-check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-proposer-2": {
+      "main": [
+        [
+          {
+            "node": "consensus-check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consensus-check": {
+      "main": [
+        [
+          {
+            "node": "apply-and-verify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "apply-and-verify": {
+      "main": [
+        [
+          {
+            "node": "increment-loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "increment-loop": {
+      "main": [
+        [
+          {
+            "node": "loop-again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop-again": {
+      "main": [
+        [
+          {
+            "node": "autonomous-gap-scan",
             "type": "main",
             "index": 0
           }
