@@ -1,0 +1,271 @@
+# Instincts generated from https://github.com/sparlit/SDLC
+# Generated: 2026-05-19T23:56:15.356Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: SDLC-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat
+
+## Evidence
+
+- 3 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat: Ultimate IQ300 SDLC with complete documentation, feat: Ultimate IQ400 'Omniscient' SDLC Engine
+
+---
+id: SDLC-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Commit Length
+
+## Action
+
+Write moderate-length commit messages (~52 characters)
+
+## Evidence
+
+- Average commit message length: 52 chars
+- Based on 3 commits
+
+---
+id: SDLC-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Naming Files
+
+## Action
+
+Use snake_case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: snake_case
+
+---
+id: SDLC-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: SDLC-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: SDLC-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: SDLC-workflow-documentation-update
+trigger: "when doing documentation update"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/sparlit/SDLC
+---
+
+# SDLC Workflow Documentation Update
+
+## Action
+
+Follow the documentation-update workflow:
+1. Edit README.md to add or update documentation, specifications, or guides.
+2. Review and finalize documentation changes.
+3. Commit changes with a message indicating documentation update or overhaul.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: README.md
+
+---
+id: sdlc-instinct-naming-conventions
+trigger: "When creating new files, functions, classes, or constants in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Naming Conventions
+
+## Action
+
+Name files in snake_case, functions in camelCase, classes in PascalCase, and constants in SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions
+- Consistent naming in src/ files
+
+---
+id: sdlc-instinct-import-style
+trigger: "When importing modules within the codebase"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Import Style
+
+## Action
+
+Use relative imports for internal modules
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+- Relative import statements in src/ files
+
+---
+id: sdlc-instinct-export-style
+trigger: "When exporting functions, classes, or constants from a module"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+- Export statements in src/ files
+
+---
+id: sdlc-instinct-testing-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Testing Location
+
+## Action
+
+Place test files in a separate directory from source code
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+- Presence of separate test directories
+
+---
+id: sdlc-instinct-git-commit-format
+trigger: "When making a git commit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Git Commit Format
+
+## Action
+
+Format commit messages using the conventional commit style with a 'feat' prefix for features
+
+## Evidence
+
+- Pattern in commits.type and commits.prefixes
+- Examples: 'feat: Ultimate IQ300 SDLC with complete documentation'
+
+---
+id: sdlc-instinct-documentation-update-workflow
+trigger: "When someone wants to improve, update, or finalize documentation for the project"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: sparlit/SDLC
+---
+
+# Sdlc Instinct Documentation Update Workflow
+
+## Action
+
+Edit README.md to add or update documentation, review changes, and commit with a message indicating documentation update or overhaul
+
+## Evidence
+
+- Workflow: documentation-update
+- Commits involving README.md updates
+
