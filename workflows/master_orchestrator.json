@@ -16,56 +16,15 @@
     },
     {
       "parameters": {
-        "interval": 1,
-        "unit": "hours"
+        "command": "cat /data/project/ARCHITECTURE.md || echo \"No architecture rules found.\""
       },
-      "id": "continuous-loop-trigger",
-      "name": "Continuous Loop Trigger",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.1,
-      "position": [
-        -600,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "return { loopCount: 0, maxLoops: 3 };"
-      },
-      "id": "init-recursive-loop",
-      "name": "Init Recursive Loop",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -400,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "command": "grep -rEi \"TODO|FIXME|placeholder|stub|bottleneck|dead end|loose end|loop hole|blind spot|wrapper|build later|fix later|empty wrapper\" /data/project || true"
-      },
-      "id": "autonomous-gap-scan",
-      "name": "Autonomous Gap Scan",
+      "id": "get-arch-rules",
+      "name": "Get Arch Rules",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -200,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "batchSize": 5,
-        "options": {}
-      },
-      "id": "parallel-batcher",
-      "name": "Parallel Batcher",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 1,
-      "position": [
-        0,
-        200
+        -400,
+        0
       ]
     },
     {
@@ -88,224 +47,38 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Propose a fix. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a lead architect. Create a plan aligned with these rules: {{ $node[\\\"Get Arch Rules\\\"].json.stdout }}. Return JSON array: [{file, action, description}]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
             }
           ]
         }
       },
-      "id": "ai-proposer-1",
-      "name": "AI Proposer 1",
+      "id": "orchestrator-planning",
+      "name": "Orchestrator Planning",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        200,
-        100
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
-            }
-          ]
-        },
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "model",
-              "value": "meta-llama/llama-3-70b-instruct:free"
-            },
-            {
-              "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Propose a fix. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
-            }
-          ]
-        }
-      },
-      "id": "ai-proposer-2",
-      "name": "AI Proposer 2",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        200,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const fix1 = $node[\"AI Proposer 1\"].json.choices[0].message.content;\nconst fix2 = $node[\"AI Proposer 2\"].json.choices[0].message.content;\nif (fix1 === fix2) return { consensus: fix1 };\n// Fallback to Proposer 1 for now, or add tie-breaker\nreturn { consensus: fix1 };"
-      },
-      "id": "consensus-check",
-      "name": "Consensus Check",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        450,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "command": "={{ $json.consensus }} && (npm test || pytest || true)"
-      },
-      "id": "apply-and-verify",
-      "name": "Apply and Verify",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        700,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "$node[\"Init Recursive Loop\"].json.loopCount++;\nreturn { \n  loopCount: $node[\"Init Recursive Loop\"].json.loopCount, \n  maxLoops: $node[\"Init Recursive Loop\"].json.maxLoops,\n  applied: true \n};"
-      },
-      "id": "increment-loop",
-      "name": "Increment Loop",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        900,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.loopCount < $json.maxLoops }}",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "loop-again",
-      "name": "Loop Again?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        1100,
-        200
+        -200,
+        0
       ]
     }
   ],
   "connections": {
-    "continuous-loop-trigger": {
+    "chat-trigger": {
       "main": [
         [
           {
-            "node": "init-recursive-loop",
+            "node": "Get Arch Rules",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "init-recursive-loop": {
+    "Get Arch Rules": {
       "main": [
         [
           {
-            "node": "autonomous-gap-scan",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "autonomous-gap-scan": {
-      "main": [
-        [
-          {
-            "node": "parallel-batcher",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "parallel-batcher": {
-      "main": [
-        [
-          {
-            "node": "ai-proposer-1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "ai-proposer-2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ai-proposer-1": {
-      "main": [
-        [
-          {
-            "node": "consensus-check",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ai-proposer-2": {
-      "main": [
-        [
-          {
-            "node": "consensus-check",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "consensus-check": {
-      "main": [
-        [
-          {
-            "node": "apply-and-verify",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "apply-and-verify": {
-      "main": [
-        [
-          {
-            "node": "increment-loop",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "increment-loop": {
-      "main": [
-        [
-          {
-            "node": "loop-again",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "loop-again": {
-      "main": [
-        [
-          {
-            "node": "autonomous-gap-scan",
+            "node": "Orchestrator Planning",
             "type": "main",
             "index": 0
           }

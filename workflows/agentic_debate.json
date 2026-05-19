@@ -1,0 +1,86 @@
+{
+  "name": "Agentic Debate Routine",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Critique the following code proposal. Find flaws and suggest improvements.\"}, {\"role\": \"user\", \"content\": \"{{ $json.proposal }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "agent-critic",
+      "name": "Agent Critic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Based on the critique, finalize the code proposal. Return ONLY the final bash command in ```.\"}, {\"role\": \"user\", \"content\": \"Original: {{ $json.proposal }}\\nCritique: {{ $json.choices[0].message.content }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "agent-finalizer",
+      "name": "Agent Finalizer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "agent-critic": {
+      "main": [
+        [
+          {
+            "node": "agent-finalizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

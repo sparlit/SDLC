@@ -1,0 +1,93 @@
+{
+  "name": "SDLC Health Dashboard",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "hours"
+      },
+      "id": "hourly-trigger",
+      "name": "Hourly Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cat /data/project/SDLC_PERF.log | tail -n 50"
+      },
+      "id": "fetch-metrics",
+      "name": "Fetch Metrics",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n</body>\n</html>`;\nreturn { html };"
+      },
+      "id": "generate-html",
+      "name": "Generate HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo '{{ $json.html }}' > /data/project/DASHBOARD.html"
+      },
+      "id": "save-dashboard",
+      "name": "Save Dashboard",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "hourly-trigger": {
+      "main": [
+        [
+          {
+            "node": "fetch-metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch-metrics": {
+      "main": [
+        [
+          {
+            "node": "generate-html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate-html": {
+      "main": [
+        [
+          {
+            "node": "save-dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
