@@ -1,0 +1,44 @@
+{
+  "name": "Voice-to-SDLC Trigger",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-trigger",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Voice Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "whisper /tmp/audio.wav --model tiny --language en"
+      },
+      "id": "whisper-transcribe",
+      "name": "Whisper Transcribe",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "workflowId": "god_mode_orchestrator",
+        "parameters": {
+          "chatInput": "={{ $json.stdout }}"
+        }
+      },
+      "id": "trigger-brain",
+      "name": "Trigger Brain",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "webhook-trigger": { "main": [[{ "node": "whisper-transcribe", "type": "main", "index": 0 }]] },
+    "whisper-transcribe": { "main": [[{ "node": "trigger-brain", "type": "main", "index": 0 }]] }
+  }
+}
