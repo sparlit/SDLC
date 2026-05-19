@@ -1,0 +1,162 @@
+{
+  "name": "Autonomous Fixing Loop",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "hours"
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "grep -rE \"TODO|FIXME|placeholder|stub\" /data/project || true"
+      },
+      "id": "find-gaps",
+      "name": "Find Gaps/Placeholders",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an autonomous fixing agent. Provide a single shell command to fix the following gaps or placeholders. Wrap the command in ```bash code blocks.\"}, {\"role\": \"user\", \"content\": \"{{ $json.stdout }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-fix-generator",
+      "name": "AI Fix Generator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Fix Generator\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1] : content;\n\n// Basic sanitization: prevent some dangerous commands\nconst dangerous = ['rm -rf /', 'mkfs', 'shutdown'];\nif (dangerous.some(d => command.includes(d))) {\n  throw new Error('Dangerous command detected');\n}\n\nreturn { command };"
+      },
+      "id": "sanitize-fix",
+      "name": "Sanitize Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.command }}"
+      },
+      "id": "apply-fix",
+      "name": "Apply Fix",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && git add . && git commit -m \"Autonomous fix applied\" && git push || echo \"No changes to commit\""
+      },
+      "id": "git-commit-push",
+      "name": "Git Commit & Push",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "find-gaps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find-gaps": {
+      "main": [
+        [
+          {
+            "node": "ai-fix-generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-fix-generator": {
+      "main": [
+        [
+          {
+            "node": "sanitize-fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sanitize-fix": {
+      "main": [
+        [
+          {
+            "node": "apply-fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "apply-fix": {
+      "main": [
+        [
+          {
+            "node": "git-commit-push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
