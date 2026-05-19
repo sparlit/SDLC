@@ -1,0 +1,55 @@
+{
+  "name": "IQ200 Unified SDLC Brain",
+  "nodes": [
+    {
+      "parameters": { "options": {} },
+      "id": "trigger",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+      },
+      "id": "scout-phase",
+      "name": "Scout Phase (Analyze)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You are the Devil's Advocate. Critique these findings and propose the most hardened fix possible. Return bash code.\"}, {\"role\": \"user\", \"content\": \"{{ $json.stdout }}\"}]" }
+          ]
+        }
+      },
+      "id": "devil-phase",
+      "name": "Devil Phase (Critique)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.choices[0].message.content }} && pytest /data/project"
+      },
+      "id": "architect-phase",
+      "name": "Architect Phase (Implement)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 600, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "scout-phase", "type": "main", "index": 0 }]] },
+    "scout-phase": { "main": [[{ "node": "devil-phase", "type": "main", "index": 0 }]] },
+    "devil-phase": { "main": [[{ "node": "architect-phase", "type": "main", "index": 0 }]] }
+  }
+}
