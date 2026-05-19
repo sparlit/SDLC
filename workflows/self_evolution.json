@@ -1,0 +1,114 @@
+{
+  "name": "Prompt Self-Evolution Routine",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "weeks"
+      },
+      "id": "weekly-trigger",
+      "name": "Weekly Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cat /data/project/SDLC_PERF.log"
+      },
+      "id": "read-logs",
+      "name": "Read Performance Logs",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze these logs and suggest improved system prompts for n8n. Current prompts: {{ JSON.stringify($node[\\\"Read Performance Logs\\\"].json) }}. Return a new prompts.json format.\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-evolve-prompts",
+      "name": "AI Evolve Prompts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo \"{{ $json.choices[0].message.content }}\" > /data/project/setup/prompts.json"
+      },
+      "id": "update-prompts-file",
+      "name": "Update Prompts File",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "weekly-trigger": {
+      "main": [
+        [
+          {
+            "node": "read-logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "read-logs": {
+      "main": [
+        [
+          {
+            "node": "ai-evolve-prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-evolve-prompts": {
+      "main": [
+        [
+          {
+            "node": "update-prompts-file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

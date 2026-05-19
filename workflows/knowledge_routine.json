@@ -1,0 +1,114 @@
+{
+  "name": "Knowledge & Documentation Routine",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "days"
+      },
+      "id": "daily-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "git log --since=\"1 day ago\" --patch > /tmp/changes.diff"
+      },
+      "id": "get-changes",
+      "name": "Get Recent Changes",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Summarize these code changes for a technical README. Update the knowledge base in JSON format: { 'pattern': '...', 'solution': '...' }.\"}, {\"role\": \"user\", \"content\": \"Changes: {{ $node[\\\"get-changes\\\"].json.stdout }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-summarizer",
+      "name": "AI Summarizer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo \"{{ $json.choices[0].message.content }}\" >> /data/project/SDLC_KNOWLEDGE.md"
+      },
+      "id": "update-docs",
+      "name": "Update Documentation",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "daily-trigger": {
+      "main": [
+        [
+          {
+            "node": "get-changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-changes": {
+      "main": [
+        [
+          {
+            "node": "ai-summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-summarizer": {
+      "main": [
+        [
+          {
+            "node": "update-docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

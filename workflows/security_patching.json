@@ -1,0 +1,114 @@
+{
+  "name": "Autonomous Security Patching",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "days"
+      },
+      "id": "daily-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "trivy fs --format json /data/project"
+      },
+      "id": "trivy-scan",
+      "name": "Trivy Scan",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze this Trivy JSON output and provide a shell command to patch the vulnerabilities (e.g., npm update, pip install --upgrade). Results: {{ $json.stdout }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-security-fixer",
+      "name": "AI Security Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        450,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.choices[0].message.content }} && cd /data/project && git add . && git commit -m \"Autonomous security patch applied\" && git push"
+      },
+      "id": "apply-patch",
+      "name": "Apply Patch",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        700,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "daily-trigger": {
+      "main": [
+        [
+          {
+            "node": "trivy-scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trivy-scan": {
+      "main": [
+        [
+          {
+            "node": "ai-security-fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-security-fixer": {
+      "main": [
+        [
+          {
+            "node": "apply-patch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
