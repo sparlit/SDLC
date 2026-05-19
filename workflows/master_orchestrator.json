@@ -10,7 +10,7 @@
       "type": "n8n-nodes-base.chatTrigger",
       "typeVersion": 1,
       "position": [
-        -200,
+        -400,
         0
       ]
     },
@@ -24,7 +24,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
       "position": [
-        -200,
+        -400,
         200
       ]
     },
@@ -35,7 +35,7 @@
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
       "position": [
-        -200,
+        -400,
         400
       ]
     },
@@ -59,7 +59,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"You are a lead architect. Create a plan for the project based on chat input. Return JSON array: [{file, action, description}]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Break request into tasks. Return JSON array [{file, action, description}]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
             }
           ]
         }
@@ -69,8 +69,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        50,
-        -50
+        -150,
+        0
       ]
     },
     {
@@ -82,7 +82,21 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        50,
+        -150,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "parallel-batcher",
+      "name": "Parallel Batcher",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        100,
         200
       ]
     },
@@ -106,7 +120,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Fix these SDLC issues: bottlenecks, gaps, stubs, etc. Return a shell command to apply the fix wrapped in ```bash. Issues found: {{ $json.stdout }}\"}, {\"role\": \"user\", \"content\": \"Apply fixes.\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Fix SDLC issues. Return bash command in ```. Issues: {{ $json.stdout }}\"}]"
             }
           ]
         }
@@ -116,150 +130,34 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        250,
+        300,
         200
       ]
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Fix Loop\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\nif (['rm -rf /', 'mkfs'].some(d => command.includes(d))) throw new Error('Security violation');\nreturn { command };"
+        "jsCode": "const content = $node[\"AI Fix Loop\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\nreturn { command };"
       },
       "id": "fix-sanitizer",
       "name": "Fix Sanitizer",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        450,
+        500,
         200
       ]
     },
     {
       "parameters": {
-        "command": "={{ $json.command }} && cd /data/project && (npm test || pytest || true)"
+        "command": "={{ $json.command }} && (npm test || pytest || true)"
       },
       "id": "apply-and-verify",
       "name": "Apply and Verify",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        650,
+        700,
         200
-      ]
-    },
-    {
-      "parameters": {
-        "command": "cd /data/project && git add . && git commit -m \"Autonomous fixing loop: applied fixes\" && git push || echo 'no changes'"
-      },
-      "id": "commit-verified-fixes",
-      "name": "Commit Verified Fixes",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        850,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $json.workflow.id }}",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "X-N8N-API-KEY",
-              "value": "={{ $env.N8N_API_KEY }}"
-            }
-          ]
-        }
-      },
-      "id": "get-self-json",
-      "name": "Get Self JSON",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        50,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
-            }
-          ]
-        },
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "model",
-              "value": "google/gemini-2.0-flash-001"
-            },
-            {
-              "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Fix this n8n workflow error: {{ $node[\\\"Error Self-Healing Trigger\\\"].json.execution.error.message }}. Return the patched JSON nodes and connections in ```json.\"}, {\"role\": \"user\", \"content\": \"{{ JSON.stringify($json) }}\"}]"
-            }
-          ]
-        }
-      },
-      "id": "ai-self-patcher",
-      "name": "AI Self-Patcher",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        250,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const content = $node[\"AI Self-Patcher\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nreturn JSON.parse(match ? match[1].trim() : content.trim());"
-      },
-      "id": "parse-patch",
-      "name": "Parse Patch",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        450,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "method": "PUT",
-        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $node[\\\"Error Self-Healing Trigger\\\"].json.workflow.id }}",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "X-N8N-API-KEY",
-              "value": "={{ $env.N8N_API_KEY }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "nodes",
-              "value": "={{ $json.nodes }}"
-            },
-            {
-              "name": "connections",
-              "value": "={{ $json.connections }}"
-            }
-          ]
-        }
-      },
-      "id": "update-self",
-      "name": "Update Self",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        650,
-        400
       ]
     }
   ],
@@ -286,18 +184,18 @@
         ]
       ]
     },
-    "error-self-healing-trigger": {
+    "Autonomous Gap Scan": {
       "main": [
         [
           {
-            "node": "Get Self JSON",
+            "node": "Parallel Batcher",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Autonomous Gap Scan": {
+    "Parallel Batcher": {
       "main": [
         [
           {
@@ -324,50 +222,6 @@
         [
           {
             "node": "Apply and Verify",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Apply and Verify": {
-      "main": [
-        [
-          {
-            "node": "Commit Verified Fixes",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Self JSON": {
-      "main": [
-        [
-          {
-            "node": "AI Self-Patcher",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Self-Patcher": {
-      "main": [
-        [
-          {
-            "node": "Parse Patch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse Patch": {
-      "main": [
-        [
-          {
-            "node": "Update Self",
             "type": "main",
             "index": 0
           }
