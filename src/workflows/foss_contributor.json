@@ -1,0 +1,47 @@
+{
+  "name": "FOSS Contributor (Bug Bounty)",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "weeks"
+      },
+      "id": "trigger",
+      "name": "Weekly Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "git clone https://github.com/popular/foss-repo /tmp/target && python3 /data/project/src/tools/deep_analyzer.py /tmp/target"
+      },
+      "id": "scan-external",
+      "name": "Scan External Repo",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You found bugs in an external FOSS repo: {{ $json.stdout }}. Generate a fix to contribute back.\"}]" }
+          ]
+        }
+      },
+      "id": "generate-contribution",
+      "name": "Generate Contribution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "scan-external", "type": "main", "index": 0 }]] },
+    "scan-external": { "main": [[{ "node": "generate-contribution", "type": "main", "index": 0 }]] }
+  }
+}

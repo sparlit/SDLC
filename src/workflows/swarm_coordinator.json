@@ -1,0 +1,37 @@
+{
+  "name": "Multi-Agent Swarm Coordinator",
+  "nodes": [
+    {
+      "parameters": { "options": {} },
+      "id": "swarm-trigger",
+      "name": "Swarm Trigger",
+      "type": "n8n-nodes-base.chatTrigger",
+      "typeVersion": 1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { json: { agent: 'security' } },\n  { json: { agent: 'performance' } },\n  { json: { agent: 'ui_ux' } },\n  { json: { agent: 'database' } }\n];"
+      },
+      "id": "spawn-swarm",
+      "name": "Spawn Swarm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "workflowId": "={{ $json.agent }}_agent_subworkflow"
+      },
+      "id": "execute-agent",
+      "name": "Execute Agent",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "swarm-trigger": { "main": [[{ "node": "spawn-swarm", "type": "main", "index": 0 }]] },
+    "spawn-swarm": { "main": [[{ "node": "execute-agent", "type": "main", "index": 0 }]] }
+  }
+}

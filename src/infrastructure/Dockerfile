@@ -2,7 +2,7 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# Install FOSS SDLC Tools + Whisper dependencies
+# Install IQ400 Omniscient Tools
 RUN apk add --no-cache \
     python3 \
     py3-pip \
@@ -10,7 +10,10 @@ RUN apk add --no-cache \
     curl \
     unzip \
     bash \
-    ffmpeg
+    ffmpeg \
+    redis \
+    py3-psutil \
+    lm-sensors
 
 # Install OpenTofu
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && \
@@ -21,14 +24,11 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opent
 # Install Trivy
 RUN curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 
-# Install Python-based FOSS Audit & AI Tools
+# Install Python IQ400 Stack
 RUN pip3 install --no-cache-dir --break-system-packages \
-    semgrep \
-    radon \
-    bandit \
-    pytest \
-    chromadb \
-    openai-whisper \
-    scancode-toolkit
+    semgrep radon bandit pytest \
+    chromadb openai-whisper scancode-toolkit \
+    pandas numpy scikit-learn \
+    redis pydantic
 
 USER node
