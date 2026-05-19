@@ -32,6 +32,7 @@ services:
     depends_on:
       - db
       - chroma
+      - redis
 
   chroma:
     image: chromadb/chroma:latest
@@ -40,23 +41,25 @@ services:
     volumes:
       - chroma_data:/chroma/data
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  gitea:
+    image: gitea/gitea:latest
+    ports:
+      - "3001:3000"
+    volumes:
+      - gitea_data:/data
+
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - "9090:9090"
-    volumes:
-      - prometheus_data:/etc/prometheus
 
 volumes:
   n8n_db_data:
   n8n_data:
   chroma_data:
-  grafana_data:
-  prometheus_data:
+  gitea_data:

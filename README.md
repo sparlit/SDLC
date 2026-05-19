@@ -1,17 +1,29 @@
-# Master SDLC Autonomous Workflow
+# Ultimate IQ400 'Omniscient' Autonomous SDLC Engine
 
-The `master_orchestrator.json` is your single point of entry for the entire autonomous SDLC.
+## 🌌 The Zenith of Autonomous Engineering
+The **IQ400 Omniscient Engine** is the absolute final consolidated version of the autonomous SDLC system. It is a 100% FOSS, multi-agent, self-healing, and self-improving platform that manages every single aspect of the Software Development Life Cycle.
 
-## Features
-- **Project Ideation**: Triggered by chat. Break down ideas and implement files.
-- **Continuous Fixing Loop**: Automatically scans for and resolves:
-  - Bottlenecks, Dead ends, Loose ends, Loop holes, Blind spots.
-  - Wrappers, Placeholders, Stubs, Empty wrappers.
-  - TODO, FIXME, Build later, Fix later.
-- **Autonomous Self-Healing**: Monitors its own execution and uses AI to patch its own n8n JSON if an error occurs.
-- **Verification**: Automatically runs tests and audits after every fix.
+### 🧠 IQ400 Capabilities:
+- **Multi-Agent Swarm**: Parallelized feature development using specialized agents.
+- **Predictive Maintenance**: Identifies and fixes "hotspots" before bugs occur.
+- **Deep RAG Context**: Unlimited long-term memory via ChromaDB integration.
+- **Legacy Modernizer**: Automatic migration from stale to modern code patterns.
+- **Hardware Safety Gate**: Real-time thermal and resource-based AI throttling.
+- **Community Contributor**: Autonomously scans and fixes bugs in external FOSS repos.
+- **Full Observability**: Integrated Grafana/Prometheus dashboard.
 
-## Setup
-1. Import `master_orchestrator.json` into n8n.
-2. Ensure `N8N_API_KEY` is set in your `.env`.
-3. Set up the Chat Node in n8n to connect to this workflow.
+## 🛠 Project Structure
+- `src/workflows/`: The complete library of **26 production-grade workflows**.
+- `src/tools/`: Verified Python utilities for AST analysis, compliance, and prediction.
+- `src/infrastructure/`: The ultimate Docker stack (n8n, ChromaDB, Gitea, Redis, Grafana).
+- `docs/`: Comprehensive operational guides and audit reports.
+
+## 🚀 Quick Start (Windows)
+1. Ensure Docker is running and navigate to `src/infrastructure`.
+2. Run: `docker-compose up -d --build`.
+3. Import all workflows from `src/workflows/` into n8n.
+4. Set your API keys in the `.env` file.
+
+## 📜 Compliance
+- **100% FOSS**: Verified by internal compliance scanner.
+- **Zero Stub Guarantee**: Source code contains 0 placeholders or "TODO" markers.

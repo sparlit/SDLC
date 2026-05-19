@@ -1,0 +1,47 @@
+{
+  "name": "Proactive Maintenance Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "days"
+      },
+      "id": "daily-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/predictive_analyzer.py /data/project"
+      },
+      "id": "risk-analysis",
+      "name": "Risk Analysis",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Analyze these high-risk files and suggest proactive refactoring to prevent future bugs. Files: {{ $json.stdout }}\"}]" }
+          ]
+        }
+      },
+      "id": "proactive-fixer",
+      "name": "Proactive Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "daily-trigger": { "main": [[{ "node": "risk-analysis", "type": "main", "index": 0 }]] },
+    "risk-analysis": { "main": [[{ "node": "proactive-fixer", "type": "main", "index": 0 }]] }
+  }
+}

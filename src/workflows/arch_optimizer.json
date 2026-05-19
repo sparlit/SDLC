@@ -1,0 +1,47 @@
+{
+  "name": "Neural Architecture Optimizer",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 1,
+        "unit": "weeks"
+      },
+      "id": "weekly-trigger",
+      "name": "Weekly Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/legacy_modernizer.py /data/project"
+      },
+      "id": "legacy-scan",
+      "name": "Legacy Scan",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You are a systems architect. Based on the legacy scan: {{ $json.stdout }}, propose a modern, optimized neural architecture upgrade for the project.\"}]" }
+          ]
+        }
+      },
+      "id": "arch-optimizer",
+      "name": "Arch Optimizer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "weekly-trigger": { "main": [[{ "node": "legacy-scan", "type": "main", "index": 0 }]] },
+    "legacy-scan": { "main": [[{ "node": "arch-optimizer", "type": "main", "index": 0 }]] }
+  }
+}
