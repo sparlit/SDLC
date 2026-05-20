@@ -46,8 +46,8 @@ def analyze_file(filepath):
                     elif isinstance(node, ast.ClassDef):
                         if len(node.body) == 1 and isinstance(node.body[0], ast.Pass):
                             findings.append(f"{filepath}:{node.lineno} - Empty class: {node.name}")
-            except Exception:
-                pass
+            except Exception as e:
+                findings.append(f"{filepath}:0 - Parse failed: {e}")
 
     except Exception as e:
         findings.append(f"{filepath}:0 - Error reading file: {e}")
