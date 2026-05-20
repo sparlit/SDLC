@@ -1,5 +1,5 @@
 {
-  "name": "SDLC Main Workflow",
+  "name": "Omniscient SDLC Lifecycle",
   "nodes": [
     {
       "parameters": {
@@ -16,108 +16,8 @@
     },
     {
       "parameters": {
-        "command": "find /data/project -maxdepth 2"
-      },
-      "id": "scan-project",
-      "name": "Scan Project Files",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        200,
-        0
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "jsCode": "const stdout = $node[\"Scan Project Files\"].json.stdout || '';\nconst files = stdout.split('\\n');\nlet language = 'unknown';\n\nif (files.some(f => f.includes('package.json'))) language = 'javascript';\nelse if (files.some(f => f.includes('requirements.txt') || f.includes('pyproject.toml'))) language = 'python';\nelse if (files.some(f => f.includes('go.mod'))) language = 'go';\n\nreturn { language, files };"
-      },
-      "id": "detect-language",
-      "name": "Polyglot Detection",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        400,
-        0
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ $json.language }}",
-              "value2": "javascript"
-            }
-          ]
-        }
-      },
-      "id": "is-javascript",
-      "name": "Is JS?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        600,
-        -100
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ $json.language }}",
-              "value2": "python"
-            }
-          ]
-        }
-      },
-      "id": "is-python",
-      "name": "Is Python?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        600,
-        100
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "command": "cd /data/project && npm test && npm audit"
-      },
-      "id": "npm-test-audit",
-      "name": "NPM Test & Audit",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        800,
-        -150
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "command": "cd /data/project && pytest && bandit -r ."
-      },
-      "id": "pytest-bandit",
-      "name": "Pytest & Bandit",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        800,
-        50
-      ],
-      "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "url": "https://openrouter.ai/api/v1/chat/completions",
         "method": "POST",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
         "headerParameters": {
           "parameters": [
             {
@@ -126,26 +26,165 @@
             }
           ]
         },
-        "sendBody": true,
         "bodyParameters": {
           "parameters": [
             {
               "name": "model",
-              "value": "google/gemini-2.0-flash-001"
+              "value": "openrouter/free"
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for gaps, placeholders, and security issues. Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\\nTest Results: {{ JSON.stringify($json) }}\"}, {\"role\": \"user\", \"content\": \"Provide a comprehensive SDLC report.\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a Project Planner. Define project scope, objectives, requirements, and timeline for the following request. Return a structured JSON object.\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
             }
           ]
         }
       },
-      "id": "ai-sdlc-report",
-      "name": "AI SDLC Report",
+      "id": "planning",
+      "name": "Planning",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        1100,
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a Business Analyst. Gather detailed requirements, conduct feasibility study, and perform risk assessment based on the plan: {{ JSON.stringify($json) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "analysis",
+      "name": "Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a System Architect. Create design specifications, database schema, and API designs based on the analysis: {{ JSON.stringify($json) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "design",
+      "name": "Design",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": "task_orchestrator"
+      },
+      "id": "development",
+      "name": "Development",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": "sdlc_main"
+      },
+      "id": "testing",
+      "name": "Testing",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": "autonomous_fixing"
+      },
+      "id": "error-fixing",
+      "name": "Error Fixing",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": "infrastructure_deploy"
+      },
+      "id": "deployment",
+      "name": "Deployment",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": "health_check"
+      },
+      "id": "maintenance",
+      "name": "Maintenance",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1600,
         0
       ],
       "continueOnFail": true
@@ -155,14 +194,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Scan Project Files\"].error !== undefined }",
+              "value1": "={ $node[\"Planning\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "8b29d59f-d6d6-43d9-8317-298c15dc1848",
-      "name": "Check: Scan Proje-0-2412",
+      "id": "50b5915d-f718-4432-8f1a-723f6964cc6d",
+      "name": "Check: Planning-0-c26b",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -177,8 +216,8 @@
           "waitForResults": true
         }
       },
-      "id": "01379a56-4ed5-4a88-9f86-3c575443a739",
-      "name": "Omniscient Fix: Scan Proje-0-2412",
+      "id": "8b58fade-2f46-4d58-8ef2-1d98abb2ecbe",
+      "name": "Omniscient Fix: Planning-0-c26b",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -191,14 +230,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Polyglot Detection\"].error !== undefined }",
+              "value1": "={ $node[\"Analysis\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "8eca64e9-dd24-4167-9739-3f2c2946c110",
-      "name": "Check: Polyglot D-0-8852",
+      "id": "a79e7180-9690-455e-b398-33641b3172ac",
+      "name": "Check: Analysis-0-a2d6",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -213,8 +252,8 @@
           "waitForResults": true
         }
       },
-      "id": "e5e2f9ce-4bbd-444a-8303-3dfbe6ce3cc2",
-      "name": "Omniscient Fix: Polyglot D-0-8852",
+      "id": "0a4be4cc-d7dc-4b9f-8b1f-3bf27ba7b4c6",
+      "name": "Omniscient Fix: Analysis-0-a2d6",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -227,162 +266,18 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Is JS?\"].error !== undefined }",
+              "value1": "={ $node[\"Design\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "41942dc6-61a6-4ca7-a317-d0624856c509",
-      "name": "Check: Is JS?-0-37d0",
+      "id": "9902d825-04b0-4802-86b8-955d76451e39",
+      "name": "Check: Design-0-24cd",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -150
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "68f21dd8-0063-4446-8c0f-c32405c3ab5e",
-      "name": "Omniscient Fix: Is JS?-0-37d0",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        1000,
-        -100
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Is Python?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "a28ffd19-4a5a-41c6-89d5-dca93130ef9b",
-      "name": "Check: Is Python?-0-92de",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        800,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "0ee9befd-2ac9-4eef-93db-c0efa2937186",
-      "name": "Omniscient Fix: Is Python?-0-92de",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        1000,
-        100
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"NPM Test & Audit\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "a1f22fcd-e3d1-4d1d-9adc-8d8bddc5f2d6",
-      "name": "Check: NPM Test &-0-ddea",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        1000,
-        -200
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "6616080a-ad4b-4589-ac66-c0089a801a55",
-      "name": "Omniscient Fix: NPM Test &-0-ddea",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        1200,
-        -150
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Pytest & Bandit\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "50a3dd6c-697f-459d-a5a1-d07e5ac43a03",
-      "name": "Check: Pytest & B-0-1cf7",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        1000,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "0be5e536-699a-4628-8f95-ebe477077060",
-      "name": "Omniscient Fix: Pytest & B-0-1cf7",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        1200,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI SDLC Report\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "f63f5e9a-3f7c-4625-9b66-742a446965fc",
-      "name": "Check: AI SDLC Re-0-e008",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        1300,
         -50
       ]
     },
@@ -393,12 +288,156 @@
           "waitForResults": true
         }
       },
-      "id": "d3b76374-0d94-4835-98b6-76230b1c66b9",
-      "name": "Omniscient Fix: AI SDLC Re-0-e008",
+      "id": "5d70aad1-5487-49a4-8501-c611dca7f175",
+      "name": "Omniscient Fix: Design-0-24cd",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        1500,
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Development\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d21fd3a2-e02a-4376-8479-04300ad53a9c",
+      "name": "Check: Developmen-0-3166",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "ebab79bd-94af-47f8-95cd-013357107980",
+      "name": "Omniscient Fix: Developmen-0-3166",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Testing\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f58216f1-e536-4a9c-a81c-0320185c97e3",
+      "name": "Check: Testing-0-07f5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "0469c3f7-0ada-4274-b459-33cbdaa739d7",
+      "name": "Omniscient Fix: Testing-0-07f5",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Error Fixing\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9e1bb5ca-7a05-40c1-bf42-277b057d6747",
+      "name": "Check: Error Fixi-0-cdf1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a8a9e6ad-4bbe-4ed1-bc83-6199932cac41",
+      "name": "Omniscient Fix: Error Fixi-0-cdf1",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Deployment\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9324eaf5-1eaa-4852-87f0-98db0b03aebf",
+      "name": "Check: Deployment-0-0a59",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "86caf327-d3cb-41ce-9323-08ab9411755b",
+      "name": "Omniscient Fix: Deployment-0-0a59",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1800,
         0
       ]
     }
@@ -408,291 +447,296 @@
       "main": [
         [
           {
-            "node": "Scan Project Files",
+            "node": "Planning",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Scan Proje-0-2412": {
+    "Check: Planning-0-c26b": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Scan Proje-0-2412",
+            "node": "Omniscient Fix: Planning-0-c26b",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Scan Project Files (P0)",
+            "node": "Analysis",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Scan Proje-0-2412": {
+    "Omniscient Fix: Planning-0-c26b": {
       "main": [
         [
           {
-            "node": "Scan Project Files",
+            "node": "Planning",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Scan Project Files": {
+    "Planning": {
       "main": [
         [
           {
-            "node": "Check: Scan Proje-0-2412",
+            "node": "Check: Planning-0-c26b",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Polyglot D-0-8852": {
+    "Check: Analysis-0-a2d6": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Polyglot D-0-8852",
+            "node": "Omniscient Fix: Analysis-0-a2d6",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Polyglot Detection (P0)",
+            "node": "Design",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Polyglot D-0-8852": {
+    "Omniscient Fix: Analysis-0-a2d6": {
       "main": [
         [
           {
-            "node": "Polyglot Detection",
+            "node": "Analysis",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Polyglot Detection": {
+    "Analysis": {
       "main": [
         [
           {
-            "node": "Check: Polyglot D-0-8852",
+            "node": "Check: Analysis-0-a2d6",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is JS?-0-37d0": {
+    "Check: Design-0-24cd": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is JS?-0-37d0",
+            "node": "Omniscient Fix: Design-0-24cd",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Is JS? (P0)",
+            "node": "Development",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Is JS?-0-37d0": {
+    "Omniscient Fix: Design-0-24cd": {
       "main": [
         [
           {
-            "node": "Is JS?",
+            "node": "Design",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Is JS?": {
+    "Design": {
       "main": [
         [
           {
-            "node": "Check: Is JS?-0-37d0",
+            "node": "Check: Design-0-24cd",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is Python?-0-92de": {
+    "Check: Developmen-0-3166": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is Python?-0-92de",
+            "node": "Omniscient Fix: Developmen-0-3166",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Is Python? (P0)",
+            "node": "Testing",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Is Python?-0-92de": {
+    "Omniscient Fix: Developmen-0-3166": {
       "main": [
         [
           {
-            "node": "Is Python?",
+            "node": "Development",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Is Python?": {
+    "Development": {
       "main": [
         [
           {
-            "node": "Check: Is Python?-0-92de",
+            "node": "Check: Developmen-0-3166",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: NPM Test &-0-ddea": {
+    "Check: Testing-0-07f5": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: NPM Test &-0-ddea",
+            "node": "Omniscient Fix: Testing-0-07f5",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: NPM Test & Audit (P0)",
+            "node": "Error Fixing",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: NPM Test &-0-ddea": {
+    "Omniscient Fix: Testing-0-07f5": {
       "main": [
         [
           {
-            "node": "NPM Test & Audit",
+            "node": "Testing",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "NPM Test & Audit": {
+    "Testing": {
       "main": [
         [
           {
-            "node": "Check: NPM Test &-0-ddea",
+            "node": "Check: Testing-0-07f5",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Pytest & B-0-1cf7": {
+    "Check: Error Fixi-0-cdf1": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Pytest & B-0-1cf7",
+            "node": "Omniscient Fix: Error Fixi-0-cdf1",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Pytest & Bandit (P0)",
+            "node": "Deployment",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Pytest & B-0-1cf7": {
+    "Omniscient Fix: Error Fixi-0-cdf1": {
       "main": [
         [
           {
-            "node": "Pytest & Bandit",
+            "node": "Error Fixing",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Pytest & Bandit": {
+    "Error Fixing": {
       "main": [
         [
           {
-            "node": "Check: Pytest & B-0-1cf7",
+            "node": "Check: Error Fixi-0-cdf1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI SDLC Re-0-e008": {
+    "Check: Deployment-0-0a59": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI SDLC Re-0-e008",
+            "node": "Omniscient Fix: Deployment-0-0a59",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI SDLC Report (P0)",
+            "node": "Maintenance",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI SDLC Re-0-e008": {
+    "Omniscient Fix: Deployment-0-0a59": {
       "main": [
         [
           {
-            "node": "AI SDLC Report",
+            "node": "Deployment",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI SDLC Report": {
+    "Deployment": {
       "main": [
         [
           {
-            "node": "Check: AI SDLC Re-0-e008",
+            "node": "Check: Deployment-0-0a59",
             "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "Maintenance": {
+      "main": [
+        []
       ]
     }
   }

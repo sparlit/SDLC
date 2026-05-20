@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "cfe42b1f-9add-4d42-9312-64657c4ddc91",
-      "name": "Check: Read All Context (P0)",
+      "id": "77a8e609-63b5-4ecd-8098-9cc9caf1f285",
+      "name": "Check: Read All C-0-46b3",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "95374e4d-06fa-4fb1-8f20-f9c319ffd46b",
-      "name": "Omniscient Fix: Read All Context (P0)",
+      "id": "1029e407-3009-4dae-ac15-0438d898d8e4",
+      "name": "Omniscient Fix: Read All C-0-46b3",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -125,8 +125,8 @@
           ]
         }
       },
-      "id": "f0871d9a-8a9e-49f3-9381-5d2581a9727c",
-      "name": "Check: AI Evolve Arch (P0)",
+      "id": "769b85c3-1045-471f-84be-d8a99ce64405",
+      "name": "Check: AI Evolve -0-ede1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -141,8 +141,8 @@
           "waitForResults": true
         }
       },
-      "id": "00929278-aeee-4cd0-ac50-8e01425bdd9d",
-      "name": "Omniscient Fix: AI Evolve Arch (P0)",
+      "id": "6adf2221-4c06-4d60-9c7c-a41d221c661a",
+      "name": "Omniscient Fix: AI Evolve -0-ede1",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -161,8 +161,8 @@
           ]
         }
       },
-      "id": "ed4cf177-0b9d-4616-86ee-53eef18c03b8",
-      "name": "Check: Update Arch (P0)",
+      "id": "b3fa6855-e39d-43f4-afa1-a85dfeb1f582",
+      "name": "Check: Update Arc-0-2327",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -177,8 +177,8 @@
           "waitForResults": true
         }
       },
-      "id": "43cb3642-2637-4fd3-ba30-527925df745b",
-      "name": "Omniscient Fix: Update Arch (P0)",
+      "id": "f7f27da4-447b-4a25-ae41-97322d042d4f",
+      "name": "Omniscient Fix: Update Arc-0-2327",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -188,11 +188,11 @@
     }
   ],
   "connections": {
-    "Check: Read All Context (P0)": {
+    "Check: Read All C-0-46b3": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Read All Context (P0)",
+            "node": "Omniscient Fix: Read All C-0-46b3",
             "type": "main",
             "index": 0
           }
@@ -206,7 +206,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Read All Context (P0)": {
+    "Omniscient Fix: Read All C-0-46b3": {
       "main": [
         [
           {
@@ -221,18 +221,18 @@
       "main": [
         [
           {
-            "node": "Check: Read All Context (P0)",
+            "node": "Check: Read All C-0-46b3",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Evolve Arch (P0)": {
+    "Check: AI Evolve -0-ede1": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Evolve Arch (P0)",
+            "node": "Omniscient Fix: AI Evolve -0-ede1",
             "type": "main",
             "index": 0
           }
@@ -246,7 +246,7 @@
         ]
       ]
     },
-    "Omniscient Fix: AI Evolve Arch (P0)": {
+    "Omniscient Fix: AI Evolve -0-ede1": {
       "main": [
         [
           {
@@ -261,18 +261,18 @@
       "main": [
         [
           {
-            "node": "Check: AI Evolve Arch (P0)",
+            "node": "Check: AI Evolve -0-ede1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Update Arch (P0)": {
+    "Check: Update Arc-0-2327": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Update Arch (P0)",
+            "node": "Omniscient Fix: Update Arc-0-2327",
             "type": "main",
             "index": 0
           }
@@ -286,7 +286,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Update Arch (P0)": {
+    "Omniscient Fix: Update Arc-0-2327": {
       "main": [
         [
           {
@@ -301,7 +301,7 @@
       "main": [
         [
           {
-            "node": "Check: Update Arch (P0)",
+            "node": "Check: Update Arc-0-2327",
             "type": "main",
             "index": 0
           }

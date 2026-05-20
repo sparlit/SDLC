@@ -67,8 +67,8 @@
           ]
         }
       },
-      "id": "478521a1-4398-4376-8a61-175d54f3a050",
-      "name": "Check: Scan External Repo (P0)",
+      "id": "a48312d5-b27c-4904-ab0b-427bb5ed3163",
+      "name": "Check: Scan Exter-0-a1aa",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -83,8 +83,8 @@
           "waitForResults": true
         }
       },
-      "id": "edde583c-3907-4220-a001-9c8db5b07feb",
-      "name": "Omniscient Fix: Scan External Repo (P0)",
+      "id": "dee1d10f-3dd0-4cdf-b6ef-0e58689dff8c",
+      "name": "Omniscient Fix: Scan Exter-0-a1aa",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -103,8 +103,8 @@
           ]
         }
       },
-      "id": "07fae110-8605-4502-bba7-e6d1b65e30bd",
-      "name": "Check: Generate Contribution (P0)",
+      "id": "c8146065-fa91-416d-8f10-706ba0fef728",
+      "name": "Check: Generate C-0-fb31",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -119,8 +119,8 @@
           "waitForResults": true
         }
       },
-      "id": "1cb768d3-9ad2-4a53-96f7-2e3933ee7cf6",
-      "name": "Omniscient Fix: Generate Contribution (P0)",
+      "id": "76848f36-46a4-40e3-ac69-694bb994f26e",
+      "name": "Omniscient Fix: Generate C-0-fb31",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -130,11 +130,11 @@
     }
   ],
   "connections": {
-    "Check: Scan External Repo (P0)": {
+    "Check: Scan Exter-0-a1aa": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Scan External Repo (P0)",
+            "node": "Omniscient Fix: Scan Exter-0-a1aa",
             "type": "main",
             "index": 0
           }
@@ -148,7 +148,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Scan External Repo (P0)": {
+    "Omniscient Fix: Scan Exter-0-a1aa": {
       "main": [
         [
           {
@@ -163,18 +163,18 @@
       "main": [
         [
           {
-            "node": "Check: Scan External Repo (P0)",
+            "node": "Check: Scan Exter-0-a1aa",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Generate Contribution (P0)": {
+    "Check: Generate C-0-fb31": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Generate Contribution (P0)",
+            "node": "Omniscient Fix: Generate C-0-fb31",
             "type": "main",
             "index": 0
           }
@@ -188,7 +188,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Generate Contribution (P0)": {
+    "Omniscient Fix: Generate C-0-fb31": {
       "main": [
         [
           {
@@ -203,7 +203,7 @@
       "main": [
         [
           {
-            "node": "Check: Generate Contribution (P0)",
+            "node": "Check: Generate C-0-fb31",
             "type": "main",
             "index": 0
           }

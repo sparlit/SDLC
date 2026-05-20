@@ -67,8 +67,8 @@
           ]
         }
       },
-      "id": "62996ee3-816b-4e5c-b581-4a4d058d0916",
-      "name": "Check: Legacy Scan (P0)",
+      "id": "026fdbb0-24cc-4737-ac19-d8a2533d1149",
+      "name": "Check: Legacy Sca-0-f043",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -83,8 +83,8 @@
           "waitForResults": true
         }
       },
-      "id": "1799a3e0-d6c9-4d1a-951e-73a67c0a4b9b",
-      "name": "Omniscient Fix: Legacy Scan (P0)",
+      "id": "bd4ddb60-9105-40a8-8592-62d4bf5b732f",
+      "name": "Omniscient Fix: Legacy Sca-0-f043",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -103,8 +103,8 @@
           ]
         }
       },
-      "id": "7ef2bc86-0fed-48f0-ba14-895001ebf0c0",
-      "name": "Check: Arch Optimizer (P0)",
+      "id": "7794b79d-6e94-406f-aec4-4653e2990252",
+      "name": "Check: Arch Optim-0-084d",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -119,8 +119,8 @@
           "waitForResults": true
         }
       },
-      "id": "e0c8cf10-b91c-4597-bf79-ae0c02377f35",
-      "name": "Omniscient Fix: Arch Optimizer (P0)",
+      "id": "240a57b1-85fc-411f-ac43-7e467d4e7f44",
+      "name": "Omniscient Fix: Arch Optim-0-084d",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -130,11 +130,11 @@
     }
   ],
   "connections": {
-    "Check: Legacy Scan (P0)": {
+    "Check: Legacy Sca-0-f043": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Legacy Scan (P0)",
+            "node": "Omniscient Fix: Legacy Sca-0-f043",
             "type": "main",
             "index": 0
           }
@@ -148,7 +148,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Legacy Scan (P0)": {
+    "Omniscient Fix: Legacy Sca-0-f043": {
       "main": [
         [
           {
@@ -163,18 +163,18 @@
       "main": [
         [
           {
-            "node": "Check: Legacy Scan (P0)",
+            "node": "Check: Legacy Sca-0-f043",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Arch Optimizer (P0)": {
+    "Check: Arch Optim-0-084d": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Arch Optimizer (P0)",
+            "node": "Omniscient Fix: Arch Optim-0-084d",
             "type": "main",
             "index": 0
           }
@@ -188,7 +188,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Arch Optimizer (P0)": {
+    "Omniscient Fix: Arch Optim-0-084d": {
       "main": [
         [
           {
@@ -203,7 +203,7 @@
       "main": [
         [
           {
-            "node": "Check: Arch Optimizer (P0)",
+            "node": "Check: Arch Optim-0-084d",
             "type": "main",
             "index": 0
           }

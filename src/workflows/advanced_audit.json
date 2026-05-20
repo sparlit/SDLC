@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "a6b67853-28f1-42a3-869d-b829e49fb457",
-      "name": "Check: Trigger (P0)",
+      "id": "ef9d393a-fbc8-415f-b142-27676ca9872e",
+      "name": "Check: Trigger-0-67ba",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "25fc865b-7f80-40e9-bc56-a4cadeebaefe",
-      "name": "Omniscient Fix: Trigger (P0)",
+      "id": "abd2f5ee-1889-4e1d-8ce7-ef889e03cf57",
+      "name": "Omniscient Fix: Trigger-0-67ba",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -125,8 +125,8 @@
           ]
         }
       },
-      "id": "911572fe-5cb5-4b85-b944-cb7393216c84",
-      "name": "Check: Semgrep Scan (P0)",
+      "id": "daa8836a-15cc-43ef-a15d-509bbc1deb93",
+      "name": "Check: Semgrep Sc-0-489f",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -141,8 +141,8 @@
           "waitForResults": true
         }
       },
-      "id": "feb53a6b-549d-4bd2-9065-40efafa7b92a",
-      "name": "Omniscient Fix: Semgrep Scan (P0)",
+      "id": "573000eb-3054-4b7f-bd00-5c8aaf62c8ec",
+      "name": "Omniscient Fix: Semgrep Sc-0-489f",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -161,8 +161,8 @@
           ]
         }
       },
-      "id": "b3d4ef81-5c5f-4b13-b11c-762daa2ef4bf",
-      "name": "Check: Radon Complexity (P0)",
+      "id": "e0aa8d17-304d-4844-bbca-93711cb1fd66",
+      "name": "Check: Radon Comp-0-3362",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -177,8 +177,8 @@
           "waitForResults": true
         }
       },
-      "id": "4d13c3af-de49-4738-b5ec-8a5792cac770",
-      "name": "Omniscient Fix: Radon Complexity (P0)",
+      "id": "d1772d9e-4008-4118-ae17-a60e2e1cfce9",
+      "name": "Omniscient Fix: Radon Comp-0-3362",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -197,8 +197,8 @@
           ]
         }
       },
-      "id": "356ecfdd-60d9-4d82-b61e-5b8d082709bd",
-      "name": "Check: AI Audit Report (P0)",
+      "id": "27b68547-cd0c-4c7b-b38b-90c459730d2e",
+      "name": "Check: AI Audit R-0-9903",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -213,8 +213,8 @@
           "waitForResults": true
         }
       },
-      "id": "0cb12b11-0f42-4914-a00e-f9498ddb48cd",
-      "name": "Omniscient Fix: AI Audit Report (P0)",
+      "id": "cf066fb5-1d8f-4429-97b5-cde0bc81b694",
+      "name": "Omniscient Fix: AI Audit R-0-9903",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -224,11 +224,11 @@
     }
   ],
   "connections": {
-    "Check: Trigger (P0)": {
+    "Check: Trigger-0-67ba": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Trigger (P0)",
+            "node": "Omniscient Fix: Trigger-0-67ba",
             "type": "main",
             "index": 0
           }
@@ -242,7 +242,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Trigger (P0)": {
+    "Omniscient Fix: Trigger-0-67ba": {
       "main": [
         [
           {
@@ -257,18 +257,18 @@
       "main": [
         [
           {
-            "node": "Check: Trigger (P0)",
+            "node": "Check: Trigger-0-67ba",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Semgrep Scan (P0)": {
+    "Check: Semgrep Sc-0-489f": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Semgrep Scan (P0)",
+            "node": "Omniscient Fix: Semgrep Sc-0-489f",
             "type": "main",
             "index": 0
           }
@@ -282,7 +282,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Semgrep Scan (P0)": {
+    "Omniscient Fix: Semgrep Sc-0-489f": {
       "main": [
         [
           {
@@ -297,18 +297,18 @@
       "main": [
         [
           {
-            "node": "Check: Semgrep Scan (P0)",
+            "node": "Check: Semgrep Sc-0-489f",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Radon Complexity (P0)": {
+    "Check: Radon Comp-0-3362": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Radon Complexity (P0)",
+            "node": "Omniscient Fix: Radon Comp-0-3362",
             "type": "main",
             "index": 0
           }
@@ -322,7 +322,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Radon Complexity (P0)": {
+    "Omniscient Fix: Radon Comp-0-3362": {
       "main": [
         [
           {
@@ -337,18 +337,18 @@
       "main": [
         [
           {
-            "node": "Check: Radon Complexity (P0)",
+            "node": "Check: Radon Comp-0-3362",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Audit Report (P0)": {
+    "Check: AI Audit R-0-9903": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Audit Report (P0)",
+            "node": "Omniscient Fix: AI Audit R-0-9903",
             "type": "main",
             "index": 0
           }
@@ -362,7 +362,7 @@
         ]
       ]
     },
-    "Omniscient Fix: AI Audit Report (P0)": {
+    "Omniscient Fix: AI Audit R-0-9903": {
       "main": [
         [
           {
@@ -377,7 +377,7 @@
       "main": [
         [
           {
-            "node": "Check: AI Audit Report (P0)",
+            "node": "Check: AI Audit R-0-9903",
             "type": "main",
             "index": 0
           }

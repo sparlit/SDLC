@@ -132,8 +132,8 @@
           ]
         }
       },
-      "id": "e191d9ea-3720-43b2-be80-d941fd0a2842",
-      "name": "Check: Find Gaps/Placeholders (P0)",
+      "id": "9204f01b-6b6a-4420-a330-e36b3f6da5b8",
+      "name": "Check: Find Gaps/-0-5714",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -148,8 +148,8 @@
           "waitForResults": true
         }
       },
-      "id": "e3c7a0ca-a289-4b70-8f7c-b644727c9ea1",
-      "name": "Omniscient Fix: Find Gaps/Placeholders (P0)",
+      "id": "2782cef0-0cab-4694-9eb6-e76607c6884b",
+      "name": "Omniscient Fix: Find Gaps/-0-5714",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -168,8 +168,8 @@
           ]
         }
       },
-      "id": "1c25cc02-3e83-41bc-857f-41eb8cd269e1",
-      "name": "Check: AI Fix Generator (P0)",
+      "id": "622d61c3-409f-418e-b8c7-e6d0146584eb",
+      "name": "Check: AI Fix Gen-0-28ec",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -184,8 +184,8 @@
           "waitForResults": true
         }
       },
-      "id": "ac4af703-2799-4691-bfcd-0cc765949415",
-      "name": "Omniscient Fix: AI Fix Generator (P0)",
+      "id": "ddba64d4-7527-4168-a36b-0686473d5042",
+      "name": "Omniscient Fix: AI Fix Gen-0-28ec",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -204,8 +204,8 @@
           ]
         }
       },
-      "id": "cbabd14f-2f2e-4730-b71b-3ff4756ea5b7",
-      "name": "Check: Sanitize Fix (P0)",
+      "id": "8750afee-2e34-4bc1-8957-9f1c6eb0049f",
+      "name": "Check: Sanitize F-0-9725",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -220,8 +220,8 @@
           "waitForResults": true
         }
       },
-      "id": "0ad3dc4a-5f90-4750-8eff-c0632de9bed9",
-      "name": "Omniscient Fix: Sanitize Fix (P0)",
+      "id": "dea2d0fb-a6b4-4ba2-bac5-ba579657d1dd",
+      "name": "Omniscient Fix: Sanitize F-0-9725",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -240,8 +240,8 @@
           ]
         }
       },
-      "id": "986b3d6e-f03b-42aa-9ba0-b9e187f5fd25",
-      "name": "Check: Apply Fix (P0)",
+      "id": "f4f72c56-a869-49fa-ab9d-b374a0d428c8",
+      "name": "Check: Apply Fix-0-f6b0",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -256,8 +256,8 @@
           "waitForResults": true
         }
       },
-      "id": "16abb71b-77af-4a0c-b0c9-ac48c97fcb87",
-      "name": "Omniscient Fix: Apply Fix (P0)",
+      "id": "496ced92-2a43-4f59-8fcc-34f9c4e09637",
+      "name": "Omniscient Fix: Apply Fix-0-f6b0",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -276,8 +276,8 @@
           ]
         }
       },
-      "id": "1b55c412-ddf4-4b94-aab6-cae7cfc08e7a",
-      "name": "Check: Git Commit & Push (P0)",
+      "id": "cd758696-1349-41ad-bd3f-1c1f03b47211",
+      "name": "Check: Git Commit-0-82a2",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -292,8 +292,8 @@
           "waitForResults": true
         }
       },
-      "id": "7d7771ac-1cf0-4823-8461-b90257e67bca",
-      "name": "Omniscient Fix: Git Commit & Push (P0)",
+      "id": "da98babe-c877-4ad0-8e5b-324b3d459457",
+      "name": "Omniscient Fix: Git Commit-0-82a2",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -312,8 +312,8 @@
           ]
         }
       },
-      "id": "107bdba1-c604-4925-a0d7-a9522c53a864",
-      "name": "Check: Fix Failed Notification (P0)",
+      "id": "6f466be6-971f-49ad-9b22-753e6675ae80",
+      "name": "Check: Fix Failed-0-59d3",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -328,8 +328,8 @@
           "waitForResults": true
         }
       },
-      "id": "95c815e1-4675-495c-996f-fe1e50cb6d6b",
-      "name": "Omniscient Fix: Fix Failed Notification (P0)",
+      "id": "8818831c-5045-40fd-8819-a2fe6b85480f",
+      "name": "Omniscient Fix: Fix Failed-0-59d3",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -339,11 +339,11 @@
     }
   ],
   "connections": {
-    "Check: Find Gaps/Placeholders (P0)": {
+    "Check: Find Gaps/-0-5714": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Find Gaps/Placeholders (P0)",
+            "node": "Omniscient Fix: Find Gaps/-0-5714",
             "type": "main",
             "index": 0
           }
@@ -357,7 +357,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Find Gaps/Placeholders (P0)": {
+    "Omniscient Fix: Find Gaps/-0-5714": {
       "main": [
         [
           {
@@ -372,18 +372,18 @@
       "main": [
         [
           {
-            "node": "Check: Find Gaps/Placeholders (P0)",
+            "node": "Check: Find Gaps/-0-5714",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Fix Generator (P0)": {
+    "Check: AI Fix Gen-0-28ec": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Fix Generator (P0)",
+            "node": "Omniscient Fix: AI Fix Gen-0-28ec",
             "type": "main",
             "index": 0
           }
@@ -397,7 +397,7 @@
         ]
       ]
     },
-    "Omniscient Fix: AI Fix Generator (P0)": {
+    "Omniscient Fix: AI Fix Gen-0-28ec": {
       "main": [
         [
           {
@@ -412,18 +412,18 @@
       "main": [
         [
           {
-            "node": "Check: AI Fix Generator (P0)",
+            "node": "Check: AI Fix Gen-0-28ec",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Sanitize Fix (P0)": {
+    "Check: Sanitize F-0-9725": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Sanitize Fix (P0)",
+            "node": "Omniscient Fix: Sanitize F-0-9725",
             "type": "main",
             "index": 0
           }
@@ -437,7 +437,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Sanitize Fix (P0)": {
+    "Omniscient Fix: Sanitize F-0-9725": {
       "main": [
         [
           {
@@ -452,18 +452,18 @@
       "main": [
         [
           {
-            "node": "Check: Sanitize Fix (P0)",
+            "node": "Check: Sanitize F-0-9725",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Apply Fix (P0)": {
+    "Check: Apply Fix-0-f6b0": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Apply Fix (P0)",
+            "node": "Omniscient Fix: Apply Fix-0-f6b0",
             "type": "main",
             "index": 0
           }
@@ -477,7 +477,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Apply Fix (P0)": {
+    "Omniscient Fix: Apply Fix-0-f6b0": {
       "main": [
         [
           {
@@ -492,18 +492,18 @@
       "main": [
         [
           {
-            "node": "Check: Apply Fix (P0)",
+            "node": "Check: Apply Fix-0-f6b0",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Git Commit & Push (P0)": {
+    "Check: Git Commit-0-82a2": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Git Commit & Push (P0)",
+            "node": "Omniscient Fix: Git Commit-0-82a2",
             "type": "main",
             "index": 0
           }
@@ -517,7 +517,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Git Commit & Push (P0)": {
+    "Omniscient Fix: Git Commit-0-82a2": {
       "main": [
         [
           {
@@ -532,18 +532,18 @@
       "main": [
         [
           {
-            "node": "Check: Git Commit & Push (P0)",
+            "node": "Check: Git Commit-0-82a2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Fix Failed Notification (P0)": {
+    "Check: Fix Failed-0-59d3": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Fix Failed Notification (P0)",
+            "node": "Omniscient Fix: Fix Failed-0-59d3",
             "type": "main",
             "index": 0
           }
@@ -557,7 +557,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Fix Failed Notification (P0)": {
+    "Omniscient Fix: Fix Failed-0-59d3": {
       "main": [
         [
           {
@@ -572,7 +572,7 @@
       "main": [
         [
           {
-            "node": "Check: Fix Failed Notification (P0)",
+            "node": "Check: Fix Failed-0-59d3",
             "type": "main",
             "index": 0
           }

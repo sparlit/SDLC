@@ -54,8 +54,8 @@
           ]
         }
       },
-      "id": "d0dfffe1-e007-4d5e-a9f4-c1ca2b1f50e6",
-      "name": "Check: Manual Trigger (P0)",
+      "id": "00bb3b4f-0e56-43dc-a5b5-0ef3b425f604",
+      "name": "Check: Manual Tri-0-9549",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -70,8 +70,8 @@
           "waitForResults": true
         }
       },
-      "id": "b82332c6-d40f-4783-9dc3-b491e7aa8887",
-      "name": "Omniscient Fix: Manual Trigger (P0)",
+      "id": "d12fb734-9663-4c71-b816-b7032da0cc48",
+      "name": "Omniscient Fix: Manual Tri-0-9549",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -90,8 +90,8 @@
           ]
         }
       },
-      "id": "64962685-1aed-43f7-ad44-22efc99039c6",
-      "name": "Check: Run Stress Test (P0)",
+      "id": "7fadd24c-688d-4d46-a642-43fa475bd95d",
+      "name": "Check: Run Stress-0-0b0f",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -106,8 +106,8 @@
           "waitForResults": true
         }
       },
-      "id": "931d7b30-9bb5-4b93-b322-486e14e15679",
-      "name": "Omniscient Fix: Run Stress Test (P0)",
+      "id": "9d3b71fb-6f00-4c1a-b95d-ff9e94bb8ce2",
+      "name": "Omniscient Fix: Run Stress-0-0b0f",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -126,8 +126,8 @@
           ]
         }
       },
-      "id": "2a859c83-80c2-4564-aad3-9ca42d795fb4",
-      "name": "Check: Log Performance (P0)",
+      "id": "e1a0a399-35e6-41fa-a78a-4f99dbab8f13",
+      "name": "Check: Log Perfor-0-e54b",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -142,8 +142,8 @@
           "waitForResults": true
         }
       },
-      "id": "4f9aa198-5a8d-4636-b804-754de4910bee",
-      "name": "Omniscient Fix: Log Performance (P0)",
+      "id": "18ef5022-240f-46b1-ab06-2e8a09efc51a",
+      "name": "Omniscient Fix: Log Perfor-0-e54b",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -153,11 +153,11 @@
     }
   ],
   "connections": {
-    "Check: Manual Trigger (P0)": {
+    "Check: Manual Tri-0-9549": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Manual Trigger (P0)",
+            "node": "Omniscient Fix: Manual Tri-0-9549",
             "type": "main",
             "index": 0
           }
@@ -171,7 +171,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Manual Trigger (P0)": {
+    "Omniscient Fix: Manual Tri-0-9549": {
       "main": [
         [
           {
@@ -186,18 +186,18 @@
       "main": [
         [
           {
-            "node": "Check: Manual Trigger (P0)",
+            "node": "Check: Manual Tri-0-9549",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Run Stress Test (P0)": {
+    "Check: Run Stress-0-0b0f": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Run Stress Test (P0)",
+            "node": "Omniscient Fix: Run Stress-0-0b0f",
             "type": "main",
             "index": 0
           }
@@ -211,7 +211,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Run Stress Test (P0)": {
+    "Omniscient Fix: Run Stress-0-0b0f": {
       "main": [
         [
           {
@@ -226,18 +226,18 @@
       "main": [
         [
           {
-            "node": "Check: Run Stress Test (P0)",
+            "node": "Check: Run Stress-0-0b0f",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Log Performance (P0)": {
+    "Check: Log Perfor-0-e54b": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Log Performance (P0)",
+            "node": "Omniscient Fix: Log Perfor-0-e54b",
             "type": "main",
             "index": 0
           }
@@ -251,7 +251,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Log Performance (P0)": {
+    "Omniscient Fix: Log Perfor-0-e54b": {
       "main": [
         [
           {
@@ -266,7 +266,7 @@
       "main": [
         [
           {
-            "node": "Check: Log Performance (P0)",
+            "node": "Check: Log Perfor-0-e54b",
             "type": "main",
             "index": 0
           }

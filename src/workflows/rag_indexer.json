@@ -68,8 +68,8 @@
           ]
         }
       },
-      "id": "1c3eb832-47f2-4434-bd26-58e1f6de07f3",
-      "name": "Check: Read Project Files (P0)",
+      "id": "595af9cf-ef8b-43d5-988c-d45784ded1d4",
+      "name": "Check: Read Proje-0-3d96",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -84,8 +84,8 @@
           "waitForResults": true
         }
       },
-      "id": "28218116-c5de-46f1-b7e5-f6d7f5c5fa11",
-      "name": "Omniscient Fix: Read Project Files (P0)",
+      "id": "18610458-a477-4feb-82a7-d410d4f2387b",
+      "name": "Omniscient Fix: Read Proje-0-3d96",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -104,8 +104,8 @@
           ]
         }
       },
-      "id": "675c7e47-c1cf-485a-9e9c-ea8c80c0d1b2",
-      "name": "Check: Chroma Upsert (P0)",
+      "id": "0428d6d8-afe1-433d-8932-6e3b61314abe",
+      "name": "Check: Chroma Ups-0-d1a8",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -120,8 +120,8 @@
           "waitForResults": true
         }
       },
-      "id": "adb56494-27fa-47aa-b9ce-e5008ba3ff99",
-      "name": "Omniscient Fix: Chroma Upsert (P0)",
+      "id": "94b6455b-8327-4df5-b720-2cbeb5f9259b",
+      "name": "Omniscient Fix: Chroma Ups-0-d1a8",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -131,11 +131,11 @@
     }
   ],
   "connections": {
-    "Check: Read Project Files (P0)": {
+    "Check: Read Proje-0-3d96": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Read Project Files (P0)",
+            "node": "Omniscient Fix: Read Proje-0-3d96",
             "type": "main",
             "index": 0
           }
@@ -149,7 +149,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Read Project Files (P0)": {
+    "Omniscient Fix: Read Proje-0-3d96": {
       "main": [
         [
           {
@@ -164,18 +164,18 @@
       "main": [
         [
           {
-            "node": "Check: Read Project Files (P0)",
+            "node": "Check: Read Proje-0-3d96",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Chroma Upsert (P0)": {
+    "Check: Chroma Ups-0-d1a8": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Chroma Upsert (P0)",
+            "node": "Omniscient Fix: Chroma Ups-0-d1a8",
             "type": "main",
             "index": 0
           }
@@ -189,7 +189,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Chroma Upsert (P0)": {
+    "Omniscient Fix: Chroma Ups-0-d1a8": {
       "main": [
         [
           {
@@ -204,7 +204,7 @@
       "main": [
         [
           {
-            "node": "Check: Chroma Upsert (P0)",
+            "node": "Check: Chroma Ups-0-d1a8",
             "type": "main",
             "index": 0
           }

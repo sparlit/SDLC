@@ -58,8 +58,8 @@
           ]
         }
       },
-      "id": "421e1799-9dd8-4690-8975-8cf838ec549f",
-      "name": "Check: Whisper Transcribe (P0)",
+      "id": "3e47cb41-f407-44c4-a8b6-11f61072b1c9",
+      "name": "Check: Whisper Tr-0-b840",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -74,8 +74,8 @@
           "waitForResults": true
         }
       },
-      "id": "aab11bde-b560-41bf-bb5d-f95a8b1b2371",
-      "name": "Omniscient Fix: Whisper Transcribe (P0)",
+      "id": "056c7bda-4d64-4968-9156-450198169a74",
+      "name": "Omniscient Fix: Whisper Tr-0-b840",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -94,8 +94,8 @@
           ]
         }
       },
-      "id": "440f2d55-aa08-4b4d-9ba8-ad1b37ab61f4",
-      "name": "Check: Trigger Brain (P0)",
+      "id": "13aeb95f-4352-47e8-b839-84f29d5364ec",
+      "name": "Check: Trigger Br-0-f166",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -110,8 +110,8 @@
           "waitForResults": true
         }
       },
-      "id": "4ffaebdb-e605-4679-8354-fe8102e957a7",
-      "name": "Omniscient Fix: Trigger Brain (P0)",
+      "id": "4920bf03-3061-4852-bd57-5eb5cce4e7ff",
+      "name": "Omniscient Fix: Trigger Br-0-f166",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -121,11 +121,11 @@
     }
   ],
   "connections": {
-    "Check: Whisper Transcribe (P0)": {
+    "Check: Whisper Tr-0-b840": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Whisper Transcribe (P0)",
+            "node": "Omniscient Fix: Whisper Tr-0-b840",
             "type": "main",
             "index": 0
           }
@@ -139,7 +139,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Whisper Transcribe (P0)": {
+    "Omniscient Fix: Whisper Tr-0-b840": {
       "main": [
         [
           {
@@ -154,18 +154,18 @@
       "main": [
         [
           {
-            "node": "Check: Whisper Transcribe (P0)",
+            "node": "Check: Whisper Tr-0-b840",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Trigger Brain (P0)": {
+    "Check: Trigger Br-0-f166": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Trigger Brain (P0)",
+            "node": "Omniscient Fix: Trigger Br-0-f166",
             "type": "main",
             "index": 0
           }
@@ -179,7 +179,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Trigger Brain (P0)": {
+    "Omniscient Fix: Trigger Br-0-f166": {
       "main": [
         [
           {
@@ -194,7 +194,7 @@
       "main": [
         [
           {
-            "node": "Check: Trigger Brain (P0)",
+            "node": "Check: Trigger Br-0-f166",
             "type": "main",
             "index": 0
           }

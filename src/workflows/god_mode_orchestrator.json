@@ -53,8 +53,8 @@
           ]
         }
       },
-      "id": "918f320d-688d-424a-a719-0c7e14279552",
-      "name": "Check: Hardware Safety Check (P0)",
+      "id": "a1f2d6a7-4e5d-418f-b221-0bfad3b3a951",
+      "name": "Check: Hardware S-0-3b54",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -69,8 +69,8 @@
           "waitForResults": true
         }
       },
-      "id": "ac47c4b2-7f28-45a5-8050-7af266f9e56d",
-      "name": "Omniscient Fix: Hardware Safety Check (P0)",
+      "id": "1cda18b1-eedd-400c-a5b0-4e2f2c1ed433",
+      "name": "Omniscient Fix: Hardware S-0-3b54",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "ad09b47b-604a-4c9f-a113-81145a2381c3",
-      "name": "Check: Scout (Deep Analyze) (P0)",
+      "id": "54d9aa05-ec4e-4b0a-a36a-f3e4d4474474",
+      "name": "Check: Scout (Dee-0-ff4a",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "df347483-daa0-496d-b531-4b27e50bfbca",
-      "name": "Omniscient Fix: Scout (Deep Analyze) (P0)",
+      "id": "5e85cb0a-418b-478e-8218-049d9a2ca4d0",
+      "name": "Omniscient Fix: Scout (Dee-0-ff4a",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -116,11 +116,11 @@
     }
   ],
   "connections": {
-    "Check: Hardware Safety Check (P0)": {
+    "Check: Hardware S-0-3b54": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Hardware Safety Check (P0)",
+            "node": "Omniscient Fix: Hardware S-0-3b54",
             "type": "main",
             "index": 0
           }
@@ -134,7 +134,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Hardware Safety Check (P0)": {
+    "Omniscient Fix: Hardware S-0-3b54": {
       "main": [
         [
           {
@@ -149,18 +149,18 @@
       "main": [
         [
           {
-            "node": "Check: Hardware Safety Check (P0)",
+            "node": "Check: Hardware S-0-3b54",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Scout (Deep Analyze) (P0)": {
+    "Check: Scout (Dee-0-ff4a": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Scout (Deep Analyze) (P0)",
+            "node": "Omniscient Fix: Scout (Dee-0-ff4a",
             "type": "main",
             "index": 0
           }
@@ -174,7 +174,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Scout (Deep Analyze) (P0)": {
+    "Omniscient Fix: Scout (Dee-0-ff4a": {
       "main": [
         [
           {
@@ -189,7 +189,7 @@
       "main": [
         [
           {
-            "node": "Check: Scout (Deep Analyze) (P0)",
+            "node": "Check: Scout (Dee-0-ff4a",
             "type": "main",
             "index": 0
           }

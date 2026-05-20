@@ -53,8 +53,8 @@
           ]
         }
       },
-      "id": "ac863175-7b56-4572-887f-a5fce49162c8",
-      "name": "Check: Spawn Swarm (P0)",
+      "id": "e18400d2-4cac-415f-9444-25794a0a8737",
+      "name": "Check: Spawn Swar-0-b751",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -69,8 +69,8 @@
           "waitForResults": true
         }
       },
-      "id": "2835ba6f-abf1-4ad1-b414-ce1d3f1c50db",
-      "name": "Omniscient Fix: Spawn Swarm (P0)",
+      "id": "e5fdd53b-19e4-43ac-8229-3660f1f81e5e",
+      "name": "Omniscient Fix: Spawn Swar-0-b751",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "3d85bea2-b9d1-4405-b697-58212725e2a7",
-      "name": "Check: Execute Agent (P0)",
+      "id": "c6371a5e-2032-44b5-be6c-94fce8880dfa",
+      "name": "Check: Execute Ag-0-9e19",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "62de64aa-7a52-47c3-a8b0-cf0d6b0316f0",
-      "name": "Omniscient Fix: Execute Agent (P0)",
+      "id": "4711dff9-ce62-442f-a90c-0364b131431e",
+      "name": "Omniscient Fix: Execute Ag-0-9e19",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -116,11 +116,11 @@
     }
   ],
   "connections": {
-    "Check: Spawn Swarm (P0)": {
+    "Check: Spawn Swar-0-b751": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Spawn Swarm (P0)",
+            "node": "Omniscient Fix: Spawn Swar-0-b751",
             "type": "main",
             "index": 0
           }
@@ -134,7 +134,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Spawn Swarm (P0)": {
+    "Omniscient Fix: Spawn Swar-0-b751": {
       "main": [
         [
           {
@@ -149,18 +149,18 @@
       "main": [
         [
           {
-            "node": "Check: Spawn Swarm (P0)",
+            "node": "Check: Spawn Swar-0-b751",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Execute Agent (P0)": {
+    "Check: Execute Ag-0-9e19": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Execute Agent (P0)",
+            "node": "Omniscient Fix: Execute Ag-0-9e19",
             "type": "main",
             "index": 0
           }
@@ -174,7 +174,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Execute Agent (P0)": {
+    "Omniscient Fix: Execute Ag-0-9e19": {
       "main": [
         [
           {
@@ -189,7 +189,7 @@
       "main": [
         [
           {
-            "node": "Check: Execute Agent (P0)",
+            "node": "Check: Execute Ag-0-9e19",
             "type": "main",
             "index": 0
           }

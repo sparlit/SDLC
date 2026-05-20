@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "cda81b2f-d4a8-4978-85f5-0a03cafa168a",
-      "name": "Check: List Files (P0)",
+      "id": "c7b0310f-8d14-4744-b383-40e0279be558",
+      "name": "Check: List Files-0-b533",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "4a53a397-4c70-4121-b47c-6a2ed8bb3c21",
-      "name": "Omniscient Fix: List Files (P0)",
+      "id": "6da86cb0-ea11-4cca-91d7-2f9c93bff69c",
+      "name": "Omniscient Fix: List Files-0-b533",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -125,8 +125,8 @@
           ]
         }
       },
-      "id": "f51dd81f-5a4a-4138-9b6f-b8b41fa56741",
-      "name": "Check: AI Doc Generator (P0)",
+      "id": "9bb2d051-3e49-451e-8a4f-58e556402c5b",
+      "name": "Check: AI Doc Gen-0-f1a7",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -141,8 +141,8 @@
           "waitForResults": true
         }
       },
-      "id": "36142818-e73f-4af5-9074-c15cae196bf9",
-      "name": "Omniscient Fix: AI Doc Generator (P0)",
+      "id": "2b174804-b69d-4f11-9a98-60e37da9d5b7",
+      "name": "Omniscient Fix: AI Doc Gen-0-f1a7",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -161,8 +161,8 @@
           ]
         }
       },
-      "id": "2ef85eb9-e82e-4945-8d15-8ac7c71546fd",
-      "name": "Check: Save Docs (P0)",
+      "id": "d1a1b5ca-7b18-40e5-8ac5-a69a550ef4d3",
+      "name": "Check: Save Docs-0-6724",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -177,8 +177,8 @@
           "waitForResults": true
         }
       },
-      "id": "51254160-3b12-46c6-895a-ec7aa92043ad",
-      "name": "Omniscient Fix: Save Docs (P0)",
+      "id": "17ad2c9c-9428-466a-91eb-7381d4e82552",
+      "name": "Omniscient Fix: Save Docs-0-6724",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -188,11 +188,11 @@
     }
   ],
   "connections": {
-    "Check: List Files (P0)": {
+    "Check: List Files-0-b533": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: List Files (P0)",
+            "node": "Omniscient Fix: List Files-0-b533",
             "type": "main",
             "index": 0
           }
@@ -206,7 +206,7 @@
         ]
       ]
     },
-    "Omniscient Fix: List Files (P0)": {
+    "Omniscient Fix: List Files-0-b533": {
       "main": [
         [
           {
@@ -221,18 +221,18 @@
       "main": [
         [
           {
-            "node": "Check: List Files (P0)",
+            "node": "Check: List Files-0-b533",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Doc Generator (P0)": {
+    "Check: AI Doc Gen-0-f1a7": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Doc Generator (P0)",
+            "node": "Omniscient Fix: AI Doc Gen-0-f1a7",
             "type": "main",
             "index": 0
           }
@@ -246,7 +246,7 @@
         ]
       ]
     },
-    "Omniscient Fix: AI Doc Generator (P0)": {
+    "Omniscient Fix: AI Doc Gen-0-f1a7": {
       "main": [
         [
           {
@@ -261,18 +261,18 @@
       "main": [
         [
           {
-            "node": "Check: AI Doc Generator (P0)",
+            "node": "Check: AI Doc Gen-0-f1a7",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Save Docs (P0)": {
+    "Check: Save Docs-0-6724": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Save Docs (P0)",
+            "node": "Omniscient Fix: Save Docs-0-6724",
             "type": "main",
             "index": 0
           }
@@ -286,7 +286,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Save Docs (P0)": {
+    "Omniscient Fix: Save Docs-0-6724": {
       "main": [
         [
           {
@@ -301,7 +301,7 @@
       "main": [
         [
           {
-            "node": "Check: Save Docs (P0)",
+            "node": "Check: Save Docs-0-6724",
             "type": "main",
             "index": 0
           }

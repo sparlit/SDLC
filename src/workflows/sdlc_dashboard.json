@@ -68,8 +68,8 @@
           ]
         }
       },
-      "id": "d88c2091-244d-4e24-96ee-a0700bed58aa",
-      "name": "Check: Fetch Metrics (P0)",
+      "id": "1f7f3c18-e9f8-4345-b839-1ee6d6dcd238",
+      "name": "Check: Fetch Metr-0-6543",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -84,8 +84,8 @@
           "waitForResults": true
         }
       },
-      "id": "bafa81d8-1a98-4186-bc45-c9ce2170d213",
-      "name": "Omniscient Fix: Fetch Metrics (P0)",
+      "id": "ed73a99c-c51c-4858-b2bc-ec7d496f2c88",
+      "name": "Omniscient Fix: Fetch Metr-0-6543",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -104,8 +104,8 @@
           ]
         }
       },
-      "id": "a186d94c-eb18-41c0-8213-3ef870774975",
-      "name": "Check: Generate HTML (P0)",
+      "id": "d6018a61-aadf-44a2-8553-dae95005e1e6",
+      "name": "Check: Generate H-0-49d9",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -120,8 +120,8 @@
           "waitForResults": true
         }
       },
-      "id": "292bbe46-242c-4a09-bcbc-5e7952cc8ded",
-      "name": "Omniscient Fix: Generate HTML (P0)",
+      "id": "9486dfc2-5c86-4e3a-913f-32fabb0f9327",
+      "name": "Omniscient Fix: Generate H-0-49d9",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -140,8 +140,8 @@
           ]
         }
       },
-      "id": "3a3a678e-7165-46cd-bba1-12077a64b42f",
-      "name": "Check: Save Dashboard (P0)",
+      "id": "a35a1a1a-e1c9-4447-a1f3-6308879e90ca",
+      "name": "Check: Save Dashb-0-31a9",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -156,8 +156,8 @@
           "waitForResults": true
         }
       },
-      "id": "fa3c7e63-951c-402b-a76e-65faa78a1c42",
-      "name": "Omniscient Fix: Save Dashboard (P0)",
+      "id": "d777184a-d26d-420f-915e-329b1e006c2a",
+      "name": "Omniscient Fix: Save Dashb-0-31a9",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -167,11 +167,11 @@
     }
   ],
   "connections": {
-    "Check: Fetch Metrics (P0)": {
+    "Check: Fetch Metr-0-6543": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Fetch Metrics (P0)",
+            "node": "Omniscient Fix: Fetch Metr-0-6543",
             "type": "main",
             "index": 0
           }
@@ -185,7 +185,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Fetch Metrics (P0)": {
+    "Omniscient Fix: Fetch Metr-0-6543": {
       "main": [
         [
           {
@@ -200,18 +200,18 @@
       "main": [
         [
           {
-            "node": "Check: Fetch Metrics (P0)",
+            "node": "Check: Fetch Metr-0-6543",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Generate HTML (P0)": {
+    "Check: Generate H-0-49d9": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Generate HTML (P0)",
+            "node": "Omniscient Fix: Generate H-0-49d9",
             "type": "main",
             "index": 0
           }
@@ -225,7 +225,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Generate HTML (P0)": {
+    "Omniscient Fix: Generate H-0-49d9": {
       "main": [
         [
           {
@@ -240,18 +240,18 @@
       "main": [
         [
           {
-            "node": "Check: Generate HTML (P0)",
+            "node": "Check: Generate H-0-49d9",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Save Dashboard (P0)": {
+    "Check: Save Dashb-0-31a9": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Save Dashboard (P0)",
+            "node": "Omniscient Fix: Save Dashb-0-31a9",
             "type": "main",
             "index": 0
           }
@@ -265,7 +265,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Save Dashboard (P0)": {
+    "Omniscient Fix: Save Dashb-0-31a9": {
       "main": [
         [
           {
@@ -280,7 +280,7 @@
       "main": [
         [
           {
-            "node": "Check: Save Dashboard (P0)",
+            "node": "Check: Save Dashb-0-31a9",
             "type": "main",
             "index": 0
           }

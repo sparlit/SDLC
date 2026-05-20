@@ -91,8 +91,8 @@
           ]
         }
       },
-      "id": "0f1ef614-8397-4e66-8827-d081c7d39136",
-      "name": "Check: Check Hardware (P0)",
+      "id": "6749e36e-a528-450d-be39-7d3a5c90a9b9",
+      "name": "Check: Check Hard-0-b2a1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -107,8 +107,8 @@
           "waitForResults": true
         }
       },
-      "id": "c1dcb97e-91cd-4650-9f31-cf18ad3d60c2",
-      "name": "Omniscient Fix: Check Hardware (P0)",
+      "id": "442e2aa6-c6c7-455f-b277-97960f816dac",
+      "name": "Omniscient Fix: Check Hard-0-b2a1",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -127,8 +127,8 @@
           ]
         }
       },
-      "id": "a0eb7317-6fe9-442e-8086-6a16f2975a9d",
-      "name": "Check: Is Stable? (P0)",
+      "id": "80a0891c-9789-4e82-9d8b-6878233cc727",
+      "name": "Check: Is Stable?-0-6d9e",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -143,8 +143,8 @@
           "waitForResults": true
         }
       },
-      "id": "fb0647fe-d29f-40cf-ac58-f272d5b81278",
-      "name": "Omniscient Fix: Is Stable? (P0)",
+      "id": "e6eec885-9a6d-4533-bb4a-fe68c5ff3798",
+      "name": "Omniscient Fix: Is Stable?-0-6d9e",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -163,8 +163,8 @@
           ]
         }
       },
-      "id": "c05c8948-a328-4555-9158-74a4a665914a",
-      "name": "Check: Alert Notification (P0)",
+      "id": "66dcb925-d33e-4994-9411-b5eda450192d",
+      "name": "Check: Alert Noti-0-1bb1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -179,8 +179,8 @@
           "waitForResults": true
         }
       },
-      "id": "b392ca38-7986-4e7b-a74c-683db044f031",
-      "name": "Omniscient Fix: Alert Notification (P0)",
+      "id": "c2cfa6f0-17f9-4fcf-b3e1-e83ea6a0e7c2",
+      "name": "Omniscient Fix: Alert Noti-0-1bb1",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -190,11 +190,11 @@
     }
   ],
   "connections": {
-    "Check: Check Hardware (P0)": {
+    "Check: Check Hard-0-b2a1": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Check Hardware (P0)",
+            "node": "Omniscient Fix: Check Hard-0-b2a1",
             "type": "main",
             "index": 0
           }
@@ -208,7 +208,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Check Hardware (P0)": {
+    "Omniscient Fix: Check Hard-0-b2a1": {
       "main": [
         [
           {
@@ -223,18 +223,18 @@
       "main": [
         [
           {
-            "node": "Check: Check Hardware (P0)",
+            "node": "Check: Check Hard-0-b2a1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is Stable? (P0)": {
+    "Check: Is Stable?-0-6d9e": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is Stable? (P0)",
+            "node": "Omniscient Fix: Is Stable?-0-6d9e",
             "type": "main",
             "index": 0
           }
@@ -248,7 +248,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Is Stable? (P0)": {
+    "Omniscient Fix: Is Stable?-0-6d9e": {
       "main": [
         [
           {
@@ -263,18 +263,18 @@
       "main": [
         [
           {
-            "node": "Check: Is Stable? (P0)",
+            "node": "Check: Is Stable?-0-6d9e",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Alert Notification (P0)": {
+    "Check: Alert Noti-0-1bb1": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Alert Notification (P0)",
+            "node": "Omniscient Fix: Alert Noti-0-1bb1",
             "type": "main",
             "index": 0
           }
@@ -288,7 +288,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Alert Notification (P0)": {
+    "Omniscient Fix: Alert Noti-0-1bb1": {
       "main": [
         [
           {
@@ -303,7 +303,7 @@
       "main": [
         [
           {
-            "node": "Check: Alert Notification (P0)",
+            "node": "Check: Alert Noti-0-1bb1",
             "type": "main",
             "index": 0
           }

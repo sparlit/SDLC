@@ -89,8 +89,8 @@
           ]
         }
       },
-      "id": "f3dc5815-ec7d-46ac-96cd-02b009600979",
-      "name": "Check: Get Recent Changes (P0)",
+      "id": "0b577bd4-71b8-4630-b77e-578949a4151b",
+      "name": "Check: Get Recent-0-2be4",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -105,8 +105,8 @@
           "waitForResults": true
         }
       },
-      "id": "79695e12-2093-4048-8c00-5e82913b1177",
-      "name": "Omniscient Fix: Get Recent Changes (P0)",
+      "id": "688a573e-17ca-49bd-9818-87d41d98988b",
+      "name": "Omniscient Fix: Get Recent-0-2be4",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -125,8 +125,8 @@
           ]
         }
       },
-      "id": "7d170d72-79f8-4789-9fb3-d5b1b7d5959c",
-      "name": "Check: AI Summarizer (P0)",
+      "id": "a41877b4-6eb9-4542-948f-55f78b76e6bf",
+      "name": "Check: AI Summari-0-99f0",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -141,8 +141,8 @@
           "waitForResults": true
         }
       },
-      "id": "7bcf5ce7-a5d9-41d5-93ca-2f6c518d5bc3",
-      "name": "Omniscient Fix: AI Summarizer (P0)",
+      "id": "6d25e960-ed0b-4872-b4b2-ef5dc93ab901",
+      "name": "Omniscient Fix: AI Summari-0-99f0",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -161,8 +161,8 @@
           ]
         }
       },
-      "id": "701930ec-febe-435b-a7a9-f854329f0953",
-      "name": "Check: Update Documentation (P0)",
+      "id": "c0e54002-98c1-4b25-88f1-e627520aafe5",
+      "name": "Check: Update Doc-0-274e",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -177,8 +177,8 @@
           "waitForResults": true
         }
       },
-      "id": "ca1c899b-262d-4fea-ae7f-c57d660c711b",
-      "name": "Omniscient Fix: Update Documentation (P0)",
+      "id": "f3b1e005-917d-4c57-b489-c882e33b1075",
+      "name": "Omniscient Fix: Update Doc-0-274e",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -188,11 +188,11 @@
     }
   ],
   "connections": {
-    "Check: Get Recent Changes (P0)": {
+    "Check: Get Recent-0-2be4": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Get Recent Changes (P0)",
+            "node": "Omniscient Fix: Get Recent-0-2be4",
             "type": "main",
             "index": 0
           }
@@ -206,7 +206,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Get Recent Changes (P0)": {
+    "Omniscient Fix: Get Recent-0-2be4": {
       "main": [
         [
           {
@@ -221,18 +221,18 @@
       "main": [
         [
           {
-            "node": "Check: Get Recent Changes (P0)",
+            "node": "Check: Get Recent-0-2be4",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Summarizer (P0)": {
+    "Check: AI Summari-0-99f0": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Summarizer (P0)",
+            "node": "Omniscient Fix: AI Summari-0-99f0",
             "type": "main",
             "index": 0
           }
@@ -246,7 +246,7 @@
         ]
       ]
     },
-    "Omniscient Fix: AI Summarizer (P0)": {
+    "Omniscient Fix: AI Summari-0-99f0": {
       "main": [
         [
           {
@@ -261,18 +261,18 @@
       "main": [
         [
           {
-            "node": "Check: AI Summarizer (P0)",
+            "node": "Check: AI Summari-0-99f0",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Update Documentation (P0)": {
+    "Check: Update Doc-0-274e": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Update Documentation (P0)",
+            "node": "Omniscient Fix: Update Doc-0-274e",
             "type": "main",
             "index": 0
           }
@@ -286,7 +286,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Update Documentation (P0)": {
+    "Omniscient Fix: Update Doc-0-274e": {
       "main": [
         [
           {
@@ -301,7 +301,7 @@
       "main": [
         [
           {
-            "node": "Check: Update Documentation (P0)",
+            "node": "Check: Update Doc-0-274e",
             "type": "main",
             "index": 0
           }

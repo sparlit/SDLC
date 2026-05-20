@@ -82,8 +82,8 @@
           ]
         }
       },
-      "id": "e5289f60-1d58-432c-be71-71a9f50c55fd",
-      "name": "Check: Agent Critic (P0)",
+      "id": "963eb9c4-627e-4cef-be16-05068fd6282f",
+      "name": "Check: Agent Crit-0-9b82",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -98,8 +98,8 @@
           "waitForResults": true
         }
       },
-      "id": "e1784ca9-bb40-42b1-bf1f-c761693eff3d",
-      "name": "Omniscient Fix: Agent Critic (P0)",
+      "id": "ed238bb9-56ff-49bf-8dca-51c332588667",
+      "name": "Omniscient Fix: Agent Crit-0-9b82",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -118,8 +118,8 @@
           ]
         }
       },
-      "id": "ba388e7c-02b2-4bfd-8d8d-b07058deb6d2",
-      "name": "Check: Agent Finalizer (P0)",
+      "id": "3f40f47b-2f69-4570-8e4e-9dd2f5754753",
+      "name": "Check: Agent Fina-0-3b27",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -134,8 +134,8 @@
           "waitForResults": true
         }
       },
-      "id": "4770dda4-e9ac-40de-9508-5b3aa692fe59",
-      "name": "Omniscient Fix: Agent Finalizer (P0)",
+      "id": "1bbfa2a4-0893-4bc8-8ed2-899513da5b9e",
+      "name": "Omniscient Fix: Agent Fina-0-3b27",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -145,11 +145,11 @@
     }
   ],
   "connections": {
-    "Check: Agent Critic (P0)": {
+    "Check: Agent Crit-0-9b82": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Agent Critic (P0)",
+            "node": "Omniscient Fix: Agent Crit-0-9b82",
             "type": "main",
             "index": 0
           }
@@ -163,7 +163,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Agent Critic (P0)": {
+    "Omniscient Fix: Agent Crit-0-9b82": {
       "main": [
         [
           {
@@ -178,18 +178,18 @@
       "main": [
         [
           {
-            "node": "Check: Agent Critic (P0)",
+            "node": "Check: Agent Crit-0-9b82",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Agent Finalizer (P0)": {
+    "Check: Agent Fina-0-3b27": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Agent Finalizer (P0)",
+            "node": "Omniscient Fix: Agent Fina-0-3b27",
             "type": "main",
             "index": 0
           }
@@ -203,7 +203,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Agent Finalizer (P0)": {
+    "Omniscient Fix: Agent Fina-0-3b27": {
       "main": [
         [
           {
@@ -218,7 +218,7 @@
       "main": [
         [
           {
-            "node": "Check: Agent Finalizer (P0)",
+            "node": "Check: Agent Fina-0-3b27",
             "type": "main",
             "index": 0
           }

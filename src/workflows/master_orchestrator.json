@@ -74,8 +74,8 @@
           ]
         }
       },
-      "id": "a05ac127-26a5-4bb9-9d79-3fc5d5d715a1",
-      "name": "Check: Get Arch Rules (P0)",
+      "id": "90ce86c2-6801-4fc4-b705-6dd35bd97431",
+      "name": "Check: Get Arch R-0-82be",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -90,8 +90,8 @@
           "waitForResults": true
         }
       },
-      "id": "68c5ccff-a5ea-4e27-9c17-096f7a70ec8c",
-      "name": "Omniscient Fix: Get Arch Rules (P0)",
+      "id": "f0add11f-2723-46be-94c9-17941183654c",
+      "name": "Omniscient Fix: Get Arch R-0-82be",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -110,8 +110,8 @@
           ]
         }
       },
-      "id": "2174bcfa-6d7e-485b-9b9c-83c525e141c7",
-      "name": "Check: Orchestrator Planning (P0)",
+      "id": "1bb52359-ef43-41cd-a2a8-71187d8d3e4c",
+      "name": "Check: Orchestrat-0-eee0",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -126,8 +126,8 @@
           "waitForResults": true
         }
       },
-      "id": "55b075da-6ed1-4160-a488-89ef5571a744",
-      "name": "Omniscient Fix: Orchestrator Planning (P0)",
+      "id": "a0c95e64-d0d4-469d-a0c7-ef30fb434297",
+      "name": "Omniscient Fix: Orchestrat-0-eee0",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -137,11 +137,11 @@
     }
   ],
   "connections": {
-    "Check: Get Arch Rules (P0)": {
+    "Check: Get Arch R-0-82be": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Get Arch Rules (P0)",
+            "node": "Omniscient Fix: Get Arch R-0-82be",
             "type": "main",
             "index": 0
           }
@@ -155,7 +155,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Get Arch Rules (P0)": {
+    "Omniscient Fix: Get Arch R-0-82be": {
       "main": [
         [
           {
@@ -170,18 +170,18 @@
       "main": [
         [
           {
-            "node": "Check: Get Arch Rules (P0)",
+            "node": "Check: Get Arch R-0-82be",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Orchestrator Planning (P0)": {
+    "Check: Orchestrat-0-eee0": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Orchestrator Planning (P0)",
+            "node": "Omniscient Fix: Orchestrat-0-eee0",
             "type": "main",
             "index": 0
           }
@@ -195,7 +195,7 @@
         ]
       ]
     },
-    "Omniscient Fix: Orchestrator Planning (P0)": {
+    "Omniscient Fix: Orchestrat-0-eee0": {
       "main": [
         [
           {
@@ -210,7 +210,7 @@
       "main": [
         [
           {
-            "node": "Check: Orchestrator Planning (P0)",
+            "node": "Check: Orchestrat-0-eee0",
             "type": "main",
             "index": 0
           }
