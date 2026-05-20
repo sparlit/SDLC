@@ -10,7 +10,10 @@
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -20,7 +23,11 @@
       "name": "Read Project Files",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -29,8 +36,14 @@
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            { "name": "documents", "value": "={{ $json.stdout }}" },
-            { "name": "ids", "value": "={{ $json.fileName }}" }
+            {
+              "name": "documents",
+              "value": "={{ $json.stdout }}"
+            },
+            {
+              "name": "ids",
+              "value": "={{ $json.fileName }}"
+            }
           ]
         }
       },
@@ -38,11 +51,165 @@
       "name": "Chroma Upsert",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Read Project Files\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5b9d6da5-9af5-41fd-9544-bfc0e8c67f00",
+      "name": "Check: Read Project Files (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "b2ddb4da-6919-4de2-80ab-b74143f5fe1d",
+      "name": "Omniscient Fix: Read Project Files (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Chroma Upsert\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "7c0f929a-225e-4f93-954c-dd09a607239c",
+      "name": "Check: Chroma Upsert (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "6eca0711-b723-4206-98bb-fe86384b9a0a",
+      "name": "Omniscient Fix: Chroma Upsert (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
     }
   ],
   "connections": {
-    "trigger": { "main": [[{ "node": "read-files", "type": "main", "index": 0 }]] },
-    "read-files": { "main": [[{ "node": "chroma-upsert", "type": "main", "index": 0 }]] }
+    "Check: Read Project Files (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Read Project Files (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Read Project Files (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Read Project Files (P0)": {
+      "main": [
+        [
+          {
+            "node": "Read Project Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Project Files": {
+      "main": [
+        [
+          {
+            "node": "Check: Read Project Files (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Chroma Upsert (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Chroma Upsert (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Chroma Upsert (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Chroma Upsert (P0)": {
+      "main": [
+        [
+          {
+            "node": "Chroma Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chroma Upsert": {
+      "main": [
+        [
+          {
+            "node": "Check: Chroma Upsert (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

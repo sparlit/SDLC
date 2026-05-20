@@ -10,7 +10,10 @@
       "name": "Weekly Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -20,7 +23,11 @@
       "name": "Scan External Repo",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -28,8 +35,14 @@
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "bodyParameters": {
           "parameters": [
-            { "name": "model", "value": "google/gemini-2.0-flash-001" },
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You found bugs in an external FOSS repo: {{ $json.stdout }}. Generate a fix to contribute back.\"}]" }
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You found bugs in an external FOSS repo: {{ $json.stdout }}. Generate a fix to contribute back.\"}]"
+            }
           ]
         }
       },
@@ -37,11 +50,165 @@
       "name": "Generate Contribution",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Scan External Repo\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bbca7b4d-36b1-41ed-80f9-ccdd16cb8350",
+      "name": "Check: Scan External Repo (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "6b31933c-1a5c-4c18-9e4d-4b1f4f4de825",
+      "name": "Omniscient Fix: Scan External Repo (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Generate Contribution\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5c6591dd-a84d-4ef7-901a-ab496df785ed",
+      "name": "Check: Generate Contribution (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "71ced692-7f74-4a26-bdf8-b79d624573e5",
+      "name": "Omniscient Fix: Generate Contribution (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
     }
   ],
   "connections": {
-    "trigger": { "main": [[{ "node": "scan-external", "type": "main", "index": 0 }]] },
-    "scan-external": { "main": [[{ "node": "generate-contribution", "type": "main", "index": 0 }]] }
+    "Check: Scan External Repo (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Scan External Repo (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Scan External Repo (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Scan External Repo (P0)": {
+      "main": [
+        [
+          {
+            "node": "Scan External Repo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scan External Repo": {
+      "main": [
+        [
+          {
+            "node": "Check: Scan External Repo (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Generate Contribution (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Generate Contribution (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Generate Contribution (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Generate Contribution (P0)": {
+      "main": [
+        [
+          {
+            "node": "Generate Contribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Contribution": {
+      "main": [
+        [
+          {
+            "node": "Check: Generate Contribution (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

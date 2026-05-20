@@ -26,7 +26,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -60,7 +61,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -73,37 +75,233 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Get Recent Changes\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "6fa4d774-f949-4515-9acb-1254f573cbad",
+      "name": "Check: Get Recent Changes (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "b1e6e55b-7a2b-487a-b1c9-27cde9ce27b8",
+      "name": "Omniscient Fix: Get Recent Changes (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Summarizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "00ef1544-a280-404c-beb3-e23f525594b6",
+      "name": "Check: AI Summarizer (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "69c83fa5-156b-476f-bd83-c1166ff801e3",
+      "name": "Omniscient Fix: AI Summarizer (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Documentation\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "4c57a66f-23ee-49e0-8fec-c6b5dc421b26",
+      "name": "Check: Update Documentation (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a2dfa808-ae71-4310-b56a-110a37c2b895",
+      "name": "Omniscient Fix: Update Documentation (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "daily-trigger": {
+    "Check: Get Recent Changes (P0)": {
       "main": [
         [
           {
-            "node": "get-changes",
+            "node": "Omniscient Fix: Get Recent Changes (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Get Recent Changes (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "get-changes": {
+    "Omniscient Fix: Get Recent Changes (P0)": {
       "main": [
         [
           {
-            "node": "ai-summarizer",
+            "node": "Get Recent Changes",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-summarizer": {
+    "Get Recent Changes": {
       "main": [
         [
           {
-            "node": "update-docs",
+            "node": "Check: Get Recent Changes (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Summarizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Summarizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Summarizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Summarizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "AI Summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Summarizer": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Summarizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Update Documentation (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Update Documentation (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Update Documentation (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Update Documentation (P0)": {
+      "main": [
+        [
+          {
+            "node": "Update Documentation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Documentation": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Documentation (P0)",
             "type": "main",
             "index": 0
           }

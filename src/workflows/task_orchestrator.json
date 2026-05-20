@@ -46,7 +46,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -59,7 +60,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -93,7 +95,8 @@
       "position": [
         600,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -106,7 +109,8 @@
       "position": [
         800,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -119,11 +123,210 @@
       "position": [
         1000,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Planner\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "15bf0a76-7c1c-4293-a910-d34c550c6d56",
+      "name": "Check: AI Planner (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "bcb41643-a905-41a9-b514-54364e48913b",
+      "name": "Omniscient Fix: AI Planner (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Parse Plan\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "0a13390f-3c67-4702-aa6f-1226d6e1a33e",
+      "name": "Check: Parse Plan (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "7caa9e82-3811-4652-aee0-7e22bfedcd77",
+      "name": "Omniscient Fix: Parse Plan (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Coder\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f7d84b82-1b48-4fca-9f87-b99b2ee0c707",
+      "name": "Check: AI Coder (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "5fc714fb-c0e7-4f56-bd6d-6cfa3962bc40",
+      "name": "Omniscient Fix: AI Coder (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Extract Code\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "202b2a7e-4ee4-4c66-a986-919f45747900",
+      "name": "Check: Extract Code (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "52eced52-cdee-4609-bf12-59131b634f53",
+      "name": "Omniscient Fix: Extract Code (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Write File\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "fa69f02f-3c03-4eb6-8d40-8617195cbc01",
+      "name": "Check: Write File (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "10f99c94-7650-4a73-a5e5-1871b5dcf5a1",
+      "name": "Omniscient Fix: Write File (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        0
       ]
     }
   ],
   "connections": {
-    "chat-trigger": {
+    "Check: AI Planner (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Planner (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Planner (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Planner (P0)": {
       "main": [
         [
           {
@@ -138,6 +341,35 @@
       "main": [
         [
           {
+            "node": "Check: AI Planner (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Parse Plan (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Parse Plan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Parse Plan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Parse Plan (P0)": {
+      "main": [
+        [
+          {
             "node": "Parse Plan",
             "type": "main",
             "index": 0
@@ -149,14 +381,72 @@
       "main": [
         [
           {
-            "node": "ai-coder",
+            "node": "Check: Parse Plan (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-coder": {
+    "Check: AI Coder (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Coder (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Coder (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Coder (P0)": {
+      "main": [
+        [
+          {
+            "node": "AI Coder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Coder": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Coder (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Extract Code (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Extract Code (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Extract Code (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Extract Code (P0)": {
       "main": [
         [
           {
@@ -171,7 +461,47 @@
       "main": [
         [
           {
+            "node": "Check: Extract Code (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Write File (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Write File (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Write File (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Write File (P0)": {
+      "main": [
+        [
+          {
             "node": "Write File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write File": {
+      "main": [
+        [
+          {
+            "node": "Check: Write File (P0)",
             "type": "main",
             "index": 0
           }

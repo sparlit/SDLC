@@ -10,7 +10,10 @@
       "name": "Weekly Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -20,7 +23,11 @@
       "name": "Legacy Scan",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -28,8 +35,14 @@
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "bodyParameters": {
           "parameters": [
-            { "name": "model", "value": "google/gemini-2.0-flash-001" },
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You are a systems architect. Based on the legacy scan: {{ $json.stdout }}, propose a modern, optimized neural architecture upgrade for the project.\"}]" }
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a systems architect. Based on the legacy scan: {{ $json.stdout }}, propose a modern, optimized neural architecture upgrade for the project.\"}]"
+            }
           ]
         }
       },
@@ -37,11 +50,165 @@
       "name": "Arch Optimizer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Legacy Scan\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b9b99cea-49a2-46e1-a70a-610fc666bc14",
+      "name": "Check: Legacy Scan (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "e3eac1a2-9003-4933-9418-1dbb8963fc35",
+      "name": "Omniscient Fix: Legacy Scan (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Arch Optimizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "2cef29b1-ccf1-4f32-a9a4-eccb5f73c331",
+      "name": "Check: Arch Optimizer (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "dd71b663-1b0e-404c-a20e-74322c69b0fc",
+      "name": "Omniscient Fix: Arch Optimizer (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
     }
   ],
   "connections": {
-    "weekly-trigger": { "main": [[{ "node": "legacy-scan", "type": "main", "index": 0 }]] },
-    "legacy-scan": { "main": [[{ "node": "arch-optimizer", "type": "main", "index": 0 }]] }
+    "Check: Legacy Scan (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Legacy Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Legacy Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Legacy Scan (P0)": {
+      "main": [
+        [
+          {
+            "node": "Legacy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Legacy Scan": {
+      "main": [
+        [
+          {
+            "node": "Check: Legacy Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Arch Optimizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Arch Optimizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Arch Optimizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Arch Optimizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "Arch Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arch Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Check: Arch Optimizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

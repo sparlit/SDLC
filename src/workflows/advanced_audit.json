@@ -12,7 +12,8 @@
       "position": [
         0,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -25,7 +26,8 @@
       "position": [
         200,
         -50
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -38,7 +40,8 @@
       "position": [
         200,
         150
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -72,42 +75,309 @@
       "position": [
         450,
         50
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trigger\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b20fed3f-bfa8-4fb9-a6d1-65c2a0758e16",
+      "name": "Check: Trigger (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "bc02a785-0ae7-44b2-a642-35096c4cdf7b",
+      "name": "Omniscient Fix: Trigger (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Semgrep Scan\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e232e68d-a00e-474f-8c96-0f6e2c5c3cb2",
+      "name": "Check: Semgrep Scan (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a1ab5f38-8594-4d4a-b87b-923fbd485b3c",
+      "name": "Omniscient Fix: Semgrep Scan (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Radon Complexity\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d20199a2-d930-40ad-9a95-42bce53e26d0",
+      "name": "Check: Radon Complexity (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "43d51f0c-2833-4327-8ddb-3290e9e119d4",
+      "name": "Omniscient Fix: Radon Complexity (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Audit Report\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ae709528-dc8d-44cc-bb76-0139f25147e1",
+      "name": "Check: AI Audit Report (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fbcc7229-64a7-47e5-ad26-aef10487cfba",
+      "name": "Omniscient Fix: AI Audit Report (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        850,
+        50
       ]
     }
   ],
   "connections": {
-    "trigger": {
+    "Check: Trigger (P0)": {
       "main": [
         [
           {
-            "node": "semgrep-scan",
+            "node": "Omniscient Fix: Trigger (P0)",
             "type": "main",
             "index": 0
-          },
+          }
+        ],
+        [
           {
-            "node": "radon-complexity",
+            "node": "Check: Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "semgrep-scan": {
+    "Omniscient Fix: Trigger (P0)": {
       "main": [
         [
           {
-            "node": "ai-audit-report",
+            "node": "Trigger",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "radon-complexity": {
+    "Trigger": {
       "main": [
         [
           {
-            "node": "ai-audit-report",
+            "node": "Check: Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Semgrep Scan (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Semgrep Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Semgrep Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Semgrep Scan (P0)": {
+      "main": [
+        [
+          {
+            "node": "Semgrep Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Semgrep Scan": {
+      "main": [
+        [
+          {
+            "node": "Check: Semgrep Scan (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Radon Complexity (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Radon Complexity (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Radon Complexity (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Radon Complexity (P0)": {
+      "main": [
+        [
+          {
+            "node": "Radon Complexity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Radon Complexity": {
+      "main": [
+        [
+          {
+            "node": "Check: Radon Complexity (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Audit Report (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Audit Report (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Audit Report (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Audit Report (P0)": {
+      "main": [
+        [
+          {
+            "node": "AI Audit Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Audit Report": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Audit Report (P0)",
             "type": "main",
             "index": 0
           }

@@ -26,11 +26,12 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
-        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n</body>\n</html>`;\nreturn { html };"
+        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>\n</html>`;\nreturn { html };"
       },
       "id": "generate-html",
       "name": "Generate HTML",
@@ -39,7 +40,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -52,37 +54,233 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Fetch Metrics\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ddbe9e3f-4f59-4319-b31f-ebb1e72112aa",
+      "name": "Check: Fetch Metrics (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "aad93b16-1161-4e03-ace3-40f14cc57f27",
+      "name": "Omniscient Fix: Fetch Metrics (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Generate HTML\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "79f93f8b-3e77-4d09-9ba4-494e90e8faae",
+      "name": "Check: Generate HTML (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a47d57b4-782d-4482-903b-6a1f66f87309",
+      "name": "Omniscient Fix: Generate HTML (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Save Dashboard\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ec1c1764-968a-42e4-8450-7c8d6068e22d",
+      "name": "Check: Save Dashboard (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "5d370136-df44-45df-bcd4-b6936c78ef1c",
+      "name": "Omniscient Fix: Save Dashboard (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "hourly-trigger": {
+    "Check: Fetch Metrics (P0)": {
       "main": [
         [
           {
-            "node": "fetch-metrics",
+            "node": "Omniscient Fix: Fetch Metrics (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Fetch Metrics (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "fetch-metrics": {
+    "Omniscient Fix: Fetch Metrics (P0)": {
       "main": [
         [
           {
-            "node": "generate-html",
+            "node": "Fetch Metrics",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "generate-html": {
+    "Fetch Metrics": {
       "main": [
         [
           {
-            "node": "save-dashboard",
+            "node": "Check: Fetch Metrics (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Generate HTML (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Generate HTML (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Generate HTML (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Generate HTML (P0)": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML": {
+      "main": [
+        [
+          {
+            "node": "Check: Generate HTML (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Save Dashboard (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Save Dashboard (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Save Dashboard (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Save Dashboard (P0)": {
+      "main": [
+        [
+          {
+            "node": "Save Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Check: Save Dashboard (P0)",
             "type": "main",
             "index": 0
           }

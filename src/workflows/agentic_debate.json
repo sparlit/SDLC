@@ -33,7 +33,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -67,15 +68,157 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Agent Critic\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "efacc555-dc72-4be6-87c1-0f719fb4aa9f",
+      "name": "Check: Agent Critic (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "22ee8390-4fd6-4a0d-bc26-46140355b399",
+      "name": "Omniscient Fix: Agent Critic (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Agent Finalizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d24a5a63-2bb8-4fc6-81b7-91071ec6aa9b",
+      "name": "Check: Agent Finalizer (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "7967c6e4-e05d-4f4c-a280-ea8b997c7240",
+      "name": "Omniscient Fix: Agent Finalizer (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
       ]
     }
   ],
   "connections": {
-    "agent-critic": {
+    "Check: Agent Critic (P0)": {
       "main": [
         [
           {
-            "node": "agent-finalizer",
+            "node": "Omniscient Fix: Agent Critic (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Agent Critic (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Agent Critic (P0)": {
+      "main": [
+        [
+          {
+            "node": "Agent Critic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Critic": {
+      "main": [
+        [
+          {
+            "node": "Check: Agent Critic (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Agent Finalizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Agent Finalizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Agent Finalizer (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Agent Finalizer (P0)": {
+      "main": [
+        [
+          {
+            "node": "Agent Finalizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Finalizer": {
+      "main": [
+        [
+          {
+            "node": "Check: Agent Finalizer (P0)",
             "type": "main",
             "index": 0
           }

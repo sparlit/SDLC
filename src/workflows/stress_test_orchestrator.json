@@ -12,7 +12,8 @@
       "position": [
         0,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -25,7 +26,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -38,26 +40,233 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Manual Trigger\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "03ccb916-2f28-416d-8562-cd16dbb67e8f",
+      "name": "Check: Manual Trigger (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "e012d449-3b3d-49da-aa82-6a0184437915",
+      "name": "Omniscient Fix: Manual Trigger (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Run Stress Test\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "cbf8f853-f0b3-42f8-b25b-2759a8eb8182",
+      "name": "Check: Run Stress Test (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "cdc40c86-e854-42c8-bf6d-54d505ace0eb",
+      "name": "Omniscient Fix: Run Stress Test (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Log Performance\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e9ae070f-5a83-41e6-b986-054c75e8b6c6",
+      "name": "Check: Log Performance (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fbc5c5de-f901-46d5-9d5e-e97e609bef55",
+      "name": "Omniscient Fix: Log Performance (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
       ]
     }
   ],
   "connections": {
-    "manual-trigger": {
+    "Check: Manual Trigger (P0)": {
       "main": [
         [
           {
-            "node": "run-stress-test",
+            "node": "Omniscient Fix: Manual Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Manual Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "run-stress-test": {
+    "Omniscient Fix: Manual Trigger (P0)": {
       "main": [
         [
           {
-            "node": "log-performance",
+            "node": "Manual Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check: Manual Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Run Stress Test (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Run Stress Test (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Run Stress Test (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Run Stress Test (P0)": {
+      "main": [
+        [
+          {
+            "node": "Run Stress Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Stress Test": {
+      "main": [
+        [
+          {
+            "node": "Check: Run Stress Test (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Log Performance (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Log Performance (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Log Performance (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Log Performance (P0)": {
+      "main": [
+        [
+          {
+            "node": "Log Performance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Performance": {
+      "main": [
+        [
+          {
+            "node": "Check: Log Performance (P0)",
             "type": "main",
             "index": 0
           }

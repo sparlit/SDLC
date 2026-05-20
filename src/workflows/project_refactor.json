@@ -12,7 +12,8 @@
       "position": [
         0,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -25,7 +26,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -38,7 +40,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -52,7 +55,8 @@
       "position": [
         600,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -65,48 +69,385 @@
       "position": [
         800,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trigger\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "0efdff48-f5f4-47bb-bfaa-78b9ed7b9a82",
+      "name": "Check: Trigger (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "011db487-f38e-448e-b2f7-b3dad9936b3e",
+      "name": "Omniscient Fix: Trigger (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Chunk Project\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "7874fc5b-d82b-4859-835e-3139bf6052b5",
+      "name": "Check: Chunk Project (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "de929736-185a-498c-ba13-a10d2eddfc7c",
+      "name": "Omniscient Fix: Chunk Project (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"List Chunks\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "81a49dc2-31a7-4da4-a43a-55aba282503e",
+      "name": "Check: List Chunks (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "d827a689-0580-4947-a84c-a8ebaeaad63c",
+      "name": "Omniscient Fix: List Chunks (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Process Chunks Parallel\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e7a3d589-703a-4216-817b-0f489f49d705",
+      "name": "Check: Process Chunks Parallel (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "80ce9802-c63f-4892-a46e-264e4039793d",
+      "name": "Omniscient Fix: Process Chunks Parallel (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Refactor Logic\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "95322abc-c0f6-4f63-a1e4-29b10264ffeb",
+      "name": "Check: Refactor Logic (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "2c56ce27-6bf0-4537-9510-01bc4f3d8d07",
+      "name": "Omniscient Fix: Refactor Logic (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
       ]
     }
   ],
   "connections": {
-    "trigger": {
+    "Check: Trigger (P0)": {
       "main": [
         [
           {
-            "node": "chunk-project",
+            "node": "Omniscient Fix: Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "chunk-project": {
+    "Omniscient Fix: Trigger (P0)": {
       "main": [
         [
           {
-            "node": "list-chunks",
+            "node": "Trigger",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "list-chunks": {
+    "Trigger": {
       "main": [
         [
           {
-            "node": "process-chunks-parallel",
+            "node": "Check: Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "process-chunks-parallel": {
+    "Check: Chunk Project (P0)": {
       "main": [
         [
           {
-            "node": "refactor-logic",
+            "node": "Omniscient Fix: Chunk Project (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Chunk Project (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Chunk Project (P0)": {
+      "main": [
+        [
+          {
+            "node": "Chunk Project",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk Project": {
+      "main": [
+        [
+          {
+            "node": "Check: Chunk Project (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: List Chunks (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: List Chunks (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: List Chunks (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: List Chunks (P0)": {
+      "main": [
+        [
+          {
+            "node": "List Chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Chunks": {
+      "main": [
+        [
+          {
+            "node": "Check: List Chunks (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Process Chunks Parallel (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Process Chunks Parallel (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Process Chunks Parallel (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Process Chunks Parallel (P0)": {
+      "main": [
+        [
+          {
+            "node": "Process Chunks Parallel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Chunks Parallel": {
+      "main": [
+        [
+          {
+            "node": "Check: Process Chunks Parallel (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Refactor Logic (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Refactor Logic (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Refactor Logic (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Refactor Logic (P0)": {
+      "main": [
+        [
+          {
+            "node": "Refactor Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refactor Logic": {
+      "main": [
+        [
+          {
+            "node": "Check: Refactor Logic (P0)",
             "type": "main",
             "index": 0
           }

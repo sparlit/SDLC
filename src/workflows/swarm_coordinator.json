@@ -2,12 +2,17 @@
   "name": "Multi-Agent Swarm Coordinator",
   "nodes": [
     {
-      "parameters": { "options": {} },
+      "parameters": {
+        "options": {}
+      },
       "id": "swarm-trigger",
       "name": "Swarm Trigger",
       "type": "n8n-nodes-base.chatTrigger",
       "typeVersion": 1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -17,7 +22,11 @@
       "name": "Spawn Swarm",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -27,11 +36,165 @@
       "name": "Execute Agent",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Spawn Swarm\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bcfc81a7-643b-4175-ba15-ca25d1e5f235",
+      "name": "Check: Spawn Swarm (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "f4f73977-5e34-47e0-9d44-1ef11c5ba6ea",
+      "name": "Omniscient Fix: Spawn Swarm (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Execute Agent\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "fdcc18ef-aa39-4a30-9c4a-98b875f337ed",
+      "name": "Check: Execute Agent (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "64fe3110-3ac6-4b7f-ae7a-bd0ebf02908c",
+      "name": "Omniscient Fix: Execute Agent (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
     }
   ],
   "connections": {
-    "swarm-trigger": { "main": [[{ "node": "spawn-swarm", "type": "main", "index": 0 }]] },
-    "spawn-swarm": { "main": [[{ "node": "execute-agent", "type": "main", "index": 0 }]] }
+    "Check: Spawn Swarm (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Spawn Swarm (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Spawn Swarm (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Spawn Swarm (P0)": {
+      "main": [
+        [
+          {
+            "node": "Spawn Swarm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spawn Swarm": {
+      "main": [
+        [
+          {
+            "node": "Check: Spawn Swarm (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Execute Agent (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Execute Agent (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Execute Agent (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Execute Agent (P0)": {
+      "main": [
+        [
+          {
+            "node": "Execute Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Agent": {
+      "main": [
+        [
+          {
+            "node": "Check: Execute Agent (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

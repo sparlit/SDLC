@@ -27,7 +27,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -48,7 +49,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -63,7 +65,7 @@
             },
             {
               "name": "content",
-              "value": "=### ⚠️ CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
+              "value": "=### \u26a0\ufe0f CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
             }
           ]
         }
@@ -75,38 +77,233 @@
       "position": [
         600,
         100
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Check Hardware\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "6356402a-65dd-4169-bf62-572d067c8e39",
+      "name": "Check: Check Hardware (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "adb892c1-6473-4306-b631-6bb6e91b4bb3",
+      "name": "Omniscient Fix: Check Hardware (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Is Stable?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ee709157-39fd-471f-92cc-5c72ee60e981",
+      "name": "Check: Is Stable? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "5546d73b-871b-4d2a-8f9d-94ee512236a8",
+      "name": "Omniscient Fix: Is Stable? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Alert Notification\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "baf50901-5093-4075-8ab3-e2ceac47dc12",
+      "name": "Check: Alert Notification (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "7e6ffca5-bbcb-439e-b180-433d40dc3052",
+      "name": "Omniscient Fix: Alert Notification (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        100
       ]
     }
   ],
   "connections": {
-    "health-trigger": {
+    "Check: Check Hardware (P0)": {
       "main": [
         [
           {
-            "node": "check-hardware",
+            "node": "Omniscient Fix: Check Hardware (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Check Hardware (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "check-hardware": {
+    "Omniscient Fix: Check Hardware (P0)": {
       "main": [
         [
           {
-            "node": "is-stable",
+            "node": "Check Hardware",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "is-stable": {
+    "Check Hardware": {
       "main": [
-        [],
         [
           {
-            "node": "alert-notification",
+            "node": "Check: Check Hardware (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Is Stable? (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Is Stable? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Is Stable? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Is Stable? (P0)": {
+      "main": [
+        [
+          {
+            "node": "Is Stable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Stable?": {
+      "main": [
+        [
+          {
+            "node": "Check: Is Stable? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Alert Notification (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Alert Notification (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Alert Notification (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Alert Notification (P0)": {
+      "main": [
+        [
+          {
+            "node": "Alert Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Notification": {
+      "main": [
+        [
+          {
+            "node": "Check: Alert Notification (P0)",
             "type": "main",
             "index": 0
           }

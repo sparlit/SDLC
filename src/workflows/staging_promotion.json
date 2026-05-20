@@ -12,7 +12,8 @@
       "position": [
         0,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -25,7 +26,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -45,7 +47,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -58,37 +61,309 @@
       "position": [
         600,
         -50
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Promote Trigger\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "fb0c1529-f118-4368-8543-60da3a7a89de",
+      "name": "Check: Promote Trigger (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "022fe665-2d28-42b2-be54-9f7fe884ba86",
+      "name": "Omniscient Fix: Promote Trigger (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Verify Staging\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ae956577-5d35-409a-b28a-2af038578d66",
+      "name": "Check: Verify Staging (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fe6a7eb6-e3ee-40fb-b5aa-5ea176874e3d",
+      "name": "Omniscient Fix: Verify Staging (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Staging Passed?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9c3e11bd-e200-4630-9f34-b04214ec6e43",
+      "name": "Check: Staging Passed? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "57b30c15-9301-4adf-be80-9b0ba7b79d8a",
+      "name": "Omniscient Fix: Staging Passed? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Promote to Prod\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f78b94a2-0ce3-4ac8-acd1-8ab1c823a370",
+      "name": "Check: Promote to Prod (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "77057959-07c0-4652-b98f-23fdeccf1d70",
+      "name": "Omniscient Fix: Promote to Prod (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
       ]
     }
   ],
   "connections": {
-    "promote-trigger": {
+    "Check: Promote Trigger (P0)": {
       "main": [
         [
           {
-            "node": "verify-staging",
+            "node": "Omniscient Fix: Promote Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Promote Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "verify-staging": {
+    "Omniscient Fix: Promote Trigger (P0)": {
       "main": [
         [
           {
-            "node": "staging-passed",
+            "node": "Promote Trigger",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "staging-passed": {
+    "Promote Trigger": {
       "main": [
         [
           {
-            "node": "promote-to-prod",
+            "node": "Check: Promote Trigger (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Verify Staging (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Verify Staging (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Verify Staging (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Verify Staging (P0)": {
+      "main": [
+        [
+          {
+            "node": "Verify Staging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Staging": {
+      "main": [
+        [
+          {
+            "node": "Check: Verify Staging (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Staging Passed? (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Staging Passed? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Staging Passed? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Staging Passed? (P0)": {
+      "main": [
+        [
+          {
+            "node": "Staging Passed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Staging Passed?": {
+      "main": [
+        [
+          {
+            "node": "Check: Staging Passed? (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Promote to Prod (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Promote to Prod (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Promote to Prod (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Promote to Prod (P0)": {
+      "main": [
+        [
+          {
+            "node": "Promote to Prod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promote to Prod": {
+      "main": [
+        [
+          {
+            "node": "Check: Promote to Prod (P0)",
             "type": "main",
             "index": 0
           }

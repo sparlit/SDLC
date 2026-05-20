@@ -26,7 +26,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -60,7 +61,8 @@
       "position": [
         400,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -73,37 +75,233 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Read Performance Logs\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "27abd06a-747b-482c-a714-3f5f3c80a830",
+      "name": "Check: Read Performance Logs (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "be10fc1f-fdd9-4e5e-8154-a61ed09799b0",
+      "name": "Omniscient Fix: Read Performance Logs (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Evolve Prompts\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ca94f69d-acdb-49ec-88a6-e6cb94948a04",
+      "name": "Check: AI Evolve Prompts (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "13d6a29f-1fe3-4525-b13f-0a8a719f9938",
+      "name": "Omniscient Fix: AI Evolve Prompts (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Prompts File\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "efe99e89-cf1d-4e98-8685-6d477aed0546",
+      "name": "Check: Update Prompts File (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "44171509-29e0-440d-90dc-6abbda743ea1",
+      "name": "Omniscient Fix: Update Prompts File (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "weekly-trigger": {
+    "Check: Read Performance Logs (P0)": {
       "main": [
         [
           {
-            "node": "read-logs",
+            "node": "Omniscient Fix: Read Performance Logs (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Read Performance Logs (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "read-logs": {
+    "Omniscient Fix: Read Performance Logs (P0)": {
       "main": [
         [
           {
-            "node": "ai-evolve-prompts",
+            "node": "Read Performance Logs",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-evolve-prompts": {
+    "Read Performance Logs": {
       "main": [
         [
           {
-            "node": "update-prompts-file",
+            "node": "Check: Read Performance Logs (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Evolve Prompts (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Evolve Prompts (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Evolve Prompts (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Evolve Prompts (P0)": {
+      "main": [
+        [
+          {
+            "node": "AI Evolve Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Evolve Prompts": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Evolve Prompts (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Update Prompts File (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Update Prompts File (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Update Prompts File (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Update Prompts File (P0)": {
+      "main": [
+        [
+          {
+            "node": "Update Prompts File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Prompts File": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Prompts File (P0)",
             "type": "main",
             "index": 0
           }

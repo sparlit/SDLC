@@ -1,0 +1,114 @@
+{
+  "name": "Agent: Code Fixer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "input-trigger",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a senior software engineer. Fix the underlying code or infrastructure error. Analyze the error and the project context, then provide a bash command to fix it (e.g., patching a file, installing a dependency). Return ONLY the bash command wrapped in ```bash blocks.\"}, {\"role\": \"user\", \"content\": \"Error: {{ $json.error }}\\nProject Path: {{ $env.PROJECT_PATH }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-code-fixer",
+      "name": "AI Code Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Code Fixer\"].json.choices[0].message.content;\nconst match = content.match(/```bash\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1] : content;\nreturn { command: command.trim() };"
+      },
+      "id": "parse-command",
+      "name": "Parse Command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.command }}"
+      },
+      "id": "execute-fix",
+      "name": "Execute Fix",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Code Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Code Fixer": {
+      "main": [
+        [
+          {
+            "node": "Parse Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Command": {
+      "main": [
+        [
+          {
+            "node": "Execute Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
