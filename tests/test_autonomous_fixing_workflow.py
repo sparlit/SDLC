@@ -106,6 +106,11 @@ class TestWorkflowStructure:
         assert isinstance(workflow["nodes"], list)
 
     def test_workflow_has_connections(self, workflow):
+        """
+        Assert that the workflow defines a top-level "connections" mapping and that it is a dict.
+        
+        Verifies the parsed workflow JSON contains a "connections" key whose value is a mapping of node connections.
+        """
         assert "connections" in workflow
         assert isinstance(workflow["connections"], dict)
 
@@ -340,6 +345,12 @@ class TestRegressionAndBoundary:
         assert "deep_analyzer.py" not in raw
 
     def test_workflow_does_not_reference_hardware_monitor(self, workflow):
+        """
+        Asserts the serialized workflow does not contain the string "hardware_monitor".
+        
+        Raises:
+            AssertionError: If "hardware_monitor" is present in the workflow JSON.
+        """
         raw = json.dumps(workflow)
         assert "hardware_monitor" not in raw
 
@@ -364,6 +375,11 @@ class TestRegressionAndBoundary:
         assert "super_scanner.py" in raw
 
     def test_all_node_ids_are_unique(self, workflow):
+        """
+        Check that all node IDs in the workflow are unique.
+        
+        Asserts there are no duplicate `id` values among entries in `workflow["nodes"]`.
+        """
         ids = [node["id"] for node in workflow["nodes"]]
         assert len(ids) == len(set(ids)), "Duplicate node IDs found in workflow"
 
