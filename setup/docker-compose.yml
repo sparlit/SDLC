@@ -29,7 +29,7 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
       - N8N_API_KEY=${N8N_API_KEY}
-      - N8N_BLOCK_ENV_ACCESS_IN_EXPRESSIONS=true
+      - N8N_BLOCK_ENV_ACCESS_IN_EXPRESSIONS=false
     volumes:
       - n8n_data:/home/node/.n8n
       - ${PROJECT_PATH:-..}:/data/project

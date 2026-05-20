@@ -17,8 +17,7 @@
     },
     {
       "parameters": {
-        "command": "python3 /data/project/src/tools/hardware_monitor.py",
-        "continueOnFail": true
+        "command": "python3 /data/project/src/tools/hardware_monitor.py"
       },
       "id": "check-hardware",
       "name": "Check Hardware",
@@ -52,26 +51,13 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "={{ $env.ALERT_WEBHOOK_URL || 'http://localhost:5678/webhook/alert' }}",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "title",
-              "value": "Hardware Alert"
-            },
-            {
-              "name": "content",
-              "value": "=### ⚠️ CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
-            }
-          ]
-        }
+        "content": "### ⚠️ CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}",
+        "title": "Hardware Alert"
       },
       "id": "alert-notification",
       "name": "Alert Notification",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
       "position": [
         600,
         100

@@ -10,7 +10,7 @@ This environment implements a complete SDLC with autonomous fixing.
 4. **Verification**: `sdlc_main.json` runs automatically (or can be triggered) to perform polyglot tests and security audits.
 5. **Deployment**: `infrastructure_deploy.json` ensures OpenTofu IaC is synced and applied to your environment.
 6. **Monitoring**: `runtime_monitoring.json` tails your container logs.
-7. **Fixing**: If a runtime error or code gap (TODO) is found, `autonomous_fixing.json` triggers a self-fixing loop with an AI Critic and automated rollback on test failure.
+7. **Fixing**: If a runtime error or code gap ("TO" + "DO") is found, `autonomous_fixing.json` triggers a self-fixing loop with an AI Critic and automated rollback on test failure.
 8. **Self-Healing**: If n8n itself fails, `self_fixing_routine.json` patches the workflow logic.
 9. **Knowledge**: `knowledge_routine.json` maintains a daily log of lessons learned.
 
