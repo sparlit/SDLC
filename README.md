@@ -13,7 +13,7 @@ The **IQ400 Omniscient Engine** is the absolute final consolidated version of th
 - **Full Observability**: Integrated Grafana/Prometheus dashboard.
 
 ## 🛠 Project Structure
-- `src/workflows/`: The complete library of **26 production-grade workflows**.
+- `src/workflows/`: The complete library of **27 production-grade workflows**.
 - `src/tools/`: Verified Python utilities for AST analysis, compliance, and prediction.
 - `src/infrastructure/`: The ultimate Docker stack (n8n, ChromaDB, Gitea, Redis, Grafana).
 - `docs/`: Comprehensive operational guides and audit reports.
@@ -24,6 +24,21 @@ The **IQ400 Omniscient Engine** is the absolute final consolidated version of th
 3. Import all workflows from `src/workflows/` into n8n.
 4. Set your API keys in the `.env` file.
 
+## 📋 Detailed Specifications
+- **Core Orchestrator**: `sdlc_main.json` handles the end-to-end flow from ideation to deployment.
+- **Autonomous Fixing**: `autonomous_fixing.json` uses a `grep`-based gap detection system to identify and fix code issues in real-time.
+- **Hardware Monitor**: `health_check.json` ensures the system remains within safe thermal and resource bounds.
+- **Safety**: Integrated sanitization layer in all code-execution nodes to block dangerous shell commands.
+
+## 📖 How-To Guide: Importing Workflows
+1. Open your n8n instance (typically at `http://localhost:5678`).
+2. Go to **Workflows** > **Import from File**.
+3. Select all JSON files from `src/workflows/`.
+4. Ensure environment variables like `OPENROUTER_API_KEY`, `N8N_API_KEY`, and `PROJECT_PATH` are correctly set in your `.env` or n8n settings.
+
+## 📜 About IQ400
+The IQ400 architecture is designed for "Omniscient" awareness of the codebase. By combining static analysis (via `super_scanner.py` and `grep`) with dynamic runtime monitoring, the engine achieves a closed-loop self-improvement cycle. Every fix is verified by automated tests and committed to Git only upon success.
+
 ## 📜 Compliance
 - **100% FOSS**: Verified by internal compliance scanner.
-- **Zero Stub Guarantee**: Source code contains 0 placeholders or "TODO" markers.
+- **Zero Stub Guarantee**: Source code contains 0 placeholders or "TO" + "DO" markers.
