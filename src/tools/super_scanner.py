@@ -21,6 +21,7 @@ PATTERNS = [
 
 def analyze_file(filepath):
     """
+    Scan a single file for configured placeholder-like regex patterns and for empty Python functions or classes.
     Analyze a file for configured placeholder/issue patterns and for Python empty definitions.
     
     Scans the file at `filepath` line-by-line for any regex in `PATTERNS` (case-insensitive) and records matches; for Python files (`.py`) also detects functions, async functions, or classes whose bodies contain only a single `pass`. If the file cannot be read or a Python AST cannot be parsed, a corresponding error finding is recorded. Matches originating from a path containing "super_scanner.py" are ignored.
@@ -29,6 +30,15 @@ def analyze_file(filepath):
         filepath (str): Path to the file to analyze.
     
     Returns:
+        list: A list of finding strings. Each finding is formatted as
+        "{filepath}:{line_no} - Found pattern '{pattern}': {line_text}" for pattern matches,
+        "{filepath}:{line_no} - Empty function: {name}" for empty Python functions,
+        "{filepath}:{line_no} - Empty class: {name}" for empty Python classes,
+        or "{filepath}:0 - Error reading file: {error}" if the file could not be opened or read.
+    
+    Notes:
+        - Matches in files whose path contains "super_scanner.py" are ignored.
+        - When analyzing Python files, AST parsing errors are silently ignored (no finding added for parse failures).
         list[str]: A list of formatted finding strings. Each entry is either a line-level match
         ("{filepath}:{line_no} - Found pattern '{pattern}': {line_text}"), an empty-definition
         report ("{filepath}:{lineno} - Empty function: {name}" or "{filepath}:{lineno} - Empty class: {name}"),
@@ -76,6 +86,7 @@ def analyze_file(filepath):
 
 def scan_recursive(root):
     """
+    Recursively scan the directory tree at `root` and collect all findings from analyzed files.
     Recursively scan the directory tree at `root` for issues and return all findings.
     
     Walks the directory tree starting at `root`, skipping directories whose names start with a dot, analyzes each file encountered, and aggregates all reported findings.
@@ -84,6 +95,7 @@ def scan_recursive(root):
         root (str): Path to the directory to scan.
     
     Returns:
+        all_findings (list[str]): Aggregated list of finding strings produced by analyze_file for each file under `root`. Each entry is formatted as "<filepath>:<line_no> - <description>".
         list[str]: A list of formatted finding strings describing detected issues (one entry per finding).
     Scan a directory tree and collect findings from every file under the given root.
     
