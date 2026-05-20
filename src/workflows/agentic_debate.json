@@ -38,42 +38,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Agent Critic\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-agent-critic",
-      "name": "Check: Agent Critic",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-agent-critic",
-      "name": "Omniscient Fix: Agent Critic",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "headerParameters": {
@@ -112,19 +76,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Agent Finalizer\"].error !== undefined }",
+              "value1": "={ $node[\"Agent Critic\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-agent-finalizer",
-      "name": "Check: Agent Finalizer",
+      "id": "efacc555-dc72-4be6-87c1-0f719fb4aa9f",
+      "name": "Check: Agent Critic (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        550,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -134,47 +98,72 @@
           "waitForResults": true
         }
       },
-      "id": "fix-agent-finalizer",
-      "name": "Omniscient Fix: Agent Finalizer",
+      "id": "22ee8390-4fd6-4a0d-bc26-46140355b399",
+      "name": "Omniscient Fix: Agent Critic (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        550,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Agent Finalizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "d24a5a63-2bb8-4fc6-81b7-91071ec6aa9b",
+      "name": "Check: Agent Finalizer (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "7967c6e4-e05d-4f4c-a280-ea8b997c7240",
+      "name": "Omniscient Fix: Agent Finalizer (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
       ]
     }
   ],
   "connections": {
-    "Agent Critic": {
+    "Check: Agent Critic (P0)": {
       "main": [
         [
           {
-            "node": "Check: Agent Critic",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Agent Critic": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Agent Critic",
+            "node": "Omniscient Fix: Agent Critic (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Agent Critic",
+            "node": "Check: Agent Critic (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Agent Critic": {
+    "Omniscient Fix: Agent Critic (P0)": {
       "main": [
         [
           {
@@ -185,40 +174,51 @@
         ]
       ]
     },
-    "Agent Finalizer": {
+    "Agent Critic": {
       "main": [
         [
           {
-            "node": "Check: Agent Finalizer",
+            "node": "Check: Agent Critic (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Agent Finalizer": {
+    "Check: Agent Finalizer (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Agent Finalizer",
+            "node": "Omniscient Fix: Agent Finalizer (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Agent Finalizer",
+            "node": "Check: Agent Finalizer (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Agent Finalizer": {
+    "Omniscient Fix: Agent Finalizer (P0)": {
       "main": [
         [
           {
             "node": "Agent Finalizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Finalizer": {
+      "main": [
+        [
+          {
+            "node": "Check: Agent Finalizer (P0)",
             "type": "main",
             "index": 0
           }

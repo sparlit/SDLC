@@ -17,42 +17,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Promote Trigger\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-promote-trigger",
-      "name": "Check: Promote Trigger",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        150,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-promote-trigger",
-      "name": "Omniscient Fix: Promote Trigger",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        150,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && (npm test || pytest)"
       },
       "id": "verify-staging",
@@ -64,42 +28,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Verify Staging\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-verify-staging",
-      "name": "Check: Verify Staging",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-verify-staging",
-      "name": "Omniscient Fix: Verify Staging",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
     },
     {
       "parameters": {
@@ -124,42 +52,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Staging Passed?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-staging-passed",
-      "name": "Check: Staging Passed?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-staging-passed",
-      "name": "Omniscient Fix: Staging Passed?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && tofu apply -var=\"env=production\" -auto-approve"
       },
       "id": "promote-to-prod",
@@ -177,19 +69,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Promote to Prod\"].error !== undefined }",
+              "value1": "={ $node[\"Promote Trigger\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-promote-to-prod",
-      "name": "Check: Promote to Prod",
+      "id": "fb0c1529-f118-4368-8543-60da3a7a89de",
+      "name": "Check: Promote Trigger (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        750,
-        0
+        200,
+        -50
       ]
     },
     {
@@ -199,47 +91,144 @@
           "waitForResults": true
         }
       },
-      "id": "fix-promote-to-prod",
-      "name": "Omniscient Fix: Promote to Prod",
+      "id": "022fe665-2d28-42b2-be54-9f7fe884ba86",
+      "name": "Omniscient Fix: Promote Trigger (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        750,
-        100
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Verify Staging\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ae956577-5d35-409a-b28a-2af038578d66",
+      "name": "Check: Verify Staging (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fe6a7eb6-e3ee-40fb-b5aa-5ea176874e3d",
+      "name": "Omniscient Fix: Verify Staging (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Staging Passed?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9c3e11bd-e200-4630-9f34-b04214ec6e43",
+      "name": "Check: Staging Passed? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "57b30c15-9301-4adf-be80-9b0ba7b79d8a",
+      "name": "Omniscient Fix: Staging Passed? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Promote to Prod\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f78b94a2-0ce3-4ac8-acd1-8ab1c823a370",
+      "name": "Check: Promote to Prod (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "77057959-07c0-4652-b98f-23fdeccf1d70",
+      "name": "Omniscient Fix: Promote to Prod (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
       ]
     }
   ],
   "connections": {
-    "Promote Trigger": {
+    "Check: Promote Trigger (P0)": {
       "main": [
         [
           {
-            "node": "Check: Promote Trigger",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Promote Trigger": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Promote Trigger",
+            "node": "Omniscient Fix: Promote Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Promote Trigger",
+            "node": "Check: Promote Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Promote Trigger": {
+    "Omniscient Fix: Promote Trigger (P0)": {
       "main": [
         [
           {
@@ -250,36 +239,36 @@
         ]
       ]
     },
-    "Verify Staging": {
+    "Promote Trigger": {
       "main": [
         [
           {
-            "node": "Check: Verify Staging",
+            "node": "Check: Promote Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Verify Staging": {
+    "Check: Verify Staging (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Verify Staging",
+            "node": "Omniscient Fix: Verify Staging (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Verify Staging",
+            "node": "Check: Verify Staging (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Verify Staging": {
+    "Omniscient Fix: Verify Staging (P0)": {
       "main": [
         [
           {
@@ -290,36 +279,36 @@
         ]
       ]
     },
-    "Staging Passed?": {
+    "Verify Staging": {
       "main": [
         [
           {
-            "node": "Check: Staging Passed?",
+            "node": "Check: Verify Staging (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Staging Passed?": {
+    "Check: Staging Passed? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Staging Passed?",
+            "node": "Omniscient Fix: Staging Passed? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Staging Passed?",
+            "node": "Check: Staging Passed? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Staging Passed?": {
+    "Omniscient Fix: Staging Passed? (P0)": {
       "main": [
         [
           {
@@ -330,40 +319,51 @@
         ]
       ]
     },
-    "Promote to Prod": {
+    "Staging Passed?": {
       "main": [
         [
           {
-            "node": "Check: Promote to Prod",
+            "node": "Check: Staging Passed? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Promote to Prod": {
+    "Check: Promote to Prod (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Promote to Prod",
+            "node": "Omniscient Fix: Promote to Prod (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Promote to Prod",
+            "node": "Check: Promote to Prod (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Promote to Prod": {
+    "Omniscient Fix: Promote to Prod (P0)": {
       "main": [
         [
           {
             "node": "Promote to Prod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promote to Prod": {
+      "main": [
+        [
+          {
+            "node": "Check: Promote to Prod (P0)",
             "type": "main",
             "index": 0
           }

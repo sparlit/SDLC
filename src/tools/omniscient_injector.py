@@ -5,15 +5,18 @@ import uuid
 
 def inject_omniscient_logic(filepath):
     with open(filepath, 'r') as f:
-        workflow = json.load(f)
+        try:
+            workflow = json.load(f)
+        except:
+            return
 
     nodes = workflow.get('nodes', [])
     connections = workflow.get('connections', {})
 
-    new_nodes = []
-    new_connections = {}
+    # Filter for original nodes only
+    original_nodes = [n for n in nodes if not (n['name'].startswith("Check:") or n['name'].startswith("Omniscient Fix:"))]
+    nodes_by_name = {n['name']: n for n in original_nodes}
 
-    # Filter out nodes we don't want to wrap
     skip_types = [
         'n8n-nodes-base.chatTrigger',
         'n8n-nodes-base.scheduleTrigger',
@@ -22,112 +25,94 @@ def inject_omniscient_logic(filepath):
         'n8n-nodes-base.webhook'
     ]
 
-    # First, collect all original nodes
-    original_nodes = []
-    for node in nodes:
-        # Don't re-wrap if already wrapped
-        if "Check: " in node['name'] or "Omniscient Fix: " in node['name']:
-            continue
-        original_nodes.append(node)
+    new_nodes = original_nodes[:]
+    new_connections = {}
+
+    # If this is the dashboard workflow, inject the Puter footer requirement
+    if "sdlc_dashboard" in filepath:
+        for node in new_nodes:
+            if node['name'] == "Generate HTML":
+                node['parameters']['jsCode'] = node['parameters']['jsCode'].replace(
+                    "</body>",
+                    "<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>"
+                )
 
     for node in original_nodes:
         node_name = node['name']
-        node_id = node.get('id', str(uuid.uuid4()))
-        node['id'] = node_id # Ensure it has an ID
-        new_nodes.append(node)
-
-        # Get connections for this node
-        orig_conn = connections.get(node_name) or (connections.get(node_id) if node_id else None)
+        orig_conn = connections.get(node_name, {})
 
         if node['type'] in skip_types:
             if orig_conn:
                 new_connections[node_name] = orig_conn
             continue
 
-        # 1. Enable continueOnFail
         node['continueOnFail'] = True
 
-        # 2. Create Check Node (IF node)
-        check_node_name = f"Check: {node_name}"
-        check_node_id = f"check-{node_id}"
-        check_node = {
-            "parameters": {
-                "conditions": {
-                    "boolean": [
-                        {
-                            "value1": f"={{{{ $node[\"{node_name}\"].error !== undefined }}}}}}",
-                            "value2": True
-                        }
-                    ]
-                }
-            },
-            "id": check_node_id,
-            "name": check_node_name,
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 1,
-            "position": [node['position'][0] + 150, node['position'][1] + 50]
-        }
-        # FIX: The expression in the condition was wrong in the review, but wait.
-        # n8n uses {{ }} for expressions. If I want literal {{ }}, I might need to escape.
-        # Let's use a simpler expression that is valid n8n.
-        check_node["parameters"]["conditions"]["boolean"][0]["value1"] = f"={{ $node[\"{node_name}\"].error !== undefined }}"
+        pos_x, pos_y = node['position']
 
-        new_nodes.append(check_node)
+        main_ports = orig_conn.get('main', [[]])
+        new_main_ports = []
 
-        # 3. Create Fixer Node (Execute Workflow)
-        fix_node_name = f"Omniscient Fix: {node_name}"
-        fix_node_id = f"fix-{node_id}"
-        fix_node = {
-            "parameters": {
-                "workflowId": "omniscient_error_orchestrator",
-                "options": {
-                    "waitForResults": True
-                }
-            },
-            "id": fix_node_id,
-            "name": fix_node_name,
-            "type": "n8n-nodes-base.executeWorkflow",
-            "typeVersion": 1,
-            "position": [node['position'][0] + 150, node['position'][1] + 150]
-        }
-        new_nodes.append(fix_node)
+        for i, targets in enumerate(main_ports):
+            check_name = f"Check: {node_name} (P{i})"
+            fix_name = f"Omniscient Fix: {node_name} (P{i})"
 
-        # 4. Rewire Connections
-        # Node A -> Check Node
-        new_connections[node_name] = {
-            "main": [[{"node": check_node_name, "type": "main", "index": 0}]]
-        }
+            check_node = {
+                "parameters": {
+                    "conditions": {
+                        "boolean": [
+                            {
+                                "value1": f"={{ $node[\"{node_name}\"].error !== undefined }}",
+                                "value2": True
+                            }
+                        ]
+                    }
+                },
+                "id": str(uuid.uuid4()),
+                "name": check_name,
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 1,
+                "position": [pos_x + 200, pos_y + (i * 100) - 50]
+            }
 
-        # Check Node:
-        # Index 0 (True) -> Fixer (Error case)
-        # Index 1 (False) -> Original Targets (Success case)
-        error_path = [{"node": fix_node_name, "type": "main", "index": 0}]
+            fix_node = {
+                "parameters": {
+                    "workflowId": "omniscient_error_orchestrator",
+                    "options": {
+                        "waitForResults": True
+                    }
+                },
+                "id": str(uuid.uuid4()),
+                "name": fix_name,
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1,
+                "position": [pos_x + 400, pos_y + (i * 100)]
+            }
 
-        # Handle ALL original output branches
-        success_paths = []
-        if orig_conn and "main" in orig_conn:
-            success_paths = orig_conn["main"]
-        else:
-            success_paths = [[]]
+            new_nodes.append(check_node)
+            new_nodes.append(fix_node)
 
-        new_connections[check_node_name] = {
-            "main": [
-                error_path,
-                *success_paths
-            ]
-        }
+            new_main_ports.append([{"node": check_name, "type": "main", "index": 0}])
 
-        # Fix Node -> Node A (Retry Loop)
-        new_connections[fix_node_name] = {
-            "main": [[{"node": node_name, "type": "main", "index": 0}]]
-        }
+            new_connections[check_name] = {
+                "main": [
+                    [{"node": fix_name, "type": "main", "index": 0}], # True = Error
+                    targets # False = Success
+                ]
+            }
+
+            new_connections[fix_name] = {
+                "main": [[{"node": node_name, "type": "main", "index": 0}]]
+            }
+
+        new_connections[node_name] = {"main": new_main_ports}
 
     workflow['nodes'] = new_nodes
     workflow['connections'] = new_connections
 
     with open(filepath, 'w') as f:
         json.dump(workflow, f, indent=2)
-    print(f"Injected Omniscient logic into {filepath}")
+    print(f"Cleanly Injected Omniscient logic into {filepath}")
 
 if __name__ == "__main__":
     target_dir = sys.argv[1] if len(sys.argv) > 1 else "src/workflows"

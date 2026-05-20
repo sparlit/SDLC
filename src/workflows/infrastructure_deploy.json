@@ -17,42 +17,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Manual Trigger\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-manual-trigger",
-      "name": "Check: Manual Trigger",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        150,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-manual-trigger",
-      "name": "Omniscient Fix: Manual Trigger",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        150,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "ls /data/project/*.tf || echo \"none\""
       },
       "id": "check-tf-files",
@@ -64,42 +28,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Check TF Files\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-check-tf-files",
-      "name": "Check: Check TF Files",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-check-tf-files",
-      "name": "Omniscient Fix: Check TF Files",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
     },
     {
       "parameters": {
@@ -125,42 +53,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Has TF?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-has-tf",
-      "name": "Check: Has TF?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-has-tf",
-      "name": "Omniscient Fix: Has TF?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && tofu init && tofu apply -auto-approve"
       },
       "id": "tofu-apply",
@@ -172,42 +64,6 @@
         -50
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"OpenTofu Apply\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-tofu-apply",
-      "name": "Check: OpenTofu Apply",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        750,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-tofu-apply",
-      "name": "Omniscient Fix: OpenTofu Apply",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        750,
-        100
-      ]
     },
     {
       "parameters": {
@@ -246,42 +102,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI TF Generator\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-ai-tf-generator",
-      "name": "Check: AI TF Generator",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        750,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-ai-tf-generator",
-      "name": "Omniscient Fix: AI TF Generator",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        750,
-        300
-      ]
-    },
-    {
-      "parameters": {
         "command": "=cat <<EOF > /data/project/main.tf\n{{ $json.choices[0].message.content }}\nEOF"
       },
       "id": "write-tf",
@@ -299,19 +119,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Write TF File\"].error !== undefined }",
+              "value1": "={ $node[\"Manual Trigger\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-write-tf",
-      "name": "Check: Write TF File",
+      "id": "35aaea7a-2ab7-4b1e-a6a0-a50ba84781f7",
+      "name": "Check: Manual Trigger (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        950,
-        200
+        200,
+        -50
       ]
     },
     {
@@ -321,47 +141,216 @@
           "waitForResults": true
         }
       },
-      "id": "fix-write-tf",
-      "name": "Omniscient Fix: Write TF File",
+      "id": "404675ea-eee4-4369-89b6-a59fdfd8de52",
+      "name": "Omniscient Fix: Manual Trigger (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        950,
-        300
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Check TF Files\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ae672097-7e65-4e14-a507-32b2483fa891",
+      "name": "Check: Check TF Files (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "ee7163a4-76c9-476e-becb-f950f03526ed",
+      "name": "Omniscient Fix: Check TF Files (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Has TF?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e84edbd4-96d5-4e82-add0-fd5ca30f43b6",
+      "name": "Check: Has TF? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "35e6e550-dede-49be-93bb-282ba8461ff3",
+      "name": "Omniscient Fix: Has TF? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"OpenTofu Apply\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "00557166-7991-4da8-9a36-dfe790da1c1b",
+      "name": "Check: OpenTofu Apply (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "c17a8487-77ed-447e-8404-1617aecd6544",
+      "name": "Omniscient Fix: OpenTofu Apply (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI TF Generator\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "fe1268e8-07c4-4c19-8c13-f5b0f6a277c9",
+      "name": "Check: AI TF Generator (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "4f1bade9-b534-4d52-a5e0-e5c739694471",
+      "name": "Omniscient Fix: AI TF Generator (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Write TF File\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b350fc82-6aa7-45e3-883b-6e5471a86e59",
+      "name": "Check: Write TF File (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "c499eb7c-ec2a-46f3-aa1e-371c78376116",
+      "name": "Omniscient Fix: Write TF File (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        150
       ]
     }
   ],
   "connections": {
-    "Manual Trigger": {
+    "Check: Manual Trigger (P0)": {
       "main": [
         [
           {
-            "node": "Check: Manual Trigger",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Manual Trigger": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Manual Trigger",
+            "node": "Omniscient Fix: Manual Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Manual Trigger",
+            "node": "Check: Manual Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Manual Trigger": {
+    "Omniscient Fix: Manual Trigger (P0)": {
       "main": [
         [
           {
@@ -372,36 +361,36 @@
         ]
       ]
     },
-    "Check TF Files": {
+    "Manual Trigger": {
       "main": [
         [
           {
-            "node": "Check: Check TF Files",
+            "node": "Check: Manual Trigger (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Check TF Files": {
+    "Check: Check TF Files (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Check TF Files",
+            "node": "Omniscient Fix: Check TF Files (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Check TF Files",
+            "node": "Check: Check TF Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Check TF Files": {
+    "Omniscient Fix: Check TF Files (P0)": {
       "main": [
         [
           {
@@ -412,36 +401,36 @@
         ]
       ]
     },
-    "Has TF?": {
+    "Check TF Files": {
       "main": [
         [
           {
-            "node": "Check: Has TF?",
+            "node": "Check: Check TF Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Has TF?": {
+    "Check: Has TF? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Has TF?",
+            "node": "Omniscient Fix: Has TF? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Has TF?",
+            "node": "Check: Has TF? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Has TF?": {
+    "Omniscient Fix: Has TF? (P0)": {
       "main": [
         [
           {
@@ -452,36 +441,36 @@
         ]
       ]
     },
-    "OpenTofu Apply": {
+    "Has TF?": {
       "main": [
         [
           {
-            "node": "Check: OpenTofu Apply",
+            "node": "Check: Has TF? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: OpenTofu Apply": {
+    "Check: OpenTofu Apply (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: OpenTofu Apply",
+            "node": "Omniscient Fix: OpenTofu Apply (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: OpenTofu Apply",
+            "node": "Check: OpenTofu Apply (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: OpenTofu Apply": {
+    "Omniscient Fix: OpenTofu Apply (P0)": {
       "main": [
         [
           {
@@ -492,36 +481,36 @@
         ]
       ]
     },
-    "AI TF Generator": {
+    "OpenTofu Apply": {
       "main": [
         [
           {
-            "node": "Check: AI TF Generator",
+            "node": "Check: OpenTofu Apply (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI TF Generator": {
+    "Check: AI TF Generator (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI TF Generator",
+            "node": "Omniscient Fix: AI TF Generator (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI TF Generator",
+            "node": "Check: AI TF Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI TF Generator": {
+    "Omniscient Fix: AI TF Generator (P0)": {
       "main": [
         [
           {
@@ -532,40 +521,51 @@
         ]
       ]
     },
-    "Write TF File": {
+    "AI TF Generator": {
       "main": [
         [
           {
-            "node": "Check: Write TF File",
+            "node": "Check: AI TF Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Write TF File": {
+    "Check: Write TF File (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Write TF File",
+            "node": "Omniscient Fix: Write TF File (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Write TF File",
+            "node": "Check: Write TF File (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Write TF File": {
+    "Omniscient Fix: Write TF File (P0)": {
       "main": [
         [
           {
             "node": "Write TF File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write TF File": {
+      "main": [
+        [
+          {
+            "node": "Check: Write TF File (P0)",
             "type": "main",
             "index": 0
           }

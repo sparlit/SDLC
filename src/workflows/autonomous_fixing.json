@@ -31,42 +31,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Find Gaps/Placeholders\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-find-gaps",
-      "name": "Check: Find Gaps/Placeholders",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-find-gaps",
-      "name": "Omniscient Fix: Find Gaps/Placeholders",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "authentication": "genericCredentialType",
@@ -105,42 +69,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI Fix Generator\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-ai-fix-generator",
-      "name": "Check: AI Fix Generator",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-ai-fix-generator",
-      "name": "Omniscient Fix: AI Fix Generator",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "jsCode": "const content = $node[\"AI Fix Generator\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\n\n// Robust Sanitization\nconst blocked = [\n  \"rm \", \"mkfs\", \"shutdown\", \"reboot\", \"mv /\", \"dd \", \n  \"> /dev/sd\", \":(){:|:&};:\", \"chmod -R 777\", \"chown -R\", \n  \"wget \", \"curl \", \"nc \", \"bash -i\", \"telnet\"\n];\n\nif (blocked.some(b => command.includes(b))) {\n  throw new Error(`CRITICAL SECURITY ALERT: Dangerous command blocked: ${command}`);\n}\n\n// Ensure command stays within project directory if possible\nconst absolutePaths = command.match(/\\b\\/(?:[^ \\t\\r\\n\"'`;|&]+)/g) || [];\nfor (const path of absolutePaths) {\n  if (!path.startsWith('/data/project')) {\n    throw new Error(\"Escapement attempt detected: Command references absolute paths outside of /data/project\");\n  }\n}\n\nreturn { command };"
       },
       "id": "sanitize-fix",
@@ -152,42 +80,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Sanitize Fix\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-sanitize-fix",
-      "name": "Check: Sanitize Fix",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        750,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-sanitize-fix",
-      "name": "Omniscient Fix: Sanitize Fix",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        750,
-        150
-      ]
     },
     {
       "parameters": {
@@ -205,42 +97,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Apply Fix\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-apply-fix",
-      "name": "Check: Apply Fix",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        950,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-apply-fix",
-      "name": "Omniscient Fix: Apply Fix",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        950,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && git add . && git commit -m \"Autonomous fix applied\" && git push || echo \"No changes to commit\""
       },
       "id": "git-commit-push",
@@ -252,42 +108,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Git Commit & Push\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-git-commit-push",
-      "name": "Check: Git Commit & Push",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        1150,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-git-commit-push",
-      "name": "Omniscient Fix: Git Commit & Push",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        1150,
-        150
-      ]
     },
     {
       "parameters": {},
@@ -306,19 +126,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Fix Failed Notification\"].error !== undefined }",
+              "value1": "={ $node[\"Find Gaps/Placeholders\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-fix-failed-notification",
-      "name": "Check: Fix Failed Notification",
+      "id": "28521486-9fc1-420d-8d2b-ad8bfccb107a",
+      "name": "Check: Find Gaps/Placeholders (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        1150,
-        250
+        400,
+        -50
       ]
     },
     {
@@ -328,47 +148,216 @@
           "waitForResults": true
         }
       },
-      "id": "fix-fix-failed-notification",
-      "name": "Omniscient Fix: Fix Failed Notification",
+      "id": "1ab05962-64aa-405b-8e9b-fe38bdb4c4b4",
+      "name": "Omniscient Fix: Find Gaps/Placeholders (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        1150,
-        350
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Fix Generator\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ffd3b8ef-e65e-4967-9bfa-66edf75c4dd3",
+      "name": "Check: AI Fix Generator (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "0dea9dc2-58f5-4ace-8b7d-808f9eb74311",
+      "name": "Omniscient Fix: AI Fix Generator (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Sanitize Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "56d5d454-3a2d-4741-9db1-1daead23661f",
+      "name": "Check: Sanitize Fix (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "12adb07b-6490-442b-8838-3f7a12692737",
+      "name": "Omniscient Fix: Sanitize Fix (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Apply Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "54697054-5eaa-4b94-848e-6762f00f9346",
+      "name": "Check: Apply Fix (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "c308e1f5-de6b-41e2-b74f-5028b968b415",
+      "name": "Omniscient Fix: Apply Fix (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Git Commit & Push\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "40b2a22b-1459-4f25-8cb0-f565d0983a48",
+      "name": "Check: Git Commit & Push (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "78bd7158-fcca-4d23-a300-4fb297afb845",
+      "name": "Omniscient Fix: Git Commit & Push (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Fix Failed Notification\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5a6df669-8931-4807-90d5-268313c92fc3",
+      "name": "Check: Fix Failed Notification (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "ab407dcf-7f92-4634-ba92-bbd82c8b975e",
+      "name": "Omniscient Fix: Fix Failed Notification (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        200
       ]
     }
   ],
   "connections": {
-    "Find Gaps/Placeholders": {
+    "Check: Find Gaps/Placeholders (P0)": {
       "main": [
         [
           {
-            "node": "Check: Find Gaps/Placeholders",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Find Gaps/Placeholders": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Find Gaps/Placeholders",
+            "node": "Omniscient Fix: Find Gaps/Placeholders (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Find Gaps/Placeholders",
+            "node": "Check: Find Gaps/Placeholders (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Find Gaps/Placeholders": {
+    "Omniscient Fix: Find Gaps/Placeholders (P0)": {
       "main": [
         [
           {
@@ -379,36 +368,36 @@
         ]
       ]
     },
-    "AI Fix Generator": {
+    "Find Gaps/Placeholders": {
       "main": [
         [
           {
-            "node": "Check: AI Fix Generator",
+            "node": "Check: Find Gaps/Placeholders (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Fix Generator": {
+    "Check: AI Fix Generator (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Fix Generator",
+            "node": "Omniscient Fix: AI Fix Generator (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Fix Generator",
+            "node": "Check: AI Fix Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Fix Generator": {
+    "Omniscient Fix: AI Fix Generator (P0)": {
       "main": [
         [
           {
@@ -419,36 +408,36 @@
         ]
       ]
     },
-    "Sanitize Fix": {
+    "AI Fix Generator": {
       "main": [
         [
           {
-            "node": "Check: Sanitize Fix",
+            "node": "Check: AI Fix Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Sanitize Fix": {
+    "Check: Sanitize Fix (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Sanitize Fix",
+            "node": "Omniscient Fix: Sanitize Fix (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Sanitize Fix",
+            "node": "Check: Sanitize Fix (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Sanitize Fix": {
+    "Omniscient Fix: Sanitize Fix (P0)": {
       "main": [
         [
           {
@@ -459,36 +448,36 @@
         ]
       ]
     },
-    "Apply Fix": {
+    "Sanitize Fix": {
       "main": [
         [
           {
-            "node": "Check: Apply Fix",
+            "node": "Check: Sanitize Fix (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Apply Fix": {
+    "Check: Apply Fix (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Apply Fix",
+            "node": "Omniscient Fix: Apply Fix (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Apply Fix",
+            "node": "Check: Apply Fix (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Apply Fix": {
+    "Omniscient Fix: Apply Fix (P0)": {
       "main": [
         [
           {
@@ -499,36 +488,36 @@
         ]
       ]
     },
-    "Git Commit & Push": {
+    "Apply Fix": {
       "main": [
         [
           {
-            "node": "Check: Git Commit & Push",
+            "node": "Check: Apply Fix (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Git Commit & Push": {
+    "Check: Git Commit & Push (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Git Commit & Push",
+            "node": "Omniscient Fix: Git Commit & Push (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Git Commit & Push",
+            "node": "Check: Git Commit & Push (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Git Commit & Push": {
+    "Omniscient Fix: Git Commit & Push (P0)": {
       "main": [
         [
           {
@@ -539,40 +528,51 @@
         ]
       ]
     },
-    "Fix Failed Notification": {
+    "Git Commit & Push": {
       "main": [
         [
           {
-            "node": "Check: Fix Failed Notification",
+            "node": "Check: Git Commit & Push (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Fix Failed Notification": {
+    "Check: Fix Failed Notification (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Fix Failed Notification",
+            "node": "Omniscient Fix: Fix Failed Notification (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Fix Failed Notification",
+            "node": "Check: Fix Failed Notification (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Fix Failed Notification": {
+    "Omniscient Fix: Fix Failed Notification (P0)": {
       "main": [
         [
           {
             "node": "Fix Failed Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fix Failed Notification": {
+      "main": [
+        [
+          {
+            "node": "Check: Fix Failed Notification (P0)",
             "type": "main",
             "index": 0
           }

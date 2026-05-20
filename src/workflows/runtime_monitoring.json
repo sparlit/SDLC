@@ -32,42 +32,6 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Get Runtime Errors\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-get-runtime-errors",
-      "name": "Check: Get Runtime Errors",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-get-runtime-errors",
-      "name": "Omniscient Fix: Get Runtime Errors",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
           "string": [
             {
               "value1": "={{ $json.stdout }}",
@@ -88,42 +52,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Has Error?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-has-error",
-      "name": "Check: Has Error?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-has-error",
-      "name": "Omniscient Fix: Has Error?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "workflowId": "autonomous_fixing"
       },
       "id": "trigger-fix-loop",
@@ -141,19 +69,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Trigger Fix Loop\"].error !== undefined }",
+              "value1": "={ $node[\"Get Runtime Errors\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-trigger-fix-loop",
-      "name": "Check: Trigger Fix Loop",
+      "id": "88d8cca7-c1c7-4540-ba21-4b8ae437c3d7",
+      "name": "Check: Get Runtime Errors (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        750,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -163,47 +91,108 @@
           "waitForResults": true
         }
       },
-      "id": "fix-trigger-fix-loop",
-      "name": "Omniscient Fix: Trigger Fix Loop",
+      "id": "2a3b955c-e222-41b0-8cb8-f549d2cf6a94",
+      "name": "Omniscient Fix: Get Runtime Errors (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        750,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Has Error?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "db9c40f7-59c9-4a80-b722-0a3c2824d60c",
+      "name": "Check: Has Error? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "5129bd64-9079-4581-af86-53863da978e5",
+      "name": "Omniscient Fix: Has Error? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trigger Fix Loop\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "a7837ce1-4682-45e5-9e78-7baa7870c68c",
+      "name": "Check: Trigger Fix Loop (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "6e8a99e7-6ca7-4af3-9fce-9c071e84eb72",
+      "name": "Omniscient Fix: Trigger Fix Loop (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "Get Runtime Errors": {
+    "Check: Get Runtime Errors (P0)": {
       "main": [
         [
           {
-            "node": "Check: Get Runtime Errors",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Get Runtime Errors": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Get Runtime Errors",
+            "node": "Omniscient Fix: Get Runtime Errors (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Get Runtime Errors",
+            "node": "Check: Get Runtime Errors (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Get Runtime Errors": {
+    "Omniscient Fix: Get Runtime Errors (P0)": {
       "main": [
         [
           {
@@ -214,36 +203,36 @@
         ]
       ]
     },
-    "Has Error?": {
+    "Get Runtime Errors": {
       "main": [
         [
           {
-            "node": "Check: Has Error?",
+            "node": "Check: Get Runtime Errors (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Has Error?": {
+    "Check: Has Error? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Has Error?",
+            "node": "Omniscient Fix: Has Error? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Has Error?",
+            "node": "Check: Has Error? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Has Error?": {
+    "Omniscient Fix: Has Error? (P0)": {
       "main": [
         [
           {
@@ -254,40 +243,51 @@
         ]
       ]
     },
-    "Trigger Fix Loop": {
+    "Has Error?": {
       "main": [
         [
           {
-            "node": "Check: Trigger Fix Loop",
+            "node": "Check: Has Error? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Trigger Fix Loop": {
+    "Check: Trigger Fix Loop (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Trigger Fix Loop",
+            "node": "Omniscient Fix: Trigger Fix Loop (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Trigger Fix Loop",
+            "node": "Check: Trigger Fix Loop (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Trigger Fix Loop": {
+    "Omniscient Fix: Trigger Fix Loop (P0)": {
       "main": [
         [
           {
             "node": "Trigger Fix Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Fix Loop": {
+      "main": [
+        [
+          {
+            "node": "Check: Trigger Fix Loop (P0)",
             "type": "main",
             "index": 0
           }

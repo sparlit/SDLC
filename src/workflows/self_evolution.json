@@ -31,42 +31,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Read Performance Logs\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-read-logs",
-      "name": "Check: Read Performance Logs",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-read-logs",
-      "name": "Omniscient Fix: Read Performance Logs",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "headerParameters": {
@@ -102,42 +66,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI Evolve Prompts\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-ai-evolve-prompts",
-      "name": "Check: AI Evolve Prompts",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-ai-evolve-prompts",
-      "name": "Omniscient Fix: AI Evolve Prompts",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "echo \"{{ $json.choices[0].message.content }}\" > /data/project/setup/prompts.json"
       },
       "id": "update-prompts-file",
@@ -155,19 +83,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Update Prompts File\"].error !== undefined }",
+              "value1": "={ $node[\"Read Performance Logs\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-update-prompts-file",
-      "name": "Check: Update Prompts File",
+      "id": "27abd06a-747b-482c-a714-3f5f3c80a830",
+      "name": "Check: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        750,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -177,47 +105,108 @@
           "waitForResults": true
         }
       },
-      "id": "fix-update-prompts-file",
-      "name": "Omniscient Fix: Update Prompts File",
+      "id": "be10fc1f-fdd9-4e5e-8154-a61ed09799b0",
+      "name": "Omniscient Fix: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        750,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Evolve Prompts\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ca94f69d-acdb-49ec-88a6-e6cb94948a04",
+      "name": "Check: AI Evolve Prompts (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "13d6a29f-1fe3-4525-b13f-0a8a719f9938",
+      "name": "Omniscient Fix: AI Evolve Prompts (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Prompts File\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "efe99e89-cf1d-4e98-8685-6d477aed0546",
+      "name": "Check: Update Prompts File (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "44171509-29e0-440d-90dc-6abbda743ea1",
+      "name": "Omniscient Fix: Update Prompts File (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "Read Performance Logs": {
+    "Check: Read Performance Logs (P0)": {
       "main": [
         [
           {
-            "node": "Check: Read Performance Logs",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Read Performance Logs": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Read Performance Logs",
+            "node": "Omniscient Fix: Read Performance Logs (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Read Performance Logs",
+            "node": "Check: Read Performance Logs (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Read Performance Logs": {
+    "Omniscient Fix: Read Performance Logs (P0)": {
       "main": [
         [
           {
@@ -228,36 +217,36 @@
         ]
       ]
     },
-    "AI Evolve Prompts": {
+    "Read Performance Logs": {
       "main": [
         [
           {
-            "node": "Check: AI Evolve Prompts",
+            "node": "Check: Read Performance Logs (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Evolve Prompts": {
+    "Check: AI Evolve Prompts (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Evolve Prompts",
+            "node": "Omniscient Fix: AI Evolve Prompts (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Evolve Prompts",
+            "node": "Check: AI Evolve Prompts (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Evolve Prompts": {
+    "Omniscient Fix: AI Evolve Prompts (P0)": {
       "main": [
         [
           {
@@ -268,40 +257,51 @@
         ]
       ]
     },
-    "Update Prompts File": {
+    "AI Evolve Prompts": {
       "main": [
         [
           {
-            "node": "Check: Update Prompts File",
+            "node": "Check: AI Evolve Prompts (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Update Prompts File": {
+    "Check: Update Prompts File (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Update Prompts File",
+            "node": "Omniscient Fix: Update Prompts File (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Update Prompts File",
+            "node": "Check: Update Prompts File (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Update Prompts File": {
+    "Omniscient Fix: Update Prompts File (P0)": {
       "main": [
         [
           {
             "node": "Update Prompts File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Prompts File": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Prompts File (P0)",
             "type": "main",
             "index": 0
           }

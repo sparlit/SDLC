@@ -31,42 +31,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Scan External Repo\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-scan-external",
-      "name": "Check: Scan External Repo",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-scan-external",
-      "name": "Omniscient Fix: Scan External Repo",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "bodyParameters": {
@@ -97,19 +61,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Generate Contribution\"].error !== undefined }",
+              "value1": "={ $node[\"Scan External Repo\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-generate-contribution",
-      "name": "Check: Generate Contribution",
+      "id": "bbca7b4d-36b1-41ed-80f9-ccdd16cb8350",
+      "name": "Check: Scan External Repo (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        550,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -119,47 +83,72 @@
           "waitForResults": true
         }
       },
-      "id": "fix-generate-contribution",
-      "name": "Omniscient Fix: Generate Contribution",
+      "id": "6b31933c-1a5c-4c18-9e4d-4b1f4f4de825",
+      "name": "Omniscient Fix: Scan External Repo (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        550,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Generate Contribution\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5c6591dd-a84d-4ef7-901a-ab496df785ed",
+      "name": "Check: Generate Contribution (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "71ced692-7f74-4a26-bdf8-b79d624573e5",
+      "name": "Omniscient Fix: Generate Contribution (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
       ]
     }
   ],
   "connections": {
-    "Scan External Repo": {
+    "Check: Scan External Repo (P0)": {
       "main": [
         [
           {
-            "node": "Check: Scan External Repo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Scan External Repo": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Scan External Repo",
+            "node": "Omniscient Fix: Scan External Repo (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Scan External Repo",
+            "node": "Check: Scan External Repo (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Scan External Repo": {
+    "Omniscient Fix: Scan External Repo (P0)": {
       "main": [
         [
           {
@@ -170,40 +159,51 @@
         ]
       ]
     },
-    "Generate Contribution": {
+    "Scan External Repo": {
       "main": [
         [
           {
-            "node": "Check: Generate Contribution",
+            "node": "Check: Scan External Repo (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Generate Contribution": {
+    "Check: Generate Contribution (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Generate Contribution",
+            "node": "Omniscient Fix: Generate Contribution (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Generate Contribution",
+            "node": "Check: Generate Contribution (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Generate Contribution": {
+    "Omniscient Fix: Generate Contribution (P0)": {
       "main": [
         [
           {
             "node": "Generate Contribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Contribution": {
+      "main": [
+        [
+          {
+            "node": "Check: Generate Contribution (P0)",
             "type": "main",
             "index": 0
           }

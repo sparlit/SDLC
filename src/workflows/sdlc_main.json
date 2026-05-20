@@ -30,42 +30,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Scan Project Files\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-scan-project",
-      "name": "Check: Scan Project Files",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-scan-project",
-      "name": "Omniscient Fix: Scan Project Files",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "jsCode": "const stdout = $node[\"Scan Project Files\"].json.stdout || '';\nconst files = stdout.split('\\n');\nlet language = 'unknown';\n\nif (files.some(f => f.includes('package.json'))) language = 'javascript';\nelse if (files.some(f => f.includes('requirements.txt') || f.includes('pyproject.toml'))) language = 'python';\nelse if (files.some(f => f.includes('go.mod'))) language = 'go';\n\nreturn { language, files };"
       },
       "id": "detect-language",
@@ -77,42 +41,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Polyglot Detection\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-detect-language",
-      "name": "Check: Polyglot Detection",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-detect-language",
-      "name": "Omniscient Fix: Polyglot Detection",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
     },
     {
       "parameters": {
@@ -138,42 +66,6 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Is JS?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-is-javascript",
-      "name": "Check: Is JS?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        750,
-        -50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-is-javascript",
-      "name": "Omniscient Fix: Is JS?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        750,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
           "string": [
             {
               "value1": "={{ $json.language }}",
@@ -194,42 +86,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Is Python?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-is-python",
-      "name": "Check: Is Python?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        750,
-        150
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-is-python",
-      "name": "Omniscient Fix: Is Python?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        750,
-        250
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && npm test && npm audit"
       },
       "id": "npm-test-audit",
@@ -244,42 +100,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"NPM Test & Audit\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-npm-test-audit",
-      "name": "Check: NPM Test & Audit",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        950,
-        -100
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-npm-test-audit",
-      "name": "Omniscient Fix: NPM Test & Audit",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        950,
-        0
-      ]
-    },
-    {
-      "parameters": {
         "command": "cd /data/project && pytest && bandit -r ."
       },
       "id": "pytest-bandit",
@@ -291,42 +111,6 @@
         50
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Pytest & Bandit\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-pytest-bandit",
-      "name": "Check: Pytest & Bandit",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        950,
-        100
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-pytest-bandit",
-      "name": "Omniscient Fix: Pytest & Bandit",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        950,
-        200
-      ]
     },
     {
       "parameters": {
@@ -371,18 +155,126 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"AI SDLC Report\"].error !== undefined }",
+              "value1": "={ $node[\"Scan Project Files\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-ai-sdlc-report",
-      "name": "Check: AI SDLC Report",
+      "id": "ccf9b22d-7ac9-4f22-8d4b-4bc335dda9d6",
+      "name": "Check: Scan Project Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        1250,
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "ed16e882-5757-43e5-88d4-ef7c8f5f00ce",
+      "name": "Omniscient Fix: Scan Project Files (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Polyglot Detection\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5660901f-1369-4d2c-aa10-62c982d6f54e",
+      "name": "Check: Polyglot Detection (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "00c857c1-87bb-421e-a52e-796659d472ce",
+      "name": "Omniscient Fix: Polyglot Detection (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Is JS?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "2abb00b7-e986-4fdb-b3c2-8fb2e7f4b2e7",
+      "name": "Check: Is JS? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -150
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "f9712b47-f39a-4ff5-84fe-80124eee4ca3",
+      "name": "Omniscient Fix: Is JS? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Is Python?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "39a376da-5b83-42b3-b854-fd93bb28a6ac",
+      "name": "Check: Is Python? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
         50
       ]
     },
@@ -393,13 +285,121 @@
           "waitForResults": true
         }
       },
-      "id": "fix-ai-sdlc-report",
-      "name": "Omniscient Fix: AI SDLC Report",
+      "id": "3479d1b5-deeb-4f92-b140-2d1ee5577454",
+      "name": "Omniscient Fix: Is Python? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        1250,
-        150
+        1000,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"NPM Test & Audit\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "7cd16ee2-0dab-4da4-b06f-c5971fe47858",
+      "name": "Check: NPM Test & Audit (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "6cab08e7-86d7-47ab-94d6-52c9908402d0",
+      "name": "Omniscient Fix: NPM Test & Audit (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -150
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Pytest & Bandit\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "4407dba8-52cc-4e7a-8243-dd79f521df8c",
+      "name": "Check: Pytest & Bandit (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fadd295d-516b-453d-8eec-a0b2c49d27bf",
+      "name": "Omniscient Fix: Pytest & Bandit (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI SDLC Report\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "4eb84340-310f-470e-bb29-4331b1de9e59",
+      "name": "Check: AI SDLC Report (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "1656b09d-d230-4c55-a2ff-fb15a3c0ad95",
+      "name": "Omniscient Fix: AI SDLC Report (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        0
       ]
     }
   ],
@@ -415,36 +415,25 @@
         ]
       ]
     },
-    "Scan Project Files": {
+    "Check: Scan Project Files (P0)": {
       "main": [
         [
           {
-            "node": "Check: Scan Project Files",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Scan Project Files": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Scan Project Files",
+            "node": "Omniscient Fix: Scan Project Files (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Scan Project Files",
+            "node": "Check: Scan Project Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Scan Project Files": {
+    "Omniscient Fix: Scan Project Files (P0)": {
       "main": [
         [
           {
@@ -455,36 +444,36 @@
         ]
       ]
     },
-    "Polyglot Detection": {
+    "Scan Project Files": {
       "main": [
         [
           {
-            "node": "Check: Polyglot Detection",
+            "node": "Check: Scan Project Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Polyglot Detection": {
+    "Check: Polyglot Detection (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Polyglot Detection",
+            "node": "Omniscient Fix: Polyglot Detection (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Polyglot Detection",
+            "node": "Check: Polyglot Detection (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Polyglot Detection": {
+    "Omniscient Fix: Polyglot Detection (P0)": {
       "main": [
         [
           {
@@ -495,36 +484,36 @@
         ]
       ]
     },
-    "Is JS?": {
+    "Polyglot Detection": {
       "main": [
         [
           {
-            "node": "Check: Is JS?",
+            "node": "Check: Polyglot Detection (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is JS?": {
+    "Check: Is JS? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is JS?",
+            "node": "Omniscient Fix: Is JS? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Is JS?",
+            "node": "Check: Is JS? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Is JS?": {
+    "Omniscient Fix: Is JS? (P0)": {
       "main": [
         [
           {
@@ -535,36 +524,36 @@
         ]
       ]
     },
-    "Is Python?": {
+    "Is JS?": {
       "main": [
         [
           {
-            "node": "Check: Is Python?",
+            "node": "Check: Is JS? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is Python?": {
+    "Check: Is Python? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is Python?",
+            "node": "Omniscient Fix: Is Python? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Is Python?",
+            "node": "Check: Is Python? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Is Python?": {
+    "Omniscient Fix: Is Python? (P0)": {
       "main": [
         [
           {
@@ -575,36 +564,36 @@
         ]
       ]
     },
-    "NPM Test & Audit": {
+    "Is Python?": {
       "main": [
         [
           {
-            "node": "Check: NPM Test & Audit",
+            "node": "Check: Is Python? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: NPM Test & Audit": {
+    "Check: NPM Test & Audit (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: NPM Test & Audit",
+            "node": "Omniscient Fix: NPM Test & Audit (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: NPM Test & Audit",
+            "node": "Check: NPM Test & Audit (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: NPM Test & Audit": {
+    "Omniscient Fix: NPM Test & Audit (P0)": {
       "main": [
         [
           {
@@ -615,36 +604,36 @@
         ]
       ]
     },
-    "Pytest & Bandit": {
+    "NPM Test & Audit": {
       "main": [
         [
           {
-            "node": "Check: Pytest & Bandit",
+            "node": "Check: NPM Test & Audit (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Pytest & Bandit": {
+    "Check: Pytest & Bandit (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Pytest & Bandit",
+            "node": "Omniscient Fix: Pytest & Bandit (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Pytest & Bandit",
+            "node": "Check: Pytest & Bandit (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Pytest & Bandit": {
+    "Omniscient Fix: Pytest & Bandit (P0)": {
       "main": [
         [
           {
@@ -655,40 +644,51 @@
         ]
       ]
     },
-    "AI SDLC Report": {
+    "Pytest & Bandit": {
       "main": [
         [
           {
-            "node": "Check: AI SDLC Report",
+            "node": "Check: Pytest & Bandit (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI SDLC Report": {
+    "Check: AI SDLC Report (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI SDLC Report",
+            "node": "Omniscient Fix: AI SDLC Report (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI SDLC Report",
+            "node": "Check: AI SDLC Report (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI SDLC Report": {
+    "Omniscient Fix: AI SDLC Report (P0)": {
       "main": [
         [
           {
             "node": "AI SDLC Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI SDLC Report": {
+      "main": [
+        [
+          {
+            "node": "Check: AI SDLC Report (P0)",
             "type": "main",
             "index": 0
           }

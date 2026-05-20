@@ -31,42 +31,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"List Files\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-list-files",
-      "name": "Check: List Files",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-list-files",
-      "name": "Omniscient Fix: List Files",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "headerParameters": {
@@ -102,42 +66,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI Doc Generator\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-ai-doc-generator",
-      "name": "Check: AI Doc Generator",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        600,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-ai-doc-generator",
-      "name": "Omniscient Fix: AI Doc Generator",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        600,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "echo '{{ $json.choices[0].message.content }}' > /data/project/swagger.yaml"
       },
       "id": "save-docs",
@@ -155,19 +83,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Save Docs\"].error !== undefined }",
+              "value1": "={ $node[\"List Files\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-save-docs",
-      "name": "Check: Save Docs",
+      "id": "82888bb8-b6f2-4432-9b3a-2aa383f286a8",
+      "name": "Check: List Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        850,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -177,47 +105,108 @@
           "waitForResults": true
         }
       },
-      "id": "fix-save-docs",
-      "name": "Omniscient Fix: Save Docs",
+      "id": "05570664-cf93-4ad6-8355-94aa45371d5a",
+      "name": "Omniscient Fix: List Files (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Doc Generator\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "62fdd85c-9d47-40a8-a51f-7769f95338f1",
+      "name": "Check: AI Doc Generator (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "77d8c614-da72-4d57-baad-f02ef9e70543",
+      "name": "Omniscient Fix: AI Doc Generator (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
         850,
-        150
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Save Docs\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "cf0445ae-1291-4e29-be76-4469bc959e7d",
+      "name": "Check: Save Docs (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "24971428-f09a-4d04-b00b-044e75bbdd6a",
+      "name": "Omniscient Fix: Save Docs (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        0
       ]
     }
   ],
   "connections": {
-    "List Files": {
+    "Check: List Files (P0)": {
       "main": [
         [
           {
-            "node": "Check: List Files",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: List Files": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: List Files",
+            "node": "Omniscient Fix: List Files (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: List Files",
+            "node": "Check: List Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: List Files": {
+    "Omniscient Fix: List Files (P0)": {
       "main": [
         [
           {
@@ -228,36 +217,36 @@
         ]
       ]
     },
-    "AI Doc Generator": {
+    "List Files": {
       "main": [
         [
           {
-            "node": "Check: AI Doc Generator",
+            "node": "Check: List Files (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Doc Generator": {
+    "Check: AI Doc Generator (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Doc Generator",
+            "node": "Omniscient Fix: AI Doc Generator (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Doc Generator",
+            "node": "Check: AI Doc Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Doc Generator": {
+    "Omniscient Fix: AI Doc Generator (P0)": {
       "main": [
         [
           {
@@ -268,40 +257,51 @@
         ]
       ]
     },
-    "Save Docs": {
+    "AI Doc Generator": {
       "main": [
         [
           {
-            "node": "Check: Save Docs",
+            "node": "Check: AI Doc Generator (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Save Docs": {
+    "Check: Save Docs (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Save Docs",
+            "node": "Omniscient Fix: Save Docs (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Save Docs",
+            "node": "Check: Save Docs (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Save Docs": {
+    "Omniscient Fix: Save Docs (P0)": {
       "main": [
         [
           {
             "node": "Save Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Docs": {
+      "main": [
+        [
+          {
+            "node": "Check: Save Docs (P0)",
             "type": "main",
             "index": 0
           }

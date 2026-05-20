@@ -30,42 +30,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Hardware Safety Check\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-safety-check",
-      "name": "Check: Hardware Safety Check",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-safety-check",
-      "name": "Omniscient Fix: Hardware Safety Check",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
       },
       "id": "scout-analyze",
@@ -83,19 +47,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Scout (Deep Analyze)\"].error !== undefined }",
+              "value1": "={ $node[\"Hardware Safety Check\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-scout-analyze",
-      "name": "Check: Scout (Deep Analyze)",
+      "id": "ada8ab3a-4ae6-4058-a21f-fd31b4cea2ae",
+      "name": "Check: Hardware Safety Check (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        550,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -105,47 +69,72 @@
           "waitForResults": true
         }
       },
-      "id": "fix-scout-analyze",
-      "name": "Omniscient Fix: Scout (Deep Analyze)",
+      "id": "d24638bc-0492-4d8e-9815-b5eebed395ae",
+      "name": "Omniscient Fix: Hardware Safety Check (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        550,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Scout (Deep Analyze)\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "cdb12812-6e03-43b3-9b12-1d1c74655322",
+      "name": "Check: Scout (Deep Analyze) (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "d51e65be-835b-458d-87ef-8f4399e517de",
+      "name": "Omniscient Fix: Scout (Deep Analyze) (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
       ]
     }
   ],
   "connections": {
-    "Hardware Safety Check": {
+    "Check: Hardware Safety Check (P0)": {
       "main": [
         [
           {
-            "node": "Check: Hardware Safety Check",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Hardware Safety Check": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Hardware Safety Check",
+            "node": "Omniscient Fix: Hardware Safety Check (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Hardware Safety Check",
+            "node": "Check: Hardware Safety Check (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Hardware Safety Check": {
+    "Omniscient Fix: Hardware Safety Check (P0)": {
       "main": [
         [
           {
@@ -156,40 +145,51 @@
         ]
       ]
     },
-    "Scout (Deep Analyze)": {
+    "Hardware Safety Check": {
       "main": [
         [
           {
-            "node": "Check: Scout (Deep Analyze)",
+            "node": "Check: Hardware Safety Check (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Scout (Deep Analyze)": {
+    "Check: Scout (Deep Analyze) (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Scout (Deep Analyze)",
+            "node": "Omniscient Fix: Scout (Deep Analyze) (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Scout (Deep Analyze)",
+            "node": "Check: Scout (Deep Analyze) (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Scout (Deep Analyze)": {
+    "Omniscient Fix: Scout (Deep Analyze) (P0)": {
       "main": [
         [
           {
             "node": "Scout (Deep Analyze)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scout (Deep Analyze)": {
+      "main": [
+        [
+          {
+            "node": "Check: Scout (Deep Analyze) (P0)",
             "type": "main",
             "index": 0
           }

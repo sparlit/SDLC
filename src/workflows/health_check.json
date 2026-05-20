@@ -33,42 +33,6 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Check Hardware\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-check-hardware",
-      "name": "Check: Check Hardware",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-check-hardware",
-      "name": "Omniscient Fix: Check Hardware",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
           "number": [
             {
               "value1": "={{ $node[\"Check Hardware\"].json.exitCode }}",
@@ -87,42 +51,6 @@
         0
       ],
       "continueOnFail": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Is Stable?\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-is-stable",
-      "name": "Check: Is Stable?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-is-stable",
-      "name": "Omniscient Fix: Is Stable?",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
     },
     {
       "parameters": {
@@ -157,19 +85,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Alert Notification\"].error !== undefined }",
+              "value1": "={ $node[\"Check Hardware\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-alert-notification",
-      "name": "Check: Alert Notification",
+      "id": "6356402a-65dd-4169-bf62-572d067c8e39",
+      "name": "Check: Check Hardware (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        750,
-        150
+        400,
+        -50
       ]
     },
     {
@@ -179,47 +107,108 @@
           "waitForResults": true
         }
       },
-      "id": "fix-alert-notification",
-      "name": "Omniscient Fix: Alert Notification",
+      "id": "adb892c1-6473-4306-b631-6bb6e91b4bb3",
+      "name": "Omniscient Fix: Check Hardware (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        750,
-        250
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Is Stable?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ee709157-39fd-471f-92cc-5c72ee60e981",
+      "name": "Check: Is Stable? (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "5546d73b-871b-4d2a-8f9d-94ee512236a8",
+      "name": "Omniscient Fix: Is Stable? (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Alert Notification\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "baf50901-5093-4075-8ab3-e2ceac47dc12",
+      "name": "Check: Alert Notification (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "7e6ffca5-bbcb-439e-b180-433d40dc3052",
+      "name": "Omniscient Fix: Alert Notification (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        100
       ]
     }
   ],
   "connections": {
-    "Check Hardware": {
+    "Check: Check Hardware (P0)": {
       "main": [
         [
           {
-            "node": "Check: Check Hardware",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Check Hardware": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Check Hardware",
+            "node": "Omniscient Fix: Check Hardware (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Check Hardware",
+            "node": "Check: Check Hardware (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Check Hardware": {
+    "Omniscient Fix: Check Hardware (P0)": {
       "main": [
         [
           {
@@ -230,36 +219,36 @@
         ]
       ]
     },
-    "Is Stable?": {
+    "Check Hardware": {
       "main": [
         [
           {
-            "node": "Check: Is Stable?",
+            "node": "Check: Check Hardware (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Is Stable?": {
+    "Check: Is Stable? (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Is Stable?",
+            "node": "Omniscient Fix: Is Stable? (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Is Stable?",
+            "node": "Check: Is Stable? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Is Stable?": {
+    "Omniscient Fix: Is Stable? (P0)": {
       "main": [
         [
           {
@@ -270,40 +259,51 @@
         ]
       ]
     },
-    "Alert Notification": {
+    "Is Stable?": {
       "main": [
         [
           {
-            "node": "Check: Alert Notification",
+            "node": "Check: Is Stable? (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Alert Notification": {
+    "Check: Alert Notification (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Alert Notification",
+            "node": "Omniscient Fix: Alert Notification (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Alert Notification",
+            "node": "Check: Alert Notification (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Alert Notification": {
+    "Omniscient Fix: Alert Notification (P0)": {
       "main": [
         [
           {
             "node": "Alert Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Notification": {
+      "main": [
+        [
+          {
+            "node": "Check: Alert Notification (P0)",
             "type": "main",
             "index": 0
           }

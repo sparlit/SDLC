@@ -31,42 +31,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"Get Recent Changes\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-get-changes",
-      "name": "Check: Get Recent Changes",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        350,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-get-changes",
-      "name": "Omniscient Fix: Get Recent Changes",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "headerParameters": {
@@ -102,42 +66,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={ $node[\"AI Summarizer\"].error !== undefined }",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "check-ai-summarizer",
-      "name": "Check: AI Summarizer",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        550,
-        50
-      ]
-    },
-    {
-      "parameters": {
-        "workflowId": "omniscient_error_orchestrator",
-        "options": {
-          "waitForResults": true
-        }
-      },
-      "id": "fix-ai-summarizer",
-      "name": "Omniscient Fix: AI Summarizer",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1,
-      "position": [
-        550,
-        150
-      ]
-    },
-    {
-      "parameters": {
         "command": "echo \"{{ $json.choices[0].message.content }}\" >> /data/project/SDLC_KNOWLEDGE.md"
       },
       "id": "update-docs",
@@ -155,19 +83,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Update Documentation\"].error !== undefined }",
+              "value1": "={ $node[\"Get Recent Changes\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "check-update-docs",
-      "name": "Check: Update Documentation",
+      "id": "6fa4d774-f949-4515-9acb-1254f573cbad",
+      "name": "Check: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        750,
-        50
+        400,
+        -50
       ]
     },
     {
@@ -177,47 +105,108 @@
           "waitForResults": true
         }
       },
-      "id": "fix-update-docs",
-      "name": "Omniscient Fix: Update Documentation",
+      "id": "b1e6e55b-7a2b-487a-b1c9-27cde9ce27b8",
+      "name": "Omniscient Fix: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        750,
-        150
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Summarizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "00ef1544-a280-404c-beb3-e23f525594b6",
+      "name": "Check: AI Summarizer (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "69c83fa5-156b-476f-bd83-c1166ff801e3",
+      "name": "Omniscient Fix: AI Summarizer (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Documentation\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "4c57a66f-23ee-49e0-8fec-c6b5dc421b26",
+      "name": "Check: Update Documentation (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a2dfa808-ae71-4310-b56a-110a37c2b895",
+      "name": "Omniscient Fix: Update Documentation (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
       ]
     }
   ],
   "connections": {
-    "Get Recent Changes": {
+    "Check: Get Recent Changes (P0)": {
       "main": [
         [
           {
-            "node": "Check: Get Recent Changes",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check: Get Recent Changes": {
-      "main": [
-        [
-          {
-            "node": "Omniscient Fix: Get Recent Changes",
+            "node": "Omniscient Fix: Get Recent Changes (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Get Recent Changes",
+            "node": "Check: Get Recent Changes (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Get Recent Changes": {
+    "Omniscient Fix: Get Recent Changes (P0)": {
       "main": [
         [
           {
@@ -228,36 +217,36 @@
         ]
       ]
     },
-    "AI Summarizer": {
+    "Get Recent Changes": {
       "main": [
         [
           {
-            "node": "Check: AI Summarizer",
+            "node": "Check: Get Recent Changes (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Summarizer": {
+    "Check: AI Summarizer (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Summarizer",
+            "node": "Omniscient Fix: AI Summarizer (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Summarizer",
+            "node": "Check: AI Summarizer (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Summarizer": {
+    "Omniscient Fix: AI Summarizer (P0)": {
       "main": [
         [
           {
@@ -268,40 +257,51 @@
         ]
       ]
     },
-    "Update Documentation": {
+    "AI Summarizer": {
       "main": [
         [
           {
-            "node": "Check: Update Documentation",
+            "node": "Check: AI Summarizer (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Update Documentation": {
+    "Check: Update Documentation (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Update Documentation",
+            "node": "Omniscient Fix: Update Documentation (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Update Documentation",
+            "node": "Check: Update Documentation (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Update Documentation": {
+    "Omniscient Fix: Update Documentation (P0)": {
       "main": [
         [
           {
             "node": "Update Documentation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Documentation": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Documentation (P0)",
             "type": "main",
             "index": 0
           }
