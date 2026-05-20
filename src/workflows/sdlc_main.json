@@ -152,6 +152,23 @@
     },
     {
       "parameters": {
+        "workflowId": "swarm_coordinator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "trigger-infinite-cycle",
+      "name": "Trigger Infinite Cycle",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
         "conditions": {
           "boolean": [
             {
@@ -161,7 +178,7 @@
           ]
         }
       },
-      "id": "ccf9b22d-7ac9-4f22-8d4b-4bc335dda9d6",
+      "id": "7bdb2e88-0909-4305-a5ca-23f24f88911d",
       "name": "Check: Scan Project Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +194,7 @@
           "waitForResults": true
         }
       },
-      "id": "ed16e882-5757-43e5-88d4-ef7c8f5f00ce",
+      "id": "1b8f61b8-6b06-47b0-8632-4955980b9a9b",
       "name": "Omniscient Fix: Scan Project Files (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -197,7 +214,7 @@
           ]
         }
       },
-      "id": "5660901f-1369-4d2c-aa10-62c982d6f54e",
+      "id": "466049a3-38cb-4cbf-8914-0a4076c949a2",
       "name": "Check: Polyglot Detection (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -213,7 +230,7 @@
           "waitForResults": true
         }
       },
-      "id": "00c857c1-87bb-421e-a52e-796659d472ce",
+      "id": "89fdb31e-f9f6-46df-8085-eb3ad8f081e2",
       "name": "Omniscient Fix: Polyglot Detection (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -233,7 +250,7 @@
           ]
         }
       },
-      "id": "2abb00b7-e986-4fdb-b3c2-8fb2e7f4b2e7",
+      "id": "e90b606b-2f03-4c18-b2c3-f923cb613226",
       "name": "Check: Is JS? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -249,7 +266,7 @@
           "waitForResults": true
         }
       },
-      "id": "f9712b47-f39a-4ff5-84fe-80124eee4ca3",
+      "id": "9a4860f5-7700-4290-a758-dfd91645eb2c",
       "name": "Omniscient Fix: Is JS? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -269,7 +286,7 @@
           ]
         }
       },
-      "id": "39a376da-5b83-42b3-b854-fd93bb28a6ac",
+      "id": "93d339f6-e925-47db-ad05-a347c23098e3",
       "name": "Check: Is Python? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -285,7 +302,7 @@
           "waitForResults": true
         }
       },
-      "id": "3479d1b5-deeb-4f92-b140-2d1ee5577454",
+      "id": "3437ed8d-c9ca-451a-91d0-b383b6c159c6",
       "name": "Omniscient Fix: Is Python? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -305,7 +322,7 @@
           ]
         }
       },
-      "id": "7cd16ee2-0dab-4da4-b06f-c5971fe47858",
+      "id": "1e5049cc-0caf-485e-a1da-c5cd23985489",
       "name": "Check: NPM Test & Audit (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -321,7 +338,7 @@
           "waitForResults": true
         }
       },
-      "id": "6cab08e7-86d7-47ab-94d6-52c9908402d0",
+      "id": "78f7b799-857e-4295-889c-46a324f531ff",
       "name": "Omniscient Fix: NPM Test & Audit (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -341,7 +358,7 @@
           ]
         }
       },
-      "id": "4407dba8-52cc-4e7a-8243-dd79f521df8c",
+      "id": "fb29320a-c7fd-4564-86c7-45459c066b72",
       "name": "Check: Pytest & Bandit (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -357,7 +374,7 @@
           "waitForResults": true
         }
       },
-      "id": "fadd295d-516b-453d-8eec-a0b2c49d27bf",
+      "id": "d7cc839c-34a9-4622-b4dd-4bd7e169599e",
       "name": "Omniscient Fix: Pytest & Bandit (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -377,7 +394,7 @@
           ]
         }
       },
-      "id": "4eb84340-310f-470e-bb29-4331b1de9e59",
+      "id": "a5f177ba-3265-4a63-a151-d543edb4c0c0",
       "name": "Check: AI SDLC Report (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -393,12 +410,48 @@
           "waitForResults": true
         }
       },
-      "id": "1656b09d-d230-4c55-a2ff-fb15a3c0ad95",
+      "id": "242ff861-2cfb-4384-840b-dcc55deee5f3",
       "name": "Omniscient Fix: AI SDLC Report (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
         1500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trigger Infinite Cycle\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5905ec0b-9f21-4a3f-8295-538de4df439a",
+      "name": "Check: Trigger Infinite Cycle (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "4f6c1425-6f2c-495e-921e-e0f56ae55e00",
+      "name": "Omniscient Fix: Trigger Infinite Cycle (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1700,
         0
       ]
     }
@@ -689,6 +742,46 @@
         [
           {
             "node": "Check: AI SDLC Report (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Trigger Infinite Cycle (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Trigger Infinite Cycle (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scan Project Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Trigger Infinite Cycle (P0)": {
+      "main": [
+        [
+          {
+            "node": "Trigger Infinite Cycle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Infinite Cycle": {
+      "main": [
+        [
+          {
+            "node": "Check: Trigger Infinite Cycle (P0)",
             "type": "main",
             "index": 0
           }
