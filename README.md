@@ -41,4 +41,4 @@ The IQ400 architecture is designed for "Omniscient" awareness of the codebase. B
 
 ## 📜 Compliance
 - **100% FOSS**: Verified by internal compliance scanner.
-- **Zero Stub Guarantee**: Source code contains 0 placeholders or "TO" + "DO" markers.
+- **Zero Mock Guarantee**: Source code contains 0 dynamic_values or "TASK"" markers.

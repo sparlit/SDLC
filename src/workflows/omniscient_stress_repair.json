@@ -1,0 +1,158 @@
+{
+  "name": "Omniscient Stress & Repair Loop",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return Array.from({ length: 100 }, (_, i) => ({ json: { iteration: i + 1 } }));"
+      },
+      "id": "generate-iterations",
+      "name": "100 Iterations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /home/jules/self_created_tools/stress_tester.py"
+      },
+      "id": "run-stress-test",
+      "name": "Run Stress Test",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $node[\"Run Stress Test\"].error !== undefined }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-failure",
+      "name": "Check Failure",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "call-fixer",
+      "name": "Omniscient Fixer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return { status: 'Iteration Successful' };"
+      },
+      "id": "iteration-success",
+      "name": "Success",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        800,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "100 Iterations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "100 Iterations": {
+      "main": [
+        [
+          {
+            "node": "Run Stress Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Stress Test": {
+      "main": [
+        [
+          {
+            "node": "check-failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check-failure": {
+      "main": [
+        [
+          {
+            "node": "call-fixer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "iteration-success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "call-fixer": {
+      "main": [
+        [
+          {
+            "node": "Run Stress Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
