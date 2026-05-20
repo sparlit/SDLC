@@ -20,6 +20,20 @@ PATTERNS = [
 ]
 
 def analyze_file(filepath):
+    """
+    Analyze a file for configured placeholder/issue patterns and for Python empty definitions.
+    
+    Scans the file at `filepath` line-by-line for any regex in `PATTERNS` (case-insensitive) and records matches; for Python files (`.py`) also detects functions, async functions, or classes whose bodies contain only a single `pass`. If the file cannot be read or a Python AST cannot be parsed, a corresponding error finding is recorded. Matches originating from a path containing "super_scanner.py" are ignored.
+    
+    Parameters:
+        filepath (str): Path to the file to analyze.
+    
+    Returns:
+        list[str]: A list of formatted finding strings. Each entry is either a line-level match
+        ("{filepath}:{line_no} - Found pattern '{pattern}': {line_text}"), an empty-definition
+        report ("{filepath}:{lineno} - Empty function: {name}" or "{filepath}:{lineno} - Empty class: {name}"),
+        or an error record ("{filepath}:0 - Error reading file: {e}" or "{filepath}:0 - Parse failed: {e}").
+    """
     findings = []
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
@@ -55,6 +69,17 @@ def analyze_file(filepath):
     return findings
 
 def scan_recursive(root):
+    """
+    Recursively scan the directory tree at `root` for issues and return all findings.
+    
+    Walks the directory tree starting at `root`, skipping directories whose names start with a dot, analyzes each file encountered, and aggregates all reported findings.
+    
+    Parameters:
+        root (str): Path to the directory to scan.
+    
+    Returns:
+        list[str]: A list of formatted finding strings describing detected issues (one entry per finding).
+    """
     all_findings = []
     for dirpath, dirnames, filenames in os.walk(root):
         # Skip .git and other hidden directories
