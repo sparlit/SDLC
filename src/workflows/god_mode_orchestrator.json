@@ -2,12 +2,17 @@
   "name": "IQ200 Unified SDLC Brain",
   "nodes": [
     {
-      "parameters": { "options": {} },
+      "parameters": {
+        "options": {}
+      },
       "id": "trigger",
       "name": "Chat Trigger",
       "type": "n8n-nodes-base.chatTrigger",
       "typeVersion": 1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -17,7 +22,47 @@
       "name": "Hardware Safety Check",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Hardware Safety Check\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-safety-check",
+      "name": "Check: Hardware Safety Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-safety-check",
+      "name": "Omniscient Fix: Hardware Safety Check",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
+      ]
     },
     {
       "parameters": {
@@ -27,11 +72,129 @@
       "name": "Scout (Deep Analyze)",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Scout (Deep Analyze)\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-scout-analyze",
+      "name": "Check: Scout (Deep Analyze)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-scout-analyze",
+      "name": "Omniscient Fix: Scout (Deep Analyze)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
+      ]
     }
   ],
   "connections": {
-    "trigger": { "main": [[{ "node": "safety-check", "type": "main", "index": 0 }]] },
-    "safety-check": { "main": [[{ "node": "scout-analyze", "type": "main", "index": 0 }]] }
+    "Hardware Safety Check": {
+      "main": [
+        [
+          {
+            "node": "Check: Hardware Safety Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Hardware Safety Check": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Hardware Safety Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Hardware Safety Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Hardware Safety Check": {
+      "main": [
+        [
+          {
+            "node": "Hardware Safety Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scout (Deep Analyze)": {
+      "main": [
+        [
+          {
+            "node": "Check: Scout (Deep Analyze)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Scout (Deep Analyze)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Scout (Deep Analyze)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Scout (Deep Analyze)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Scout (Deep Analyze)": {
+      "main": [
+        [
+          {
+            "node": "Scout (Deep Analyze)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

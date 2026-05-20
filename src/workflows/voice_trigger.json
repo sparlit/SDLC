@@ -11,7 +11,10 @@
       "name": "Voice Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -21,7 +24,47 @@
       "name": "Whisper Transcribe",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Whisper Transcribe\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-whisper-transcribe",
+      "name": "Check: Whisper Transcribe",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-whisper-transcribe",
+      "name": "Omniscient Fix: Whisper Transcribe",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
+      ]
     },
     {
       "parameters": {
@@ -34,11 +77,129 @@
       "name": "Trigger Brain",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trigger Brain\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-trigger-brain",
+      "name": "Check: Trigger Brain",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-trigger-brain",
+      "name": "Omniscient Fix: Trigger Brain",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
+      ]
     }
   ],
   "connections": {
-    "webhook-trigger": { "main": [[{ "node": "whisper-transcribe", "type": "main", "index": 0 }]] },
-    "whisper-transcribe": { "main": [[{ "node": "trigger-brain", "type": "main", "index": 0 }]] }
+    "Whisper Transcribe": {
+      "main": [
+        [
+          {
+            "node": "Check: Whisper Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Whisper Transcribe": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Whisper Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Whisper Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Whisper Transcribe": {
+      "main": [
+        [
+          {
+            "node": "Whisper Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Brain": {
+      "main": [
+        [
+          {
+            "node": "Check: Trigger Brain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Trigger Brain": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Trigger Brain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Trigger Brain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Trigger Brain": {
+      "main": [
+        [
+          {
+            "node": "Trigger Brain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

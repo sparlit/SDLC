@@ -1,0 +1,90 @@
+{
+  "name": "Agent: Operational Fixer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "input-trigger",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an operational data specialist. Your task is to fix data errors that caused a node to fail. Analyze the error and the input data, then return the corrected JSON data that should be passed to the node for a successful retry. Return ONLY the JSON object.\"}, {\"role\": \"user\", \"content\": \"Error: {{ $json.error }}\\nFailed Input Data: {{ JSON.stringify($json.inputData) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-data-fixer",
+      "name": "AI Data Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Data Fixer\"].json.choices[0].message.content;\nreturn JSON.parse(content.replace(/```json\\n?|```/g, '').trim());"
+      },
+      "id": "parse-data-fix",
+      "name": "Parse Data Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Data Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Data Fixer": {
+      "main": [
+        [
+          {
+            "node": "Parse Data Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

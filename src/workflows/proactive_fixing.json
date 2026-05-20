@@ -10,7 +10,10 @@
       "name": "Daily Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -20,7 +23,47 @@
       "name": "Risk Analysis",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Risk Analysis\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-risk-analysis",
+      "name": "Check: Risk Analysis",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-risk-analysis",
+      "name": "Omniscient Fix: Risk Analysis",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
+      ]
     },
     {
       "parameters": {
@@ -28,8 +71,14 @@
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "bodyParameters": {
           "parameters": [
-            { "name": "model", "value": "google/gemini-2.0-flash-001" },
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Analyze these high-risk files and suggest proactive refactoring to prevent future bugs. Files: {{ $json.stdout }}\"}]" }
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze these high-risk files and suggest proactive refactoring to prevent future bugs. Files: {{ $json.stdout }}\"}]"
+            }
           ]
         }
       },
@@ -37,11 +86,129 @@
       "name": "Proactive Fixer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Proactive Fixer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-proactive-fixer",
+      "name": "Check: Proactive Fixer",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-proactive-fixer",
+      "name": "Omniscient Fix: Proactive Fixer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
+      ]
     }
   ],
   "connections": {
-    "daily-trigger": { "main": [[{ "node": "risk-analysis", "type": "main", "index": 0 }]] },
-    "risk-analysis": { "main": [[{ "node": "proactive-fixer", "type": "main", "index": 0 }]] }
+    "Risk Analysis": {
+      "main": [
+        [
+          {
+            "node": "Check: Risk Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Risk Analysis": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Risk Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Risk Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Risk Analysis": {
+      "main": [
+        [
+          {
+            "node": "Risk Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Proactive Fixer": {
+      "main": [
+        [
+          {
+            "node": "Check: Proactive Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Proactive Fixer": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Proactive Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Proactive Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Proactive Fixer": {
+      "main": [
+        [
+          {
+            "node": "Proactive Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

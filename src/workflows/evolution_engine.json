@@ -26,6 +26,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Read All Context\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-read-all-context",
+      "name": "Check: Read All Context",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-read-all-context",
+      "name": "Omniscient Fix: Read All Context",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -60,6 +97,43 @@
       "position": [
         450,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Evolve Arch\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-ai-evolve-arch",
+      "name": "Check: AI Evolve Arch",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-ai-evolve-arch",
+      "name": "Omniscient Fix: AI Evolve Arch",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        150
       ]
     },
     {
@@ -73,37 +147,161 @@
       "position": [
         700,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Arch\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-update-arch",
+      "name": "Check: Update Arch",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        850,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-update-arch",
+      "name": "Omniscient Fix: Update Arch",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        850,
+        150
       ]
     }
   ],
   "connections": {
-    "weekly-trigger": {
+    "Read All Context": {
       "main": [
         [
           {
-            "node": "read-all-context",
+            "node": "Check: Read All Context",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "read-all-context": {
+    "Check: Read All Context": {
       "main": [
         [
           {
-            "node": "ai-evolve-arch",
+            "node": "Omniscient Fix: Read All Context",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Read All Context",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-evolve-arch": {
+    "Omniscient Fix: Read All Context": {
       "main": [
         [
           {
-            "node": "update-arch",
+            "node": "Read All Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Evolve Arch": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Evolve Arch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Evolve Arch": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Evolve Arch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Evolve Arch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Evolve Arch": {
+      "main": [
+        [
+          {
+            "node": "AI Evolve Arch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Arch": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Arch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Update Arch": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Update Arch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Update Arch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Update Arch": {
+      "main": [
+        [
+          {
+            "node": "Update Arch",
             "type": "main",
             "index": 0
           }

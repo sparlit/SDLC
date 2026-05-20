@@ -26,6 +26,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Trivy Scan\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-trivy-scan",
+      "name": "Check: Trivy Scan",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-trivy-scan",
+      "name": "Omniscient Fix: Trivy Scan",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -60,6 +97,43 @@
       "position": [
         450,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Security Fixer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-ai-security-fixer",
+      "name": "Check: AI Security Fixer",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-ai-security-fixer",
+      "name": "Omniscient Fix: AI Security Fixer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        150
       ]
     },
     {
@@ -73,37 +147,161 @@
       "position": [
         700,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Apply Patch\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-apply-patch",
+      "name": "Check: Apply Patch",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        850,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-apply-patch",
+      "name": "Omniscient Fix: Apply Patch",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        850,
+        150
       ]
     }
   ],
   "connections": {
-    "daily-trigger": {
+    "Trivy Scan": {
       "main": [
         [
           {
-            "node": "trivy-scan",
+            "node": "Check: Trivy Scan",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "trivy-scan": {
+    "Check: Trivy Scan": {
       "main": [
         [
           {
-            "node": "ai-security-fixer",
+            "node": "Omniscient Fix: Trivy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Trivy Scan",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-security-fixer": {
+    "Omniscient Fix: Trivy Scan": {
       "main": [
         [
           {
-            "node": "apply-patch",
+            "node": "Trivy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Security Fixer": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Security Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Security Fixer": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Security Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Security Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Security Fixer": {
+      "main": [
+        [
+          {
+            "node": "AI Security Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Patch": {
+      "main": [
+        [
+          {
+            "node": "Check: Apply Patch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Apply Patch": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Apply Patch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Apply Patch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Apply Patch": {
+      "main": [
+        [
+          {
+            "node": "Apply Patch",
             "type": "main",
             "index": 0
           }

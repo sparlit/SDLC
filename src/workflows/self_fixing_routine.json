@@ -32,6 +32,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Get Workflow JSON\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-get-workflow-json",
+      "name": "Check: Get Workflow JSON",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-get-workflow-json",
+      "name": "Omniscient Fix: Get Workflow JSON",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -66,6 +103,43 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Workflow Fixer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-ai-workflow-fixer",
+      "name": "Check: AI Workflow Fixer",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-ai-workflow-fixer",
+      "name": "Omniscient Fix: AI Workflow Fixer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
       ]
     },
     {
@@ -79,6 +153,43 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Parse Workflow Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-parse-workflow-fix",
+      "name": "Check: Parse Workflow Fix",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        750,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-parse-workflow-fix",
+      "name": "Omniscient Fix: Parse Workflow Fix",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        750,
+        150
       ]
     },
     {
@@ -115,48 +226,201 @@
       "position": [
         800,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Update Workflow\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-update-workflow",
+      "name": "Check: Update Workflow",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        950,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-update-workflow",
+      "name": "Omniscient Fix: Update Workflow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        950,
+        150
       ]
     }
   ],
   "connections": {
-    "error-trigger": {
+    "Get Workflow JSON": {
       "main": [
         [
           {
-            "node": "get-workflow-json",
+            "node": "Check: Get Workflow JSON",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "get-workflow-json": {
+    "Check: Get Workflow JSON": {
       "main": [
         [
           {
-            "node": "ai-workflow-fixer",
+            "node": "Omniscient Fix: Get Workflow JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Get Workflow JSON",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-workflow-fixer": {
+    "Omniscient Fix: Get Workflow JSON": {
       "main": [
         [
           {
-            "node": "parse-workflow-fix",
+            "node": "Get Workflow JSON",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "parse-workflow-fix": {
+    "AI Workflow Fixer": {
       "main": [
         [
           {
-            "node": "update-workflow",
+            "node": "Check: AI Workflow Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Workflow Fixer": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Workflow Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Workflow Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Workflow Fixer": {
+      "main": [
+        [
+          {
+            "node": "AI Workflow Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Workflow Fix": {
+      "main": [
+        [
+          {
+            "node": "Check: Parse Workflow Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Parse Workflow Fix": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Parse Workflow Fix",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Parse Workflow Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Parse Workflow Fix": {
+      "main": [
+        [
+          {
+            "node": "Parse Workflow Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Workflow": {
+      "main": [
+        [
+          {
+            "node": "Check: Update Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Update Workflow": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Update Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Update Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Update Workflow": {
+      "main": [
+        [
+          {
+            "node": "Update Workflow",
             "type": "main",
             "index": 0
           }

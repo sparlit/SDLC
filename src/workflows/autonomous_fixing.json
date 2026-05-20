@@ -26,6 +26,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Find Gaps/Placeholders\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-find-gaps",
+      "name": "Check: Find Gaps/Placeholders",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-find-gaps",
+      "name": "Omniscient Fix: Find Gaps/Placeholders",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -63,6 +100,43 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Fix Generator\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-ai-fix-generator",
+      "name": "Check: AI Fix Generator",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-ai-fix-generator",
+      "name": "Omniscient Fix: AI Fix Generator",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
       ]
     },
     {
@@ -76,6 +150,43 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Sanitize Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-sanitize-fix",
+      "name": "Check: Sanitize Fix",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        750,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-sanitize-fix",
+      "name": "Omniscient Fix: Sanitize Fix",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        750,
+        150
       ]
     },
     {
@@ -89,6 +200,43 @@
       "position": [
         800,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Apply Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-apply-fix",
+      "name": "Check: Apply Fix",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        950,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-apply-fix",
+      "name": "Omniscient Fix: Apply Fix",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        950,
+        150
       ]
     },
     {
@@ -102,6 +250,43 @@
       "position": [
         1000,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Git Commit & Push\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-git-commit-push",
+      "name": "Check: Git Commit & Push",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1150,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-git-commit-push",
+      "name": "Omniscient Fix: Git Commit & Push",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1150,
+        150
       ]
     },
     {
@@ -113,66 +298,281 @@
       "position": [
         1000,
         200
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Fix Failed Notification\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-fix-failed-notification",
+      "name": "Check: Fix Failed Notification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1150,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-fix-failed-notification",
+      "name": "Omniscient Fix: Fix Failed Notification",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1150,
+        350
       ]
     }
   ],
   "connections": {
-    "schedule-trigger": {
+    "Find Gaps/Placeholders": {
       "main": [
         [
           {
-            "node": "find-gaps",
+            "node": "Check: Find Gaps/Placeholders",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "find-gaps": {
+    "Check: Find Gaps/Placeholders": {
       "main": [
         [
           {
-            "node": "ai-fix-generator",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ai-fix-generator": {
-      "main": [
-        [
-          {
-            "node": "sanitize-fix",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "sanitize-fix": {
-      "main": [
-        [
-          {
-            "node": "apply-fix",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "apply-fix": {
-      "main": [
-        [
-          {
-            "node": "git-commit-push",
+            "node": "Omniscient Fix: Find Gaps/Placeholders",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "fix-failed-notification",
+            "node": "Check: Find Gaps/Placeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Find Gaps/Placeholders": {
+      "main": [
+        [
+          {
+            "node": "Find Gaps/Placeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Fix Generator": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Fix Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Fix Generator": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Fix Generator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Fix Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Fix Generator": {
+      "main": [
+        [
+          {
+            "node": "AI Fix Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitize Fix": {
+      "main": [
+        [
+          {
+            "node": "Check: Sanitize Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Sanitize Fix": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Sanitize Fix",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Sanitize Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Sanitize Fix": {
+      "main": [
+        [
+          {
+            "node": "Sanitize Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Fix": {
+      "main": [
+        [
+          {
+            "node": "Check: Apply Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Apply Fix": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Apply Fix",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Apply Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Apply Fix": {
+      "main": [
+        [
+          {
+            "node": "Apply Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Git Commit & Push": {
+      "main": [
+        [
+          {
+            "node": "Check: Git Commit & Push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Git Commit & Push": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Git Commit & Push",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Git Commit & Push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Git Commit & Push": {
+      "main": [
+        [
+          {
+            "node": "Git Commit & Push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fix Failed Notification": {
+      "main": [
+        [
+          {
+            "node": "Check: Fix Failed Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Fix Failed Notification": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Fix Failed Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Fix Failed Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Fix Failed Notification": {
+      "main": [
+        [
+          {
+            "node": "Fix Failed Notification",
             "type": "main",
             "index": 0
           }

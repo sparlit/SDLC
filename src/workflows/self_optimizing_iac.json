@@ -26,6 +26,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Get Resource Usage\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-get-resource-usage",
+      "name": "Check: Get Resource Usage",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-get-resource-usage",
+      "name": "Omniscient Fix: Get Resource Usage",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -60,26 +97,121 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Optimizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-ai-optimizer",
+      "name": "Check: AI Optimizer",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-ai-optimizer",
+      "name": "Omniscient Fix: AI Optimizer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
       ]
     }
   ],
   "connections": {
-    "resource-trigger": {
+    "Get Resource Usage": {
       "main": [
         [
           {
-            "node": "get-resource-usage",
+            "node": "Check: Get Resource Usage",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "get-resource-usage": {
+    "Check: Get Resource Usage": {
       "main": [
         [
           {
-            "node": "ai-optimizer",
+            "node": "Omniscient Fix: Get Resource Usage",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Get Resource Usage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Get Resource Usage": {
+      "main": [
+        [
+          {
+            "node": "Get Resource Usage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: AI Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Optimizer": {
+      "main": [
+        [
+          {
+            "node": "AI Optimizer",
             "type": "main",
             "index": 0
           }

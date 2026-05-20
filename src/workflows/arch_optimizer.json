@@ -10,7 +10,10 @@
       "name": "Weekly Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [ 0, 0 ]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -20,7 +23,47 @@
       "name": "Legacy Scan",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
-      "position": [ 200, 0 ]
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Legacy Scan\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-legacy-scan",
+      "name": "Check: Legacy Scan",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-legacy-scan",
+      "name": "Omniscient Fix: Legacy Scan",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
+      ]
     },
     {
       "parameters": {
@@ -28,8 +71,14 @@
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "bodyParameters": {
           "parameters": [
-            { "name": "model", "value": "google/gemini-2.0-flash-001" },
-            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"You are a systems architect. Based on the legacy scan: {{ $json.stdout }}, propose a modern, optimized neural architecture upgrade for the project.\"}]" }
+            {
+              "name": "model",
+              "value": "google/gemini-2.0-flash-001"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are a systems architect. Based on the legacy scan: {{ $json.stdout }}, propose a modern, optimized neural architecture upgrade for the project.\"}]"
+            }
           ]
         }
       },
@@ -37,11 +86,129 @@
       "name": "Arch Optimizer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [ 400, 0 ]
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Arch Optimizer\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-arch-optimizer",
+      "name": "Check: Arch Optimizer",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-arch-optimizer",
+      "name": "Omniscient Fix: Arch Optimizer",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
+      ]
     }
   ],
   "connections": {
-    "weekly-trigger": { "main": [[{ "node": "legacy-scan", "type": "main", "index": 0 }]] },
-    "legacy-scan": { "main": [[{ "node": "arch-optimizer", "type": "main", "index": 0 }]] }
+    "Legacy Scan": {
+      "main": [
+        [
+          {
+            "node": "Check: Legacy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Legacy Scan": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Legacy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Legacy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Legacy Scan": {
+      "main": [
+        [
+          {
+            "node": "Legacy Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arch Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Check: Arch Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Arch Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Arch Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Arch Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Arch Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Arch Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

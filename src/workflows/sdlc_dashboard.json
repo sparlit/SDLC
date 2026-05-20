@@ -26,6 +26,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Fetch Metrics\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-fetch-metrics",
+      "name": "Check: Fetch Metrics",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-fetch-metrics",
+      "name": "Omniscient Fix: Fetch Metrics",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -39,6 +76,43 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Generate HTML\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-generate-html",
+      "name": "Check: Generate HTML",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-generate-html",
+      "name": "Omniscient Fix: Generate HTML",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
       ]
     },
     {
@@ -52,37 +126,161 @@
       "position": [
         600,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Save Dashboard\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-save-dashboard",
+      "name": "Check: Save Dashboard",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        750,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-save-dashboard",
+      "name": "Omniscient Fix: Save Dashboard",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        750,
+        150
       ]
     }
   ],
   "connections": {
-    "hourly-trigger": {
+    "Fetch Metrics": {
       "main": [
         [
           {
-            "node": "fetch-metrics",
+            "node": "Check: Fetch Metrics",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "fetch-metrics": {
+    "Check: Fetch Metrics": {
       "main": [
         [
           {
-            "node": "generate-html",
+            "node": "Omniscient Fix: Fetch Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Fetch Metrics",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "generate-html": {
+    "Omniscient Fix: Fetch Metrics": {
       "main": [
         [
           {
-            "node": "save-dashboard",
+            "node": "Fetch Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML": {
+      "main": [
+        [
+          {
+            "node": "Check: Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Generate HTML": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Generate HTML": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Check: Save Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Save Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Save Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Save Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Save Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Save Dashboard",
             "type": "main",
             "index": 0
           }

@@ -27,6 +27,43 @@
       "position": [
         200,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Check Hardware\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-check-hardware",
+      "name": "Check: Check Hardware",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        350,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-check-hardware",
+      "name": "Omniscient Fix: Check Hardware",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        350,
+        150
       ]
     },
     {
@@ -48,6 +85,43 @@
       "position": [
         400,
         0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Is Stable?\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-is-stable",
+      "name": "Check: Is Stable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        550,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-is-stable",
+      "name": "Omniscient Fix: Is Stable?",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        550,
+        150
       ]
     },
     {
@@ -63,7 +137,7 @@
             },
             {
               "name": "content",
-              "value": "=### ⚠️ CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
+              "value": "=### \u26a0\ufe0f CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
             }
           ]
         }
@@ -75,38 +149,161 @@
       "position": [
         600,
         100
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Alert Notification\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-alert-notification",
+      "name": "Check: Alert Notification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        750,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fix-alert-notification",
+      "name": "Omniscient Fix: Alert Notification",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        750,
+        250
       ]
     }
   ],
   "connections": {
-    "health-trigger": {
+    "Check Hardware": {
       "main": [
         [
           {
-            "node": "check-hardware",
+            "node": "Check: Check Hardware",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "check-hardware": {
+    "Check: Check Hardware": {
       "main": [
         [
           {
-            "node": "is-stable",
+            "node": "Omniscient Fix: Check Hardware",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Check Hardware",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "is-stable": {
+    "Omniscient Fix: Check Hardware": {
       "main": [
-        [],
         [
           {
-            "node": "alert-notification",
+            "node": "Check Hardware",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Stable?": {
+      "main": [
+        [
+          {
+            "node": "Check: Is Stable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Is Stable?": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Is Stable?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Is Stable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Is Stable?": {
+      "main": [
+        [
+          {
+            "node": "Is Stable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Notification": {
+      "main": [
+        [
+          {
+            "node": "Check: Alert Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Alert Notification": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Alert Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Alert Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Alert Notification": {
+      "main": [
+        [
+          {
+            "node": "Alert Notification",
             "type": "main",
             "index": 0
           }

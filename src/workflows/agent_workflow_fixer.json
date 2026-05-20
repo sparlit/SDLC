@@ -1,0 +1,137 @@
+{
+  "name": "Agent: Workflow Fixer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "input-trigger",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an n8n workflow expert. Your task is to fix structural or logical errors in the workflow JSON. Return ONLY the corrected 'nodes' and 'connections' arrays in a valid JSON object wrapped in ```json blocks.\"}, {\"role\": \"user\", \"content\": \"Error: {{ $json.error }}\\nWorkflow JSON: {{ JSON.stringify($json.workflow) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-fixer",
+      "name": "AI Workflow Fixer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $node[\"AI Workflow Fixer\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonStr = match ? match[1] : content;\nreturn JSON.parse(jsonStr.trim());"
+      },
+      "id": "parse-fix",
+      "name": "Parse Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $node[\"Execute Workflow Trigger\"].json.workflow.id }}",
+        "authentication": "headerAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "={{ $env.N8N_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "nodes",
+              "value": "={{ $json.nodes }}"
+            },
+            {
+              "name": "connections",
+              "value": "={{ $json.connections }}"
+            }
+          ]
+        }
+      },
+      "id": "apply-patch",
+      "name": "Apply Patch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Workflow Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Workflow Fixer": {
+      "main": [
+        [
+          {
+            "node": "Parse Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Fix": {
+      "main": [
+        [
+          {
+            "node": "Apply Patch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
