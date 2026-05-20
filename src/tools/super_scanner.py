@@ -33,6 +33,12 @@ def analyze_file(filepath):
         ("{filepath}:{line_no} - Found pattern '{pattern}': {line_text}"), an empty-definition
         report ("{filepath}:{lineno} - Empty function: {name}" or "{filepath}:{lineno} - Empty class: {name}"),
         or an error record ("{filepath}:0 - Error reading file: {e}" or "{filepath}:0 - Parse failed: {e}").
+    Scan a single file for placeholder patterns and Python definitions that contain only a `pass`.
+    
+    This function reads the file at `filepath`, records any lines that match any regex in the module-level `PATTERNS` list (case-insensitive) — excluding matches originating from the scanner implementation itself — and, for `.py` files, records functions, async functions, and classes whose bodies consist of a single `pass`. If the file cannot be read or a Python AST parse fails, a corresponding error/failure finding is recorded.
+    
+    Returns:
+        list[str]: A list of formatted finding strings like "<filepath>:<line> - Found pattern '<pattern>': <line text>" or "<filepath>:<line> - Empty function: <name>" / "<filepath>:<line> - Empty class: <name>". Error entries use line 0 and include the exception message.
     """
     findings = []
     try:
@@ -79,6 +85,13 @@ def scan_recursive(root):
     
     Returns:
         list[str]: A list of formatted finding strings describing detected issues (one entry per finding).
+    Scan a directory tree and collect findings from every file under the given root.
+    
+    Parameters:
+        root (str): Path of the directory to traverse.
+    
+    Returns:
+        list: Aggregated list of finding strings produced for files under `root`.
     """
     all_findings = []
     for dirpath, dirnames, filenames in os.walk(root):
