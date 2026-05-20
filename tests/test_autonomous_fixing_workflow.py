@@ -106,10 +106,20 @@ class TestWorkflowStructure:
         assert isinstance(workflow["nodes"], list)
 
     def test_workflow_has_connections(self, workflow):
+        """
+        Verify the top-level workflow JSON contains a 'connections' mapping.
+        
+        Asserts that the workflow includes a "connections" key and that its value is a dict.
+        """
         assert "connections" in workflow
         assert isinstance(workflow["connections"], dict)
 
     def test_workflow_has_seven_nodes(self, workflow):
+        """
+        Asserts the workflow defines exactly seven nodes.
+        
+        This test ensures the top-level `nodes` list in the workflow JSON contains 7 entries.
+        """
         assert len(workflow["nodes"]) == 7
 
 
@@ -130,11 +140,23 @@ class TestWorkflowNodes:
         assert node["type"] == "n8n-nodes-base.scheduleTrigger"
 
     def test_schedule_trigger_runs_every_30_minutes(self, nodes_by_id):
+        """
+        Validate that the `schedule-trigger` node is configured to run every 30 minutes.
+        
+        Parameters:
+            nodes_by_id (dict): Mapping of node ID to node definition; used to locate the `schedule-trigger` node and inspect its `parameters`.
+        """
         params = nodes_by_id["schedule-trigger"]["parameters"]
         assert params["interval"] == 30
         assert params["unit"] == "minutes"
 
     def test_find_gaps_node_type(self, nodes_by_id):
+        """
+        Assert that the 'find-gaps' node is of type 'n8n-nodes-base.executeCommand'.
+        
+        Parameters:
+            nodes_by_id (dict): Mapping from node ID to the node object parsed from the workflow JSON.
+        """
         node = nodes_by_id["find-gaps"]
         assert node["type"] == "n8n-nodes-base.executeCommand"
 
@@ -174,6 +196,11 @@ class TestFindGapsCommand:
         )
 
     def test_command_searches_project_path(self, find_gaps_node):
+        """
+        Asserts the find-gaps node's command targets the repository project path.
+        
+        Checks that the node's "command" parameter includes "/data/project".
+        """
         command = find_gaps_node["parameters"]["command"]
         assert "/data/project" in command
 
@@ -187,7 +214,11 @@ class TestFindGapsCommand:
         pass
 
     def test_node_display_name(self, find_gaps_node):
-        """The node was also renamed in this PR."""
+        """
+        Verify the 'find-gaps' workflow node uses the expected display name.
+        
+        Asserts that the node's "name" equals "Find Gaps/Placeholders".
+        """
         assert find_gaps_node["name"] == "Find Gaps/Placeholders"
 
 
@@ -204,7 +235,13 @@ class TestSanitizeFixNode:
 
     @pytest.mark.parametrize("dangerous_cmd", ["rm ", "mkfs", "shutdown", "reboot", "chmod -R 777"])
     def test_dangerous_command_is_blocked(self, sanitize_fix_node, dangerous_cmd):
-        """Each dangerous command must appear in the block-list."""
+        """
+        Asserts that the sanitize-fix node's JavaScript sanitization code includes the given dangerous-command substring.
+        
+        Parameters:
+            sanitize_fix_node (dict): Workflow node dict for "sanitize-fix" containing `parameters["jsCode"]`.
+            dangerous_cmd (str): Dangerous command substring that must be present in the sanitization block-list.
+        """
         js_code = sanitize_fix_node["parameters"]["jsCode"]
         assert dangerous_cmd in js_code, (
             f"Dangerous command '{dangerous_cmd}' is not blocked by sanitize-fix"
@@ -340,6 +377,11 @@ class TestRegressionAndBoundary:
         assert "deep_analyzer.py" not in raw
 
     def test_workflow_does_not_reference_hardware_monitor(self, workflow):
+        """
+        Asserts the workflow JSON does not reference the string "hardware_monitor".
+        
+        This test serializes the workflow to JSON and fails if any occurrence of "hardware_monitor" is present.
+        """
         raw = json.dumps(workflow)
         assert "hardware_monitor" not in raw
 
@@ -352,6 +394,15 @@ class TestRegressionAndBoundary:
         assert "predictive_analyzer" not in raw
 
     def test_workflow_does_not_reference_compliance_scanner(self, workflow):
+        """
+        Assert that the workflow JSON does not reference the legacy compliance scanner.
+        
+        Parameters:
+            workflow (dict): Parsed workflow JSON object.
+        
+        Raises:
+            AssertionError: If the string "compliance_scanner" appears anywhere in the serialized workflow.
+        """
         raw = json.dumps(workflow)
         assert "compliance_scanner" not in raw
 
@@ -360,6 +411,12 @@ class TestRegressionAndBoundary:
         pass
 
     def test_workflow_references_super_scanner(self, workflow):
+        """
+        Verify the workflow JSON includes a reference to the super_scanner tool.
+        
+        Parameters:
+            workflow (dict): Parsed workflow JSON object to inspect.
+        """
         raw = json.dumps(workflow)
         assert "super_scanner.py" in raw
 

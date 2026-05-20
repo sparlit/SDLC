@@ -20,6 +20,23 @@ PATTERNS = [
 ]
 
 def analyze_file(filepath):
+    """
+    Scan a single file for configured placeholder-like regex patterns and for empty Python functions or classes.
+    
+    Parameters:
+        filepath (str): Path to the file to analyze.
+    
+    Returns:
+        list: A list of finding strings. Each finding is formatted as
+        "{filepath}:{line_no} - Found pattern '{pattern}': {line_text}" for pattern matches,
+        "{filepath}:{line_no} - Empty function: {name}" for empty Python functions,
+        "{filepath}:{line_no} - Empty class: {name}" for empty Python classes,
+        or "{filepath}:0 - Error reading file: {error}" if the file could not be opened or read.
+    
+    Notes:
+        - Matches in files whose path contains "super_scanner.py" are ignored.
+        - When analyzing Python files, AST parsing errors are silently ignored (no finding added for parse failures).
+    """
     findings = []
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
@@ -55,6 +72,15 @@ def analyze_file(filepath):
     return findings
 
 def scan_recursive(root):
+    """
+    Recursively scan the directory tree at `root` and collect all findings from analyzed files.
+    
+    Parameters:
+        root (str): Path to the directory to scan.
+    
+    Returns:
+        all_findings (list[str]): Aggregated list of finding strings produced by analyze_file for each file under `root`. Each entry is formatted as "<filepath>:<line_no> - <description>".
+    """
     all_findings = []
     for dirpath, dirnames, filenames in os.walk(root):
         # Skip .git and other hidden directories
