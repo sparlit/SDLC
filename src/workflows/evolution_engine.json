@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "9df6d8f2-94ab-431c-989b-939129702f05",
+      "id": "cfe42b1f-9add-4d42-9312-64657c4ddc91",
       "name": "Check: Read All Context (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "95b97a08-3d5f-4097-a4bd-d07513335ce4",
+      "id": "95374e4d-06fa-4fb1-8f20-f9c319ffd46b",
       "name": "Omniscient Fix: Read All Context (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
           ]
         }
       },
-      "id": "2bf18711-0754-4e42-84c7-86dd2605ef27",
+      "id": "f0871d9a-8a9e-49f3-9381-5d2581a9727c",
       "name": "Check: AI Evolve Arch (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "33f29824-6815-4130-b1b5-d251e75d625b",
+      "id": "00929278-aeee-4cd0-ac50-8e01425bdd9d",
       "name": "Omniscient Fix: AI Evolve Arch (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,7 +161,7 @@
           ]
         }
       },
-      "id": "1998da8a-ecf7-4084-9cbd-50053cce9684",
+      "id": "ed4cf177-0b9d-4616-86ee-53eef18c03b8",
       "name": "Check: Update Arch (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "fbe2897a-c170-4111-aed0-877239c0edff",
+      "id": "43cb3642-2637-4fd3-ba30-527925df745b",
       "name": "Omniscient Fix: Update Arch (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

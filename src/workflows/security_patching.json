@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "68dd06bc-6328-4a65-ae22-ca1de3d2e8fb",
+      "id": "134658a4-4098-4fc4-9a1b-9ad16ac312cf",
       "name": "Check: Trivy Scan (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "72d096a1-6061-457d-93f2-b5eaba8e68b8",
+      "id": "ba3b8082-d9e3-43f8-807c-35648cce955c",
       "name": "Omniscient Fix: Trivy Scan (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
           ]
         }
       },
-      "id": "eebf3025-846a-48db-965d-c84af4cf2ec4",
+      "id": "0166540c-2b41-4c55-ad24-d090c1549347",
       "name": "Check: AI Security Fixer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "8f483129-5e38-49e7-8ac7-d2a7ebe1c9d3",
+      "id": "b85b31f0-e13c-4430-90fe-653530c87156",
       "name": "Omniscient Fix: AI Security Fixer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,7 +161,7 @@
           ]
         }
       },
-      "id": "6cb08639-e827-4ec1-b7e6-67c7f4df3599",
+      "id": "26ef3ef2-5b57-498a-92eb-ef47a9252c95",
       "name": "Check: Apply Patch (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "03e7b9d3-0be5-438a-8253-9bd896023b68",
+      "id": "2c7704aa-d5f8-4d51-a5fc-60939960c094",
       "name": "Omniscient Fix: Apply Patch (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

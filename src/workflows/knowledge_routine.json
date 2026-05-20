@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "6fa4d774-f949-4515-9acb-1254f573cbad",
+      "id": "f3dc5815-ec7d-46ac-96cd-02b009600979",
       "name": "Check: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "b1e6e55b-7a2b-487a-b1c9-27cde9ce27b8",
+      "id": "79695e12-2093-4048-8c00-5e82913b1177",
       "name": "Omniscient Fix: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
           ]
         }
       },
-      "id": "00ef1544-a280-404c-beb3-e23f525594b6",
+      "id": "7d170d72-79f8-4789-9fb3-d5b1b7d5959c",
       "name": "Check: AI Summarizer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "69c83fa5-156b-476f-bd83-c1166ff801e3",
+      "id": "7bcf5ce7-a5d9-41d5-93ca-2f6c518d5bc3",
       "name": "Omniscient Fix: AI Summarizer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,7 +161,7 @@
           ]
         }
       },
-      "id": "4c57a66f-23ee-49e0-8fec-c6b5dc421b26",
+      "id": "701930ec-febe-435b-a7a9-f854329f0953",
       "name": "Check: Update Documentation (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "a2dfa808-ae71-4310-b56a-110a37c2b895",
+      "id": "ca1c899b-262d-4fea-ae7f-c57d660c711b",
       "name": "Omniscient Fix: Update Documentation (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

@@ -132,7 +132,7 @@
           ]
         }
       },
-      "id": "4885ab6d-0f20-44be-8eab-fd0776746800",
+      "id": "d1714ecb-1dee-4079-8583-ae071a9d0f94",
       "name": "Check: Get Workflow JSON (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -148,7 +148,7 @@
           "waitForResults": true
         }
       },
-      "id": "7046d627-408e-4f5f-abf5-8124e2527e15",
+      "id": "63cacea7-9f8a-45c0-88d6-37692fb729eb",
       "name": "Omniscient Fix: Get Workflow JSON (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -168,7 +168,7 @@
           ]
         }
       },
-      "id": "8850798d-00a1-4598-9f4f-6ceed472b6eb",
+      "id": "2574a82a-c930-43e3-82c0-175264e0009d",
       "name": "Check: AI Workflow Fixer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -184,7 +184,7 @@
           "waitForResults": true
         }
       },
-      "id": "f797be5b-3004-465b-bb87-415f5d61582f",
+      "id": "658825b0-4d71-4449-b3fb-61ca568e70b5",
       "name": "Omniscient Fix: AI Workflow Fixer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -204,7 +204,7 @@
           ]
         }
       },
-      "id": "d40fd893-53df-4349-8a4d-f9a186be1289",
+      "id": "b2238415-996e-4d84-bc83-ba7da9eb1cf9",
       "name": "Check: Parse Workflow Fix (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -220,7 +220,7 @@
           "waitForResults": true
         }
       },
-      "id": "c4271b07-56cd-4fa0-8200-59f38be4de52",
+      "id": "b83d0c75-beed-4d4c-b646-5e6d18e7f6a6",
       "name": "Omniscient Fix: Parse Workflow Fix (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -240,7 +240,7 @@
           ]
         }
       },
-      "id": "ef8db4ac-1517-4ed2-9b58-d259c251d4c8",
+      "id": "eb257ed3-9982-46ee-80de-2861ac8e3f4b",
       "name": "Check: Update Workflow (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -256,7 +256,7 @@
           "waitForResults": true
         }
       },
-      "id": "ce7a4946-1160-4d3e-b9c3-e41e482209f2",
+      "id": "0b204cf6-b39a-46f4-ae80-efa24c4b4a3e",
       "name": "Omniscient Fix: Update Workflow (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

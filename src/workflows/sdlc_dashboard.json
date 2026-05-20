@@ -31,7 +31,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>\n</html>`;\nreturn { html };"
+        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer><footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>\n</html>`;\nreturn { html };"
       },
       "id": "generate-html",
       "name": "Generate HTML",
@@ -68,7 +68,7 @@
           ]
         }
       },
-      "id": "ddbe9e3f-4f59-4319-b31f-ebb1e72112aa",
+      "id": "d88c2091-244d-4e24-96ee-a0700bed58aa",
       "name": "Check: Fetch Metrics (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -84,7 +84,7 @@
           "waitForResults": true
         }
       },
-      "id": "aad93b16-1161-4e03-ace3-40f14cc57f27",
+      "id": "bafa81d8-1a98-4186-bc45-c9ce2170d213",
       "name": "Omniscient Fix: Fetch Metrics (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -104,7 +104,7 @@
           ]
         }
       },
-      "id": "79f93f8b-3e77-4d09-9ba4-494e90e8faae",
+      "id": "a186d94c-eb18-41c0-8213-3ef870774975",
       "name": "Check: Generate HTML (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -120,7 +120,7 @@
           "waitForResults": true
         }
       },
-      "id": "a47d57b4-782d-4482-903b-6a1f66f87309",
+      "id": "292bbe46-242c-4a09-bcbc-5e7952cc8ded",
       "name": "Omniscient Fix: Generate HTML (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -140,7 +140,7 @@
           ]
         }
       },
-      "id": "ec1c1764-968a-42e4-8450-7c8d6068e22d",
+      "id": "3a3a678e-7165-46cd-bba1-12077a64b42f",
       "name": "Check: Save Dashboard (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -156,7 +156,7 @@
           "waitForResults": true
         }
       },
-      "id": "5d370136-df44-45df-bcd4-b6936c78ef1c",
+      "id": "fa3c7e63-951c-402b-a76e-65faa78a1c42",
       "name": "Omniscient Fix: Save Dashboard (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

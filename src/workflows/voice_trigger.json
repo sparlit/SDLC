@@ -58,7 +58,7 @@
           ]
         }
       },
-      "id": "c5e9ee1f-00d0-45f1-ba4d-0c339ccc0802",
+      "id": "421e1799-9dd8-4690-8975-8cf838ec549f",
       "name": "Check: Whisper Transcribe (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -74,7 +74,7 @@
           "waitForResults": true
         }
       },
-      "id": "6342d035-9876-4e27-bc25-55f172e86740",
+      "id": "aab11bde-b560-41bf-bb5d-f95a8b1b2371",
       "name": "Omniscient Fix: Whisper Transcribe (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -94,7 +94,7 @@
           ]
         }
       },
-      "id": "39838e2e-4cd6-4011-89fa-9dedf278b6b2",
+      "id": "440f2d55-aa08-4b4d-9ba8-ad1b37ab61f4",
       "name": "Check: Trigger Brain (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -110,7 +110,7 @@
           "waitForResults": true
         }
       },
-      "id": "650e7a1f-5612-46cb-90cf-7d0f6888dc14",
+      "id": "4ffaebdb-e605-4679-8354-fe8102e957a7",
       "name": "Omniscient Fix: Trigger Brain (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

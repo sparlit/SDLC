@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "82888bb8-b6f2-4432-9b3a-2aa383f286a8",
+      "id": "cda81b2f-d4a8-4978-85f5-0a03cafa168a",
       "name": "Check: List Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "05570664-cf93-4ad6-8355-94aa45371d5a",
+      "id": "4a53a397-4c70-4121-b47c-6a2ed8bb3c21",
       "name": "Omniscient Fix: List Files (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
           ]
         }
       },
-      "id": "62fdd85c-9d47-40a8-a51f-7769f95338f1",
+      "id": "f51dd81f-5a4a-4138-9b6f-b8b41fa56741",
       "name": "Check: AI Doc Generator (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "77d8c614-da72-4d57-baad-f02ef9e70543",
+      "id": "36142818-e73f-4af5-9074-c15cae196bf9",
       "name": "Omniscient Fix: AI Doc Generator (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,7 +161,7 @@
           ]
         }
       },
-      "id": "cf0445ae-1291-4e29-be76-4469bc959e7d",
+      "id": "2ef85eb9-e82e-4945-8d15-8ac7c71546fd",
       "name": "Check: Save Docs (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "24971428-f09a-4d04-b00b-044e75bbdd6a",
+      "id": "51254160-3b12-46c6-895a-ec7aa92043ad",
       "name": "Omniscient Fix: Save Docs (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

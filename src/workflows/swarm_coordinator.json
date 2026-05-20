@@ -53,7 +53,7 @@
           ]
         }
       },
-      "id": "bcfc81a7-643b-4175-ba15-ca25d1e5f235",
+      "id": "ac863175-7b56-4572-887f-a5fce49162c8",
       "name": "Check: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -69,7 +69,7 @@
           "waitForResults": true
         }
       },
-      "id": "f4f73977-5e34-47e0-9d44-1ef11c5ba6ea",
+      "id": "2835ba6f-abf1-4ad1-b414-ce1d3f1c50db",
       "name": "Omniscient Fix: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "fdcc18ef-aa39-4a30-9c4a-98b875f337ed",
+      "id": "3d85bea2-b9d1-4405-b697-58212725e2a7",
       "name": "Check: Execute Agent (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "64fe3110-3ac6-4b7f-ae7a-bd0ebf02908c",
+      "id": "62de64aa-7a52-47c3-a8b0-cf0d6b0316f0",
       "name": "Omniscient Fix: Execute Agent (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

@@ -74,7 +74,7 @@
           ]
         }
       },
-      "id": "92086387-031f-4659-9d30-5e8d5da74af2",
+      "id": "a05ac127-26a5-4bb9-9d79-3fc5d5d715a1",
       "name": "Check: Get Arch Rules (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -90,7 +90,7 @@
           "waitForResults": true
         }
       },
-      "id": "ad37d4d7-1c95-43fa-9f15-8c4d0a3d41df",
+      "id": "68c5ccff-a5ea-4e27-9c17-096f7a70ec8c",
       "name": "Omniscient Fix: Get Arch Rules (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -110,7 +110,7 @@
           ]
         }
       },
-      "id": "ca1fdbe6-afdc-4b88-a42c-bdfca3a0d49f",
+      "id": "2174bcfa-6d7e-485b-9b9c-83c525e141c7",
       "name": "Check: Orchestrator Planning (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -126,7 +126,7 @@
           "waitForResults": true
         }
       },
-      "id": "8c4224fd-22e9-4cac-ae16-4caccf17f4c1",
+      "id": "55b075da-6ed1-4160-a488-89ef5571a744",
       "name": "Omniscient Fix: Orchestrator Planning (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

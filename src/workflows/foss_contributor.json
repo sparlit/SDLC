@@ -67,7 +67,7 @@
           ]
         }
       },
-      "id": "bbca7b4d-36b1-41ed-80f9-ccdd16cb8350",
+      "id": "478521a1-4398-4376-8a61-175d54f3a050",
       "name": "Check: Scan External Repo (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -83,7 +83,7 @@
           "waitForResults": true
         }
       },
-      "id": "6b31933c-1a5c-4c18-9e4d-4b1f4f4de825",
+      "id": "edde583c-3907-4220-a001-9c8db5b07feb",
       "name": "Omniscient Fix: Scan External Repo (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -103,7 +103,7 @@
           ]
         }
       },
-      "id": "5c6591dd-a84d-4ef7-901a-ab496df785ed",
+      "id": "07fae110-8605-4502-bba7-e6d1b65e30bd",
       "name": "Check: Generate Contribution (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -119,7 +119,7 @@
           "waitForResults": true
         }
       },
-      "id": "71ced692-7f74-4a26-bdf8-b79d624573e5",
+      "id": "1cb768d3-9ad2-4a53-96f7-2e3933ee7cf6",
       "name": "Omniscient Fix: Generate Contribution (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

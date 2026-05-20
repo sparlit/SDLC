@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "fb0c1529-f118-4368-8543-60da3a7a89de",
+      "id": "95e03d80-b77b-494a-a832-99931d0ac9d8",
       "name": "Check: Promote Trigger (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
           "waitForResults": true
         }
       },
-      "id": "022fe665-2d28-42b2-be54-9f7fe884ba86",
+      "id": "f570a91b-bce4-4986-ab44-536d1eaa60b3",
       "name": "Omniscient Fix: Promote Trigger (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -111,7 +111,7 @@
           ]
         }
       },
-      "id": "ae956577-5d35-409a-b28a-2af038578d66",
+      "id": "b44c2114-f8c6-4585-b083-925fca72a591",
       "name": "Check: Verify Staging (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -127,7 +127,7 @@
           "waitForResults": true
         }
       },
-      "id": "fe6a7eb6-e3ee-40fb-b5aa-5ea176874e3d",
+      "id": "1905e0d4-bbbc-4ca3-8f4a-41e8fce031ef",
       "name": "Omniscient Fix: Verify Staging (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -147,7 +147,7 @@
           ]
         }
       },
-      "id": "9c3e11bd-e200-4630-9f34-b04214ec6e43",
+      "id": "2580bb70-5f00-4289-b14c-99c3b3507518",
       "name": "Check: Staging Passed? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -163,7 +163,7 @@
           "waitForResults": true
         }
       },
-      "id": "57b30c15-9301-4adf-be80-9b0ba7b79d8a",
+      "id": "32aef40c-5dac-4047-856d-85c0d5409b54",
       "name": "Omniscient Fix: Staging Passed? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -183,7 +183,7 @@
           ]
         }
       },
-      "id": "f78b94a2-0ce3-4ac8-acd1-8ab1c823a370",
+      "id": "ffb8b40a-1d3b-4760-8bd4-e013eb3a021b",
       "name": "Check: Promote to Prod (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -199,7 +199,7 @@
           "waitForResults": true
         }
       },
-      "id": "77057959-07c0-4652-b98f-23fdeccf1d70",
+      "id": "d81f1df5-31a9-4aa6-a551-608bc8e46ed0",
       "name": "Omniscient Fix: Promote to Prod (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,

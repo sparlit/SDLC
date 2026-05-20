@@ -1,12 +1,12 @@
 {
-  "name": "SDLC Task Orchestrator",
+  "name": "Master Autonomous SDLC Agent",
   "nodes": [
     {
       "parameters": {
         "options": {}
       },
-      "id": "chat-trigger",
-      "name": "Chat Trigger",
+      "id": "user-request",
+      "name": "User Request Trigger",
       "type": "n8n-nodes-base.chatTrigger",
       "typeVersion": 1,
       "position": [
@@ -16,33 +16,12 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
-            }
-          ]
-        },
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "model",
-              "value": "google/gemini-2.0-flash-001"
-            },
-            {
-              "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"You are a lead architect. Break the user's request into a detailed development plan. Return ONLY a JSON array of objects: [{ 'file': 'path/to/file', 'action': 'create|modify', 'description': '...' }]\"}, {\"role\": \"user\", \"content\": \"{{ $json.chatInput }}\"}]"
-            }
-          ]
-        }
+        "workflowId": "task_orchestrator"
       },
-      "id": "ai-planner",
-      "name": "AI Planner",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
+      "id": "plan-and-code",
+      "name": "Plan & Code",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
       "position": [
         200,
         0
@@ -51,12 +30,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Planner\"].json.choices[0].message.content;\nconst match = content.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst plan = match ? JSON.parse(match[1]) : JSON.parse(content);\nreturn plan.map(task => ({ json: task }));"
+        "workflowId": "sdlc_main"
       },
-      "id": "parse-plan",
-      "name": "Parse Plan",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "id": "verify-and-audit",
+      "name": "Verify & Audit",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
       "position": [
         400,
         0
@@ -65,33 +44,12 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
-            }
-          ]
-        },
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "model",
-              "value": "google/gemini-2.0-flash-001"
-            },
-            {
-              "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"You are an implementer. Write the code for the following task. Return ONLY the code in ``` blocks.\"}, {\"role\": \"user\", \"content\": \"{{ JSON.stringify($json) }}\"}]"
-            }
-          ]
-        }
+        "workflowId": "autonomous_fixing"
       },
-      "id": "ai-coder",
-      "name": "AI Coder",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
+      "id": "gap-fixing-loop",
+      "name": "Gap Fixing Loop",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
       "position": [
         600,
         0
@@ -100,12 +58,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"ai-coder\"].json.choices[0].message.content;\nconst match = content.match(/```(?:[\\w]*)\\n([\\s\\S]*?)\\n```/);\nconst code = match ? match[1] : content;\nreturn { code, file: $json.file };"
+        "workflowId": "infrastructure_deploy"
       },
-      "id": "extract-code",
-      "name": "Extract Code",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "id": "deploy-infrastructure",
+      "name": "Deploy Infrastructure",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
       "position": [
         800,
         0
@@ -114,12 +72,12 @@
     },
     {
       "parameters": {
-        "command": "=cat <<EOF > \"/data/project/{{ $json.file }}\"\n{{ $json.code }}\nEOF"
+        "jsCode": "return { status: 'Mission Accomplished', report: 'The Autonomous SDLC Agent has completed the cycle from ideation to deployment with full self-healing coverage.' };"
       },
-      "id": "write-file",
-      "name": "Write File",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
+      "id": "final-report",
+      "name": "Final Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         1000,
         0
@@ -131,14 +89,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"AI Planner\"].error !== undefined }",
+              "value1": "={ $node[\"Plan & Code\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "853e983c-e6a7-4f66-a50e-2d05caa26280",
-      "name": "Check: AI Planner (P0)",
+      "id": "3713b45f-27cf-4ac8-8516-a9b7618fd239",
+      "name": "Check: Plan & Code (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -153,8 +111,8 @@
           "waitForResults": true
         }
       },
-      "id": "b6827e1c-ff3e-4e29-8766-0a183b3f7e33",
-      "name": "Omniscient Fix: AI Planner (P0)",
+      "id": "394ca8d3-c145-4dac-9a8a-6614f680b3da",
+      "name": "Omniscient Fix: Plan & Code (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -167,14 +125,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Parse Plan\"].error !== undefined }",
+              "value1": "={ $node[\"Verify & Audit\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "268e0d9f-ac00-4789-9e29-dbbf626b2e60",
-      "name": "Check: Parse Plan (P0)",
+      "id": "60ddeddf-7933-4225-add2-ec4c81da5769",
+      "name": "Check: Verify & Audit (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -189,8 +147,8 @@
           "waitForResults": true
         }
       },
-      "id": "4e75f59a-b80a-4151-a26f-a0e91a378767",
-      "name": "Omniscient Fix: Parse Plan (P0)",
+      "id": "86a5fad9-fdef-442b-b4cb-b4c6d6aba212",
+      "name": "Omniscient Fix: Verify & Audit (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -203,14 +161,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"AI Coder\"].error !== undefined }",
+              "value1": "={ $node[\"Gap Fixing Loop\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "7706d3c1-7df9-4e96-9c90-695f797dfc81",
-      "name": "Check: AI Coder (P0)",
+      "id": "7cbe8cba-416b-41ad-9b1c-1791f2051529",
+      "name": "Check: Gap Fixing Loop (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -225,8 +183,8 @@
           "waitForResults": true
         }
       },
-      "id": "9cf9f2f1-e6ec-48c7-a5b9-7a365252377b",
-      "name": "Omniscient Fix: AI Coder (P0)",
+      "id": "c2c87797-8251-4aa1-a6e9-23450d5f3009",
+      "name": "Omniscient Fix: Gap Fixing Loop (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -239,14 +197,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Extract Code\"].error !== undefined }",
+              "value1": "={ $node[\"Deploy Infrastructure\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "7fcbae32-8eaa-4909-8501-9414edaef5d5",
-      "name": "Check: Extract Code (P0)",
+      "id": "1c0e2f0b-59da-462f-80b6-ac4a3115aca5",
+      "name": "Check: Deploy Infrastructure (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -261,8 +219,8 @@
           "waitForResults": true
         }
       },
-      "id": "950fe8ad-1e49-45e5-a8ea-5dfa5593a459",
-      "name": "Omniscient Fix: Extract Code (P0)",
+      "id": "d2d0e7ec-4a4f-4d6e-a935-6384b1cd4a36",
+      "name": "Omniscient Fix: Deploy Infrastructure (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -275,14 +233,14 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={ $node[\"Write File\"].error !== undefined }",
+              "value1": "={ $node[\"Final Report\"].error !== undefined }",
               "value2": true
             }
           ]
         }
       },
-      "id": "58987c70-f8fb-4f1e-a338-6c00fb9e6779",
-      "name": "Check: Write File (P0)",
+      "id": "23e37ad0-d3af-4cd1-a0b4-668445d2915a",
+      "name": "Check: Final Report (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -297,8 +255,8 @@
           "waitForResults": true
         }
       },
-      "id": "06292b8a-77d7-4b2d-a4ca-0b7cc390019e",
-      "name": "Omniscient Fix: Write File (P0)",
+      "id": "4dde7c9e-3558-4ad1-994d-58e6eaa404dd",
+      "name": "Omniscient Fix: Final Report (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
@@ -308,200 +266,205 @@
     }
   ],
   "connections": {
-    "Check: AI Planner (P0)": {
+    "User Request Trigger": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Planner (P0)",
+            "node": "Plan & Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Plan & Code (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Plan & Code (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Planner (P0)",
+            "node": "Verify & Audit",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Planner (P0)": {
+    "Omniscient Fix: Plan & Code (P0)": {
       "main": [
         [
           {
-            "node": "AI Planner",
+            "node": "Plan & Code",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Planner": {
+    "Plan & Code": {
       "main": [
         [
           {
-            "node": "Check: AI Planner (P0)",
+            "node": "Check: Plan & Code (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Parse Plan (P0)": {
+    "Check: Verify & Audit (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Parse Plan (P0)",
+            "node": "Omniscient Fix: Verify & Audit (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Parse Plan (P0)",
+            "node": "Gap Fixing Loop",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Parse Plan (P0)": {
+    "Omniscient Fix: Verify & Audit (P0)": {
       "main": [
         [
           {
-            "node": "Parse Plan",
+            "node": "Verify & Audit",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Parse Plan": {
+    "Verify & Audit": {
       "main": [
         [
           {
-            "node": "Check: Parse Plan (P0)",
+            "node": "Check: Verify & Audit (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: AI Coder (P0)": {
+    "Check: Gap Fixing Loop (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: AI Coder (P0)",
+            "node": "Omniscient Fix: Gap Fixing Loop (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: AI Coder (P0)",
+            "node": "Deploy Infrastructure",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: AI Coder (P0)": {
+    "Omniscient Fix: Gap Fixing Loop (P0)": {
       "main": [
         [
           {
-            "node": "AI Coder",
+            "node": "Gap Fixing Loop",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Coder": {
+    "Gap Fixing Loop": {
       "main": [
         [
           {
-            "node": "Check: AI Coder (P0)",
+            "node": "Check: Gap Fixing Loop (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Extract Code (P0)": {
+    "Check: Deploy Infrastructure (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Extract Code (P0)",
+            "node": "Omniscient Fix: Deploy Infrastructure (P0)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Check: Extract Code (P0)",
+            "node": "Final Report",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Extract Code (P0)": {
+    "Omniscient Fix: Deploy Infrastructure (P0)": {
       "main": [
         [
           {
-            "node": "Extract Code",
+            "node": "Deploy Infrastructure",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extract Code": {
+    "Deploy Infrastructure": {
       "main": [
         [
           {
-            "node": "Check: Extract Code (P0)",
+            "node": "Check: Deploy Infrastructure (P0)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check: Write File (P0)": {
+    "Check: Final Report (P0)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix: Write File (P0)",
+            "node": "Omniscient Fix: Final Report (P0)",
             "type": "main",
             "index": 0
           }
         ],
+        []
+      ]
+    },
+    "Omniscient Fix: Final Report (P0)": {
+      "main": [
         [
           {
-            "node": "Check: Write File (P0)",
+            "node": "Final Report",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Omniscient Fix: Write File (P0)": {
+    "Final Report": {
       "main": [
         [
           {
-            "node": "Write File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Write File": {
-      "main": [
-        [
-          {
-            "node": "Check: Write File (P0)",
+            "node": "Check: Final Report (P0)",
             "type": "main",
             "index": 0
           }

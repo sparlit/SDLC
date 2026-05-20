@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "27abd06a-747b-482c-a714-3f5f3c80a830",
+      "id": "f42a083b-4ffa-4c43-afdb-901eaf96a00f",
       "name": "Check: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "be10fc1f-fdd9-4e5e-8154-a61ed09799b0",
+      "id": "f5f2d183-f0be-4f4a-917e-3ed677d27898",
       "name": "Omniscient Fix: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
           ]
         }
       },
-      "id": "ca94f69d-acdb-49ec-88a6-e6cb94948a04",
+      "id": "7a920d6b-69c8-47d9-955f-2dcf7d6e798f",
       "name": "Check: AI Evolve Prompts (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "13d6a29f-1fe3-4525-b13f-0a8a719f9938",
+      "id": "d265587e-a1f3-482c-8a32-2a121dd02de1",
       "name": "Omniscient Fix: AI Evolve Prompts (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,7 +161,7 @@
           ]
         }
       },
-      "id": "efe99e89-cf1d-4e98-8685-6d477aed0546",
+      "id": "a37e6958-31b9-42a3-9a0f-51777ab6e0ce",
       "name": "Check: Update Prompts File (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "44171509-29e0-440d-90dc-6abbda743ea1",
+      "id": "76551506-0ff6-4ace-b8b0-19ed6af4beb5",
       "name": "Omniscient Fix: Update Prompts File (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
