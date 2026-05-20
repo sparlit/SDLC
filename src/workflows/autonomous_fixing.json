@@ -3,8 +3,8 @@
   "nodes": [
     {
       "parameters": {
-        "interval": 1,
-        "unit": "hours"
+        "interval": 30,
+        "unit": "minutes"
       },
       "id": "schedule-trigger",
       "name": "Schedule Trigger",
@@ -17,10 +17,10 @@
     },
     {
       "parameters": {
-        "command": "python3 /data/project/src/tools/deep_analyzer.py /data/project"
+        "command": "python3 /data/project/src/tools/super_scanner.py /data/project"
       },
       "id": "find-gaps",
-      "name": "Find Code Gaps",
+      "name": "Find Gaps/Placeholders",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -32,6 +32,8 @@
       "parameters": {
         "method": "POST",
         "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
         "headerParameters": {
           "parameters": [
             {
@@ -40,6 +42,7 @@
             }
           ]
         },
+        "sendBody": true,
         "bodyParameters": {
           "parameters": [
             {
@@ -53,8 +56,8 @@
           ]
         }
       },
-      "id": "ai-fix-loop",
-      "name": "AI Fix Loop",
+      "id": "ai-fix-generator",
+      "name": "AI Fix Generator",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
@@ -64,7 +67,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $node[\"AI Fix Loop\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nreturn { command: match ? match[1].trim() : content.trim() };"
+        "jsCode": "const content = $node[\"AI Fix Generator\"].json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\n\n// Robust Sanitization\nconst blocked = [\n  \"rm \", \"mkfs\", \"shutdown\", \"reboot\", \"mv /\", \"dd \", \n  \"> /dev/sd\", \":(){:|:&};:\", \"chmod -R 777\", \"chown -R\", \n  \"wget \", \"curl \", \"nc \", \"bash -i\", \"telnet\"\n];\n\nif (blocked.some(b => command.includes(b))) {\n  throw new Error(`CRITICAL SECURITY ALERT: Dangerous command blocked: ${command}`);\n}\n\n// Ensure command stays within project directory if possible\nconst absolutePaths = command.match(/\\b\\/(?:[^ \\t\\r\\n\"'`;|&]+)/g) || [];\nfor (const path of absolutePaths) {\n  if (!path.startsWith('/data/project')) {\n    throw new Error(\"Escapement attempt detected: Command references absolute paths outside of /data/project\");\n  }\n}\n\nreturn { command };"
       },
       "id": "sanitize-fix",
       "name": "Sanitize Fix",
@@ -77,15 +80,39 @@
     },
     {
       "parameters": {
-        "command": "={{ $json.command }} && cd /data/project && (npm test || pytest || true)"
+        "command": "=cd /data/project && {{ $json.command }} && (npm test || pytest || true)"
       },
-      "id": "apply-and-verify",
-      "name": "Apply and Verify",
+      "id": "apply-fix",
+      "name": "Apply Fix",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
         800,
         0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/project && git add . && git commit -m \"Autonomous fix applied\" && git push || echo \"No changes to commit\""
+      },
+      "id": "git-commit-push",
+      "name": "Git Commit & Push",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "fix-failed-notification",
+      "name": "Fix Failed Notification",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        200
       ]
     }
   ],
@@ -105,14 +132,14 @@
       "main": [
         [
           {
-            "node": "ai-fix-loop",
+            "node": "ai-fix-generator",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ai-fix-loop": {
+    "ai-fix-generator": {
       "main": [
         [
           {
@@ -127,7 +154,25 @@
       "main": [
         [
           {
-            "node": "apply-and-verify",
+            "node": "apply-fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "apply-fix": {
+      "main": [
+        [
+          {
+            "node": "git-commit-push",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "fix-failed-notification",
             "type": "main",
             "index": 0
           }

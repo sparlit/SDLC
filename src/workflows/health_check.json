@@ -1,0 +1,117 @@
+{
+  "name": "Hardware Health Check",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 30,
+        "unit": "minutes"
+      },
+      "id": "health-trigger",
+      "name": "Health Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 /data/project/src/tools/hardware_monitor.py",
+        "continueOnFail": true
+      },
+      "id": "check-hardware",
+      "name": "Check Hardware",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $node[\"Check Hardware\"].json.exitCode }}",
+              "operation": "equal",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "id": "is-stable",
+      "name": "Is Stable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.ALERT_WEBHOOK_URL || 'http://localhost:5678/webhook/alert' }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "Hardware Alert"
+            },
+            {
+              "name": "content",
+              "value": "=### ⚠️ CRITICAL HARDWARE ALERT\nSystem stress detected. AI operations throttled.\n\nStats:\n{{ $node[\"Check Hardware\"].json.stdout }}"
+            }
+          ]
+        }
+      },
+      "id": "alert-notification",
+      "name": "Alert Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "health-trigger": {
+      "main": [
+        [
+          {
+            "node": "check-hardware",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check-hardware": {
+      "main": [
+        [
+          {
+            "node": "is-stable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is-stable": {
+      "main": [
+        [],
+        [
+          {
+            "node": "alert-notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
