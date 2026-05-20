@@ -1,0 +1,47 @@
+{
+  "name": "Autonomous Test Expansion",
+  "nodes": [
+    {
+      "parameters": {
+        "interval": 12,
+        "unit": "hours"
+      },
+      "id": "trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "pytest --cov=/data/project"
+      },
+      "id": "check-coverage",
+      "name": "Check Coverage",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "google/gemini-2.0-flash-001" },
+            { "name": "messages", "value": "=[{\"role\": \"system\", \"content\": \"Write missing unit tests to reach 100% coverage. Results: {{ $json.stdout }}\"}]" }
+          ]
+        }
+      },
+      "id": "ai-test-writer",
+      "name": "AI Test Writer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [ 400, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "check-coverage", "type": "main", "index": 0 }]] },
+    "check-coverage": { "main": [[{ "node": "ai-test-writer", "type": "main", "index": 0 }]] }
+  }
+}

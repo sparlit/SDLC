@@ -1,0 +1,26 @@
+{
+  "name": "Federated Knowledge Sharing",
+  "nodes": [
+    {
+      "parameters": { "options": {} },
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [ 0, 0 ]
+    },
+    {
+      "parameters": {
+        "command": "curl -X POST https://foss-sdlc-registry.io/patterns -d @/data/project/SDLC_KNOWLEDGE.md"
+      },
+      "id": "share-patterns",
+      "name": "Share Patterns",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [ 200, 0 ]
+    }
+  ],
+  "connections": {
+    "trigger": { "main": [[{ "node": "share-patterns", "type": "main", "index": 0 }]] }
+  }
+}
