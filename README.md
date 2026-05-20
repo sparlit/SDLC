@@ -26,7 +26,7 @@ The **IQ400 Omniscient Engine** is the absolute final consolidated version of th
 
 ## 📋 Detailed Specifications
 - **Core Orchestrator**: `sdlc_main.json` handles the end-to-end flow from ideation to deployment.
-- **Autonomous Fixing**: `autonomous_fixing.json` uses a `grep`-based gap detection system to identify and fix code issues in real-time.
+- **Autonomous Fixing**: `autonomous_fixing.json` uses `super_scanner.py` as the gap detection component to identify and fix code issues in real-time.
 - **Hardware Monitor**: `health_check.json` ensures the system remains within safe thermal and resource bounds.
 - **Safety**: Integrated sanitization layer in all code-execution nodes to block dangerous shell commands.
 
@@ -37,7 +37,7 @@ The **IQ400 Omniscient Engine** is the absolute final consolidated version of th
 4. Ensure environment variables like `OPENROUTER_API_KEY`, `N8N_API_KEY`, and `PROJECT_PATH` are correctly set in your `.env` or n8n settings.
 
 ## 📜 About IQ400
-The IQ400 architecture is designed for "Omniscient" awareness of the codebase. By combining static analysis (via `super_scanner.py` and `grep`) with dynamic runtime monitoring, the engine achieves a closed-loop self-improvement cycle. Every fix is verified by automated tests and committed to Git only upon success.
+The IQ400 architecture is designed for "Omniscient" awareness of the codebase. By combining static analysis (via `super_scanner.py`) with dynamic runtime monitoring, the engine achieves a closed-loop self-improvement cycle. Every fix is verified by automated tests and committed to Git only upon success.
 
 ## 📜 Compliance
 - **100% FOSS**: Verified by internal compliance scanner.

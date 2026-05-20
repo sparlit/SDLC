@@ -110,6 +110,12 @@ class TestWorkflowStructure:
         Verify the top-level workflow JSON contains a 'connections' mapping.
         
         Asserts that the workflow includes a "connections" key and that its value is a dict.
+        Assert that the workflow JSON contains a top-level "connections" key and that it is a mapping.
+        
+        This test verifies the workflow defines a "connections" entry and that its value is a dict.
+        Assert that the workflow defines a top-level "connections" mapping and that it is a dict.
+        
+        Verifies the parsed workflow JSON contains a "connections" key whose value is a mapping of node connections.
         """
         assert "connections" in workflow
         assert isinstance(workflow["connections"], dict)
@@ -156,6 +162,10 @@ class TestWorkflowNodes:
         
         Parameters:
             nodes_by_id (dict): Mapping from node ID to the node object parsed from the workflow JSON.
+        Assert that the workflow node with id "find-gaps" is of the n8n executeCommand node type.
+        
+        Parameters:
+            nodes_by_id (dict): Mapping of node id to node dictionary for the parsed workflow.
         """
         node = nodes_by_id["find-gaps"]
         assert node["type"] == "n8n-nodes-base.executeCommand"
@@ -190,6 +200,14 @@ class TestFindGapsCommand:
         )
 
     def test_command_uses_python3(self, find_gaps_node):
+        """
+        Asserts that the find-gaps node's command invokes Python 3.
+        
+        Checks that the 'command' parameter of the provided find-gaps node contains the substring 'python3', ensuring the scanner is executed with Python 3.
+        
+        Parameters:
+            find_gaps_node (dict): The workflow node dictionary for the 'find-gaps' node.
+        """
         command = find_gaps_node["parameters"]["command"]
         assert "python3" in command, (
             "find-gaps command should reference python3 to run the scanner"
@@ -200,6 +218,9 @@ class TestFindGapsCommand:
         Asserts the find-gaps node's command targets the repository project path.
         
         Checks that the node's "command" parameter includes "/data/project".
+        Asserts that the find-gaps node's command includes the project directory path (/data/project).
+        
+        This ensures the node will search the intended project workspace.
         """
         command = find_gaps_node["parameters"]["command"]
         assert "/data/project" in command
@@ -368,11 +389,20 @@ class TestGitCommitPushNode:
 
 class TestRegressionAndBoundary:
     def test_workflow_references_tools_directory(self, workflow):
-        """src/tools/ is the official location for SDLC utilities."""
+        """
+        Assert the workflow JSON contains a reference to the project's tools directory "src/tools/".
+        
+        This verifies the workflow refers to the canonical location for SDLC utilities.
+        """
         raw = json.dumps(workflow)
         assert "src/tools/" in raw
 
     def test_workflow_does_not_reference_deep_analyzer(self, workflow):
+        """
+        Asserts the workflow JSON does not reference the removed tool `deep_analyzer.py`.
+        
+        Checks that the serialized workflow content does not contain the literal substring "deep_analyzer.py".
+        """
         raw = json.dumps(workflow)
         assert "deep_analyzer.py" not in raw
 
@@ -381,6 +411,10 @@ class TestRegressionAndBoundary:
         Asserts the workflow JSON does not reference the string "hardware_monitor".
         
         This test serializes the workflow to JSON and fails if any occurrence of "hardware_monitor" is present.
+        Asserts the serialized workflow does not contain the string "hardware_monitor".
+        
+        Raises:
+            AssertionError: If "hardware_monitor" is present in the workflow JSON.
         """
         raw = json.dumps(workflow)
         assert "hardware_monitor" not in raw
@@ -421,6 +455,11 @@ class TestRegressionAndBoundary:
         assert "super_scanner.py" in raw
 
     def test_all_node_ids_are_unique(self, workflow):
+        """
+        Check that all node IDs in the workflow are unique.
+        
+        Asserts there are no duplicate `id` values among entries in `workflow["nodes"]`.
+        """
         ids = [node["id"] for node in workflow["nodes"]]
         assert len(ids) == len(set(ids)), "Duplicate node IDs found in workflow"
 
