@@ -16,7 +16,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return [\n  { json: { agent: 'security' } },\n  { json: { agent: 'performance' } },\n  { json: { agent: 'ui_ux' } },\n  { json: { agent: 'database' } }\n];"
+        "jsCode": "return [\n  { json: { agent: 'improvements' } },\n  { json: { agent: 'enhancements' } },\n  { json: { agent: 'feature_addons' } },\n  { json: { agent: 'functions_addon' } },\n  { json: { agent: 'monitoring' } },\n  { json: { agent: 'task_orchestration' } },\n  { json: { agent: 'architect' } },\n  { json: { agent: 'building' } },\n  { json: { agent: 'planning' } },\n  { json: { agent: 'analysis' } },\n  { json: { agent: 'design' } },\n  { json: { agent: 'development' } },\n  { json: { agent: 'testing' } },\n  { json: { agent: 'error_fixing' } },\n  { json: { agent: 'deployment' } },\n  { json: { agent: 'maintenance' } },\n  { json: { agent: 'expansion' } },\n  { json: { agent: 'security' } },\n  { json: { agent: 'performance' } },\n  { json: { agent: 'ui_ux' } },\n  { json: { agent: 'database' } }\n];"
       },
       "id": "spawn-swarm",
       "name": "Spawn Swarm",
@@ -30,7 +30,7 @@
     },
     {
       "parameters": {
-        "workflowId": "={{ $json.agent }}_agent_subworkflow"
+        "workflowId": "agent_executor"
       },
       "id": "execute-agent",
       "name": "Execute Agent",
@@ -53,7 +53,7 @@
           ]
         }
       },
-      "id": "bcfc81a7-643b-4175-ba15-ca25d1e5f235",
+      "id": "3ff4f2ce-834a-4489-9407-b0935d0284d1",
       "name": "Check: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -69,7 +69,7 @@
           "waitForResults": true
         }
       },
-      "id": "f4f73977-5e34-47e0-9d44-1ef11c5ba6ea",
+      "id": "43f6c0d0-2165-4ab0-a329-3378158be670",
       "name": "Omniscient Fix: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "fdcc18ef-aa39-4a30-9c4a-98b875f337ed",
+      "id": "431a7a79-7495-43a4-bc50-4d2c0fa2c7bc",
       "name": "Check: Execute Agent (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "64fe3110-3ac6-4b7f-ae7a-bd0ebf02908c",
+      "id": "9f07ab7b-7f3c-47f9-9a58-35b95bc34bb5",
       "name": "Omniscient Fix: Execute Agent (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -116,6 +116,17 @@
     }
   ],
   "connections": {
+    "Swarm Trigger": {
+      "main": [
+        [
+          {
+            "node": "Spawn Swarm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Check: Spawn Swarm (P0)": {
       "main": [
         [

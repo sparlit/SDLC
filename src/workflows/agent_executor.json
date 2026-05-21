@@ -1,0 +1,407 @@
+{
+  "name": "Agent: Generic Executor",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "input-trigger",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cat /data/project/src/prompts/prompts.json"
+      },
+      "id": "read-prompts",
+      "name": "Read Prompts",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const prompts = JSON.parse($node[\"Read Prompts\"].json.stdout);\nconst role = $node[\"Execute Workflow Trigger\"].json.agent || 'development';\nreturn { \n  system_prompt: prompts.system_prompts[role] || prompts.system_prompts['development'],\n  agent_role: role\n};"
+      },
+      "id": "get-role-prompt",
+      "name": "Get Role Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "openrouter/free"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"{{ $json.system_prompt }}\"}, {\"role\": \"user\", \"content\": \"Context: {{ JSON.stringify($node[\\\"Execute Workflow Trigger\\\"].json) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "ai-agent-call",
+      "name": "AI Agent Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        600,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return { \n  result: $node[\"AI Agent Call\"].json.choices[0].message.content,\n  agent: $node[\"Get Role Prompt\"].json.agent_role\n};"
+      },
+      "id": "format-output",
+      "name": "Format Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Read Prompts\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "07cac65e-39d9-4933-8520-804e7dfc26f5",
+      "name": "Check: Read Prompts (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "afc95ba2-703d-4886-88c6-b8d5190f004e",
+      "name": "Omniscient Fix: Read Prompts (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Get Role Prompt\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e9bd04b4-c647-4a3d-9dec-f36a8490bf08",
+      "name": "Check: Get Role Prompt (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "05b3dc85-21f9-4b37-8fe4-5d33f40885d5",
+      "name": "Omniscient Fix: Get Role Prompt (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"AI Agent Call\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "ddc0dd2e-9656-49fa-a7b5-2c2a9140a700",
+      "name": "Check: AI Agent Call (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "79037eac-ad1e-4ef0-ad35-a44b0f0892f3",
+      "name": "Omniscient Fix: AI Agent Call (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Format Output\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "e2a84a67-8ff6-4788-89a6-32a17184ba50",
+      "name": "Check: Format Output (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "4912d070-853c-4ed2-a131-7ee06581bc62",
+      "name": "Omniscient Fix: Format Output (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Read Prompts (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Read Prompts (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Role Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Read Prompts (P0)": {
+      "main": [
+        [
+          {
+            "node": "Read Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Prompts": {
+      "main": [
+        [
+          {
+            "node": "Check: Read Prompts (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Get Role Prompt (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Get Role Prompt (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Get Role Prompt (P0)": {
+      "main": [
+        [
+          {
+            "node": "Get Role Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Role Prompt": {
+      "main": [
+        [
+          {
+            "node": "Check: Get Role Prompt (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: AI Agent Call (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: AI Agent Call (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: AI Agent Call (P0)": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Call": {
+      "main": [
+        [
+          {
+            "node": "Check: AI Agent Call (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Format Output (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Format Output (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Omniscient Fix: Format Output (P0)": {
+      "main": [
+        [
+          {
+            "node": "Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Output": {
+      "main": [
+        [
+          {
+            "node": "Check: Format Output (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
