@@ -4,7 +4,7 @@ def analyze_file(filepath):
     with open(filepath, 'r') as f: content = f.read()
     lines = content.split('\n')
     for line_no, line in enumerate(lines, 1):
-        if 'FIX' + 'ME' in line or 'BUILD LATER' in line: findings.append(f"{filepath}:{line_no} - Incomplete logic")
+        if 'FIXME' in line or 'BUILD LATER' in line: findings.append(f"{filepath}:{line_no} - Incomplete logic")
     try:
         tree = ast.parse(content)
         for node in ast.walk(tree):
