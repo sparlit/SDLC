@@ -28,7 +28,8 @@ EXCLUDED_FILES = [
     "super_scanner.py",
     "omniscient_stress_tester.py",
     ".specify/memory/constitution.md",
-    "deep_analyzer.py"
+    "deep_analyzer.py",
+    "specs/"
 ]
 
 class AdvancedScanner(ast.NodeVisitor):
