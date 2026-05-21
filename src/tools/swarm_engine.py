@@ -128,10 +128,17 @@ class FractalSwarm:
 
     def detect_conflict(self, results: List[str]) -> bool:
         """Heuristic to detect if branches are completely polarized."""
-        # This is a stub for complex semantic analysis
-        # For now, if we have "Error:" in multiple branches but not all, it's a conflict
+        # Check for deep divergence by comparing response lengths and error presence
         errors = [r for r in results if "Error:" in r]
-        return 0 < len(errors) < len(results)
+        if 0 < len(errors) < len(results):
+            return True
+
+        # If lengths vary wildly, it might indicate a lack of consensus on complexity
+        lengths = [len(r) for r in results]
+        if max(lengths) > min(lengths) * 10:
+            return True
+
+        return False
 
     async def run_branch(self, branch_id: int) -> str:
         """Simulates one entire hierarchy tree using the specialized stage prompt."""
