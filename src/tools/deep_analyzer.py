@@ -10,7 +10,9 @@ def analyze_file(filepath):
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if len(node.body) == 1 and isinstance(node.body[0], ast.Pass): findings.append(f"{filepath}:{node.lineno} - Empty function")
-    except: pass
+    except Exception as e:
+        # Gracefully handle parse errors in analyzer tool
+        findings.append(f"{filepath}:0 - Parse error: {e}")
     return findings
 def scan_recursive(root):
     total = []

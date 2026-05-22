@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Skills and Agent Artifacts
+.agents/
+.claude/
+.codex/
+.aider/
+.windsurf/
+.gemini/
+.cline/
+.goose/
+.roo/
+.trae/
+.github/agents/
+.specify/memory/constitution.md.bak
+
+# Logs and Reports
+STRESS_TEST_REPORT.md
+npm_output.log
+bun_output.txt
+
+# Databases and Persistent Storage
+.chroma_db/
+node_modules/
+
+# Local Environment
+.env
+.venv
+venv/
+ENV/
+env/

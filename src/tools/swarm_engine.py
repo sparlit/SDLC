@@ -49,6 +49,15 @@ def load_system_prompt(role: str) -> str:
 
 async def call_llm(model: str, messages: List[Dict[str, str]], temperature=0.7) -> str:
     """Wrapper for OpenRouter API calls with robust retry, model rotation, and backoff."""
+    if os.getenv("SIMULATION_MODE") == "true":
+        # Simulate logic generation for known patterns
+        prompt = str(messages)
+        if "pass" in prompt or "placeholder" in prompt or "stub" in prompt:
+            return "print('Autonomous fix: logic implemented')"
+        if "TODO" in prompt:
+            return "return 'Requirement satisfied'"
+        return "print('Deep logic upgrade applied')"
+
     url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
