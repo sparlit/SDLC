@@ -1,3 +1,5 @@
+# Version: 1.1.0
+# Version: 1.1.0
 """
 Tests for setup/docker-compose.yml
 
@@ -80,20 +82,29 @@ class TestDockerComposeRequiredServices:
         assert "ollama:" in _compose_text()
 
 
-class TestDockerComposeRemovedServices:
-    """Services that existed before the PR must be gone."""
+class TestDockerComposeRequiredServices:
+    """All architectural services must be present."""
 
-    def test_chroma_service_removed(self):
-        assert "chroma:" not in _compose_text()
+    def test_db_service_present(self):
+        assert "db:" in _compose_text()
 
-    def test_redis_service_removed(self):
-        assert "redis:" not in _compose_text()
+    def test_n8n_service_present(self):
+        assert "n8n:" in _compose_text()
 
-    def test_gitea_service_removed(self):
-        assert "gitea:" not in _compose_text()
+    def test_ollama_service_present(self):
+        assert "ollama:" in _compose_text()
 
-    def test_grafana_service_removed(self):
-        assert "grafana:" not in _compose_text()
+    def test_chroma_service_present(self):
+        assert "chroma:" in _compose_text()
+
+    def test_redis_service_present(self):
+        assert "redis:" in _compose_text()
+
+    def test_gitea_service_present(self):
+        assert "gitea:" in _compose_text()
+
+    def test_grafana_service_present(self):
+        assert "grafana:" in _compose_text()
 
 
 class TestN8nServiceConfiguration:
@@ -131,14 +142,11 @@ class TestN8nServiceConfiguration:
         assert "depends_on" in _compose_text()
         assert "- db" in _compose_text()
 
-    def test_n8n_does_not_depend_on_chroma(self):
-        """chroma was removed from n8n's depends_on list."""
-        text = _compose_text()
-        assert "- chroma" not in text
+    def test_n8n_depends_on_chroma(self):
+        assert "- chroma" in _compose_text()
 
-    def test_n8n_does_not_depend_on_redis(self):
-        """redis was removed from n8n's depends_on list."""
-        assert "- redis" not in _compose_text()
+    def test_n8n_depends_on_redis(self):
+        assert "- redis" in _compose_text()
 
     def test_n8n_mounts_project_path(self):
         """n8n should mount the project directory under /data/project."""
@@ -174,13 +182,11 @@ class TestDockerComposeVolumes:
         """ollama_data was added in this PR."""
         assert "ollama_data:" in _compose_text()
 
-    def test_chroma_data_volume_removed(self):
-        """chroma_data volume must be gone now that chroma service was removed."""
-        assert "chroma_data:" not in _compose_text()
+    def test_chroma_data_volume_present(self):
+        assert "chroma_data:" in _compose_text()
 
-    def test_gitea_data_volume_removed(self):
-        """gitea_data volume must be gone now that gitea service was removed."""
-        assert "gitea_data:" not in _compose_text()
+    def test_gitea_data_volume_present(self):
+        assert "gitea_data:" in _compose_text()
 
 
 # ---------------------------------------------------------------------------
@@ -199,9 +205,9 @@ class TestDockerComposeYAMLStructure:
         assert "volumes" in compose
 
     def test_service_count(self, compose):
-        """Exactly three services: db, n8n, ollama."""
+        """Exactly seven services."""
         services = compose["services"]
-        assert set(services.keys()) == {"db", "n8n", "ollama"}
+        assert set(services.keys()) == {"db", "n8n", "ollama", "chroma", "redis", "gitea", "grafana"}
 
     def test_db_image(self, compose):
         assert compose["services"]["db"]["image"] == "postgres:16-alpine"
@@ -217,9 +223,9 @@ class TestDockerComposeYAMLStructure:
         assert compose["services"]["ollama"]["image"] == "ollama/ollama:latest"
 
     def test_volume_count(self, compose):
-        """Exactly three top-level volumes."""
+        """Exactly five top-level volumes."""
         volumes = compose["volumes"]
-        assert set(volumes.keys()) == {"n8n_db_data", "n8n_data", "ollama_data"}
+        assert set(volumes.keys()) == {"n8n_db_data", "n8n_data", "ollama_data", "chroma_data", "gitea_data"}
 
     def test_n8n_restart_policy(self, compose):
         assert compose["services"]["n8n"]["restart"] == "always"
@@ -242,8 +248,8 @@ class TestDockerComposeYAMLStructure:
         for expected in ("N8N_PORT", "N8N_PROTOCOL", "NODE_ENV", "WEBHOOK_URL"):
             assert expected in env_keys, f"Missing env var '{expected}' in n8n service"
 
-    def test_n8n_depends_on_only_db(self, compose):
+    def test_n8n_depends_on_required_services(self, compose):
         depends = compose["services"]["n8n"].get("depends_on", [])
-        assert depends == ["db"], (
-            f"n8n should only depend on 'db', got: {depends}"
-        )
+        assert "db" in depends
+        assert "chroma" in depends
+        assert "redis" in depends

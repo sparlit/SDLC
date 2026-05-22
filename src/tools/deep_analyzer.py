@@ -1,3 +1,5 @@
+# Version: 1.1.0
+# Version: 1.1.0
 import os, sys, ast
 def analyze_file(filepath):
     findings = []

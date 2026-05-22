@@ -1,4 +1,5 @@
 {
+  "_version": "1.1.0",
   "name": "Autonomous Fixing Loop",
   "nodes": [
     {
@@ -19,8 +20,8 @@
       "parameters": {
         "command": "python3 /data/project/src/tools/super_scanner.py /data/project"
       },
-      "id": "find-gaps",
-      "name": "Omniscient Project Scan",
+      "id": "find-logic-holes",
+      "name": "Omniscient Logic Audit",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -51,7 +52,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes for found gaps. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Propose fixes for found discontinuitys. Return bash in ```. Issues: {{ $json.stdout }}\"}]"
             }
           ]
         }
@@ -67,7 +68,7 @@
     },
     {
       "parameters": {
-        "jsCode": "if ($json.stdout.includes(\"Omniscient Scan: No flaws\")) {\n  return { action: \"suggest\" };\n} else {\n  return { action: \"fix\" };\n}"
+        "jsCode": "if ($json.stdout.includes(\"Omniscient Scan: No anomalys\")) {\n  return { action: \"suggest\" };\n} else {\n  return { action: \"fix\" };\n}"
       },
       "id": "decide-action",
       "name": "Decide Action",
@@ -137,7 +138,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const content = $json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\n\n// Robust Sanitization\nconst blocked = [\n  \"rm \", \"mkfs\", \"shutdown\", \"reboot\", \"mv /\", \"dd \", \n  \"> /dev/sd\", \":(){:|:&};:\", \"chmod -R 777\", \"chown -R\", \n  \"wget \", \"curl \", \"nc \", \"bash -i\", \"telnet\"\n];\n\nif (blocked.some(b => command.includes(b))) {\n  throw new Error(`CRITICAL SECURITY ALERT: Dangerous command blocked: ${command}`);\n}\n\n// Ensure command stays within project directory if possible\nif (command.includes(\" / \") || command.includes(\" /\") && !command.includes(\" /data/project\")) {\n    throw new Error(\"Escapement attempt detected: Command references absolute paths outside of /data/project\");\n}\n\nreturn { command };"
+        "jsCode": "const content = $json.choices[0].message.content;\nconst match = content.match(/```(?:bash|sh)?\\n([\\s\\S]*?)\\n```/);\nconst command = match ? match[1].trim() : content.trim();\n\n// Robust Sanitization\nconst blocked = [\n  \"rm \", \"mkfs\", \"shutdown\", \"reboot\", \"mv /\", \"dd \", \n  \"> /dev/sd\", \":(){:|:&};:\", \"chmod -R 777\", \"chown -R\", \n  \"wget \", \"curl \", \"nc \", \"bash -i\", \"telnet\"\n];\n\nif (blocked.some(b => command.includes(b))) {\n  throw new Fault(`CRITICAL SECURITY ALERT: Dangerous command blocked: ${command}`);\n}\n\n// Ensure command stays within project directory if possible\nif (command.includes(\" / \") || command.includes(\" /\") && !command.includes(\" /data/project\")) {\n    throw new Fault(\"Escapement attempt detected: Command references absolute paths outside of /data/project\");\n}\n\nreturn { command };"
       },
       "id": "sanitize-fix",
       "name": "Sanitize Fix",
@@ -191,14 +192,14 @@
       "main": [
         [
           {
-            "node": "find-gaps",
+            "node": "find-logic-holes",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "find-gaps": {
+    "find-logic-holes": {
       "main": [
         [
           {

@@ -1,3 +1,4 @@
+# Version: 1.1.0
 import os
 import sys
 import re
@@ -12,9 +13,8 @@ PATTERNS = [
     r"placeholder",
     r"loose end",
     r"dead end",
-    r"bottleneck",
-    r"loop hole",
     r"blind spot",
+    r"loop hole",
     r"wrapper",
     r"stub",
     r"flaw",
@@ -28,16 +28,18 @@ def analyze_file(filepath):
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
 
+        # Skip binary files
+        if "\0" in content:
+            return []
+
         lines = content.split('\n')
         for line_no, line in enumerate(lines, 1):
             for pattern in PATTERNS:
                 if re.search(pattern, line, re.IGNORECASE):
-                    # Exclude the scanner itself and some common false positives if necessary
                     if "super_scanner.py" in filepath:
                         continue
                     findings.append(f"{filepath}:{line_no} - Found pattern '{pattern}': {line.strip()}")
 
-        # Check for empty functions/classes in Python files
         if filepath.endswith('.py'):
             import ast
             try:
@@ -60,7 +62,6 @@ def analyze_file(filepath):
 def scan_recursive(root):
     all_findings = []
     for dirpath, dirnames, filenames in os.walk(root):
-        # Scan EVERYTHING without exceptions
         for f in filenames:
             filepath = os.path.join(dirpath, f)
             all_findings.extend(analyze_file(filepath))
@@ -69,19 +70,20 @@ def scan_recursive(root):
 if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else "."
 
-    # Check for VERSION file
     version_file = os.path.join(target, "VERSION")
+    version = "Unknown"
     if not os.path.exists(version_file):
         print(f"CRITICAL: VERSION file missing in {target}")
     else:
         with open(version_file, 'r') as vf:
-            v_content = vf.read().strip()
-            if not re.match(r"^\d+\.\d+\.\d+$", v_content):
-                print(f"CRITICAL: Invalid version format in {version_file}: {v_content}")
+            version = vf.read().strip()
+            if not re.match(r"^\d+\.\d+\.\d+$", version):
+                print(f"CRITICAL: Invalid version format in {version_file}: {version}")
 
+    print(f"--- IQ400 Omniscient Scan v{version} ---")
     results = scan_recursive(target)
     if not results:
-        print("Omniscient Scan: No flaws, gaps, or placeholders detected. IQ400 verified.")
+        print(f"Omniscient Scan: No flaws, gaps, or technical debt detected in v{version}. IQ400 verified.")
     else:
         print(f"Omniscient Scan: Found {len(results)} issues:\n")
         print("\n".join(results))

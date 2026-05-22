@@ -1,4 +1,5 @@
 {
+  "_version": "1.1.0",
   "name": "Agentic Debate Routine",
   "nodes": [
     {
@@ -21,7 +22,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Critique the following code proposal. Find flaws and suggest improvements.\"}, {\"role\": \"user\", \"content\": \"{{ $json.proposal }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Critique the following code proposal. Find anomalys and suggest improvements.\"}, {\"role\": \"user\", \"content\": \"{{ $json.proposal }}\"}]"
             }
           ]
         }

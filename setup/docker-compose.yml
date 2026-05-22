@@ -1,3 +1,4 @@
+# Version: 1.1.0
 version: '3.8'
 
 services:
@@ -35,6 +36,36 @@ services:
       - ${PROJECT_PATH:-..}:/data/project
     depends_on:
       - db
+      - chroma
+      - redis
+
+  chroma:
+    image: chromadb/chroma:latest
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/data
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  gitea:
+    image: gitea/gitea:latest
+    restart: always
+    ports:
+      - "3001:3000"
+    volumes:
+      - gitea_data:/data
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    ports:
+      - "3000:3000"
 
   ollama:
     image: ollama/ollama:latest
@@ -47,4 +78,6 @@ services:
 volumes:
   n8n_db_data:
   n8n_data:
+  chroma_data:
+  gitea_data:
   ollama_data:

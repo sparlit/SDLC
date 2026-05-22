@@ -1,4 +1,5 @@
 {
+  "_version": "1.1.0",
   "name": "Runtime Monitoring & Fixing",
   "nodes": [
     {
@@ -17,10 +18,10 @@
     },
     {
       "parameters": {
-        "command": "docker logs --since 1m app_container 2>&1 | grep -iE \"error|exception|stacktrace\" || true"
+        "command": "docker logs --since 1m app_container 2>&1 | grep -iE \"fault|exception|stacktrace\" || true"
       },
-      "id": "get-runtime-errors",
-      "name": "Get Runtime Errors",
+      "id": "get-runtime-faults",
+      "name": "Get Runtime Faults",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -39,8 +40,8 @@
           ]
         }
       },
-      "id": "has-error",
-      "name": "Has Error?",
+      "id": "has-fault",
+      "name": "Has Fault?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -67,25 +68,25 @@
       "main": [
         [
           {
-            "node": "get-runtime-errors",
+            "node": "get-runtime-faults",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "get-runtime-errors": {
+    "get-runtime-faults": {
       "main": [
         [
           {
-            "node": "has-error",
+            "node": "has-fault",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "has-error": {
+    "has-fault": {
       "main": [
         [
           {

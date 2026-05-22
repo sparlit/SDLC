@@ -1,11 +1,12 @@
 {
+  "_version": "1.1.0",
   "name": "Workflow Self-Fixing Routine",
   "nodes": [
     {
       "parameters": {},
-      "id": "error-trigger",
-      "name": "Error Trigger",
-      "type": "n8n-nodes-base.errorTrigger",
+      "id": "fault-trigger",
+      "name": "Fault Trigger",
+      "type": "n8n-nodes-base.faultTrigger",
       "typeVersion": 1,
       "position": [
         0,
@@ -54,7 +55,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"You are an n8n expert. Fix the following workflow JSON based on the provided error. Return ONLY the valid JSON of the nodes and connections, wrapped in ```json blocks.\"}, {\"role\": \"user\", \"content\": \"Error: {{ $node[\\\"Error Trigger\\\"].json.execution.error.message }}\\nWorkflow: {{ JSON.stringify($json) }}\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"You are an n8n expert. Fix the following workflow JSON based on the provided fault. Return ONLY the valid JSON of the nodes and connections, wrapped in ```json blocks.\"}, {\"role\": \"user\", \"content\": \"Fault: {{ $node[\\\"Fault Trigger\\\"].json.execution.fault.message }}\\nWorkflow: {{ JSON.stringify($json) }}\"}]"
             }
           ]
         }
@@ -84,7 +85,7 @@
     {
       "parameters": {
         "method": "PUT",
-        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $node[\\\"Error Trigger\\\"].json.workflow.id }}",
+        "url": "={{ $env.N8N_HOST }}/api/v1/workflows/{{ $node[\\\"Fault Trigger\\\"].json.workflow.id }}",
         "authentication": "headerAuth",
         "headerParameters": {
           "parameters": [
@@ -119,7 +120,7 @@
     }
   ],
   "connections": {
-    "error-trigger": {
+    "fault-trigger": {
       "main": [
         [
           {

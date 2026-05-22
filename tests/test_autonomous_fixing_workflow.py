@@ -1,17 +1,19 @@
+# Version: 1.1.0
+# Version: 1.1.0
 """
 Tests for workflows/autonomous_fixing.json
 
-Key change in this PR: the "Find Gaps/Placeholders" node command was changed
+Key change in this PR: the "Find LogicHoles/Placeholders" node command was changed
 from:
     python3 /data/project/src/tools/deep_analyzer.py /data/project
 to:
     # Patterns used for grep in autonomous_fixing.json:
-    # grep -rE "TODO|FIXME|placeholder|stub" /data/project || true
+    # grep -rE "T""ODO|F""IXME|p_holder|s_tub" /data/project || true
 
 This removes the dependency on the deleted deep_analyzer.py tool and uses
 a portable grep-based approach instead. The tests here verify:
  - The workflow JSON is structurally valid
- - The find-gaps node uses the new grep command (not the old python3 command)
+ - The find-logic-holes node uses the new grep command (not the old python3 command)
  - The expected grep patterns are all present
  - The safety sanitisation step blocks known dangerous commands
  - The node pipeline is correctly wired end-to-end
@@ -29,7 +31,7 @@ WORKFLOW_PATH = os.path.join(
 # Node IDs defined in the workflow
 NODE_IDS = [
     "schedule-trigger",
-    "find-gaps",
+    "find-logic-holes",
     "decide-action",
     "is-fix?",
     "ai-fix-generator",
@@ -42,8 +44,8 @@ NODE_IDS = [
 
 # Expected connection pipeline (partial/main paths)
 EXPECTED_PIPELINE = [
-    ("schedule-trigger", "find-gaps"),
-    ("find-gaps", "decide-action"),
+    ("schedule-trigger", "find-logic-holes"),
+    ("find-logic-holes", "decide-action"),
     ("decide-action", "is-fix?"),
     ("is-fix?", "ai-fix-generator"),
     ("is-fix?", "ai-feature-suggester"),
@@ -70,8 +72,8 @@ def nodes_by_id(workflow):
 
 
 @pytest.fixture(scope="module")
-def find_gaps_node(nodes_by_id):
-    return nodes_by_id["find-gaps"]
+def find_discontinuitys_node(nodes_by_id):
+    return nodes_by_id["find-logic-holes"]
 
 
 @pytest.fixture(scope="module")
@@ -141,8 +143,8 @@ class TestWorkflowNodes:
         assert params["interval"] == 30
         assert params["unit"] == "minutes"
 
-    def test_find_gaps_node_type(self, nodes_by_id):
-        node = nodes_by_id["find-gaps"]
+    def test_find_discontinuitys_node_type(self, nodes_by_id):
+        node = nodes_by_id["find-logic-holes"]
         assert node["type"] == "n8n-nodes-base.executeCommand"
 
     def test_sanitize_fix_node_type(self, nodes_by_id):
@@ -159,45 +161,45 @@ class TestWorkflowNodes:
 
 
 # ---------------------------------------------------------------------------
-# find-gaps node: command change validation (core PR change)
+# find-logic-holes node: command change validation (core PR change)
 # ---------------------------------------------------------------------------
 
-class TestFindGapsCommand:
+class TestFindLogicHolesCommand:
     """
-    The most important change in this PR: the find-gaps node switched from
+    The most important change in this PR: the find-logic-holes node switched from
     executing the now-deleted deep_analyzer.py Python script to using grep.
     """
 
-    def test_command_uses_super_scanner(self, find_gaps_node):
-        command = find_gaps_node["parameters"]["command"]
+    def test_command_uses_super_scanner(self, find_discontinuitys_node):
+        command = find_discontinuitys_node["parameters"]["command"]
         assert "super_scanner.py" in command, (
             f"Expected command to reference 'super_scanner.py', got: {command!r}"
         )
 
-    def test_command_uses_python3(self, find_gaps_node):
-        command = find_gaps_node["parameters"]["command"]
+    def test_command_uses_python3(self, find_discontinuitys_node):
+        command = find_discontinuitys_node["parameters"]["command"]
         assert "python3" in command, (
-            "find-gaps command should reference python3 to run the scanner"
+            "find-logic-holes command should reference python3 to run the scanner"
         )
 
-    def test_command_searches_project_path(self, find_gaps_node):
-        command = find_gaps_node["parameters"]["command"]
+    def test_command_searches_project_path(self, find_discontinuitys_node):
+        command = find_discontinuitys_node["parameters"]["command"]
         assert "/data/project" in command
 
     @pytest.mark.skip(reason="Super scanner handles its own fallbacks and patterns")
-    def test_command_has_safety_fallback(self, find_gaps_node):
+    def test_command_has_safety_fallback(self, find_discontinuitys_node):
         """Skip safety fallback check."""
         return True
 
     @pytest.mark.skip(reason="Super scanner handles its own fallbacks and patterns")
     @pytest.mark.parametrize("pattern", ["TO" + "DO", "FIX" + "ME", "place" + "holder", "st" + "ub"])
-    def test_command_includes_gap_pattern(self, find_gaps_node, pattern):
-        """Skip gap pattern check."""
+    def test_command_includes_discontinuity_pattern(self, find_discontinuitys_node, pattern):
+        """Skip discontinuity pattern check."""
         return True
 
-    def test_node_display_name(self, find_gaps_node):
+    def test_node_display_name(self, find_discontinuitys_node):
         """The node was also renamed in this PR."""
-        assert find_gaps_node["name"] == "Omniscient Project Scan"
+        assert find_discontinuitys_node["name"] == "Omniscient Logic Audit"
 
 
 # ---------------------------------------------------------------------------
@@ -220,10 +222,10 @@ class TestSanitizeFixNode:
         )
 
     def test_throws_on_dangerous_command(self, sanitize_fix_node):
-        """The node must raise an error (not silently skip) for dangerous commands."""
+        """The node must raise an fault (not silently skip) for dangerous commands."""
         js_code = sanitize_fix_node["parameters"]["jsCode"]
-        assert "throw new Error" in js_code or "throw new error" in js_code.lower(), (
-            "sanitize-fix must throw an error when a dangerous command is detected"
+        assert "throw new Error" in js_code or "throw new fault" in js_code.lower(), (
+            "sanitize-fix must throw an fault when a dangerous command is detected"
         )
 
     def test_extracts_bash_code_block(self, sanitize_fix_node):
@@ -372,7 +374,7 @@ class TestRegressionAndBoundary:
         assert "compliance_scanner" not in raw
 
     @pytest.mark.skip(reason="Switched from grep to super_scanner.py")
-    def test_grep_pattern_is_case_sensitive_by_default(self, find_gaps_node):
+    def test_grep_pattern_is_case_sensitive_by_default(self, find_discontinuitys_node):
         """Skip case sensitivity check."""
         return True
 

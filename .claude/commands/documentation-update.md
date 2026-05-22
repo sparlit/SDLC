@@ -1,3 +1,4 @@
+<!-- Version: 1.1.0 -->
 ---
 name: documentation-update
 description: Workflow command scaffold for documentation-update in SDLC.

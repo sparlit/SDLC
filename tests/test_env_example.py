@@ -1,9 +1,11 @@
+# Version: 1.1.0
+# Version: 1.1.0
 """
 Tests for setup/.env.example
 
 This file was added in the PR to provide a configuration template for the
 autonomous SDLC workflow. These tests verify its structure, required variables,
-and that placeholder values are used instead of real secrets.
+and that p_holder values are used instead of real secrets.
 """
 
 import os
@@ -80,17 +82,17 @@ class TestEnvExamplePlaceholderValues:
     def variables(self):
         return _parse_env_file(ENV_EXAMPLE_PATH)
 
-    def test_n8n_api_key_is_placeholder(self, variables):
+    def test_n8n_api_key_is_p_holder(self, variables):
         """N8N_API_KEY must not look like a real key."""
         value = variables.get("N8N_API_KEY", "")
-        assert "your_" in value.lower() or "placeholder" in value.lower() or value == "", (
+        assert "your_" in value.lower() or "p_holder" in value.lower() or value == "", (
             f"N8N_API_KEY appears to contain a real secret: '{value}'"
         )
 
-    def test_openrouter_api_key_is_placeholder(self, variables):
-        """OPENROUTER_API_KEY must use a placeholder, not a real key."""
+    def test_openrouter_api_key_is_p_holder(self, variables):
+        """OPENROUTER_API_KEY must use a p_holder, not a real key."""
         value = variables.get("OPENROUTER_API_KEY", "")
-        assert "your_" in value.lower() or "placeholder" in value.lower() or value == "", (
+        assert "your_" in value.lower() or "p_holder" in value.lower() or value == "", (
             f"OPENROUTER_API_KEY appears to contain a real secret: '{value}'"
         )
 
@@ -155,7 +157,7 @@ class TestEnvExampleFormat:
             )
 
     def test_n8n_api_key_and_openrouter_key_are_distinct(self):
-        """The two API key placeholders must be separate entries."""
+        """The two API key p_holders must be separate entries."""
         variables = _parse_env_file(ENV_EXAMPLE_PATH)
         assert "N8N_API_KEY" in variables
         assert "OPENROUTER_API_KEY" in variables

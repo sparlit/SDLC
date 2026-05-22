@@ -1,3 +1,4 @@
+<!-- Version: 1.1.0 -->
 # ECC for Codex CLI
 
 This supplements the root `AGENTS.md` with a repo-local ECC baseline.

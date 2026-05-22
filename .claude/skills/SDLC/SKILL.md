@@ -1,3 +1,4 @@
+<!-- Version: 1.1.0 -->
 ```markdown
 # SDLC Development Patterns
 

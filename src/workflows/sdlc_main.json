@@ -1,4 +1,5 @@
 {
+  "_version": "1.1.0",
   "name": "SDLC Main Workflow",
   "nodes": [
     {
@@ -95,10 +96,10 @@
     },
     {
       "parameters": {
-        "command": "cd /data/project && pytest && bandit -r ."
+        "command": "cd /data/project && pytest && bandit -r . && python3 src/tools/security_hardener.py /data/project && python3 src/tools/visualizer.py src/workflows > docs/dependency_map.md"
       },
       "id": "pytest-bandit",
-      "name": "Pytest & Bandit",
+      "name": "Audit, Harden & Map",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -129,7 +130,7 @@
             },
             {
               "name": "messages",
-              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for gaps, logic-holes, and security issues. Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\\nTest Results: {{ JSON.stringify($json) }}\"}, {\"role\": \"user\", \"content\": \"Provide a comprehensive SDLC report.\"}]"
+              "value": "=[{\"role\": \"system\", \"content\": \"Analyze for discontinuitys, logic-holes, and security issues. Project info: {{ JSON.stringify($node[\\\"Polyglot Detection\\\"].json) }}\\nTest Results: {{ JSON.stringify($json) }}\"}, {\"role\": \"user\", \"content\": \"Provide a comprehensive SDLC report.\"}]"
             }
           ]
         }
