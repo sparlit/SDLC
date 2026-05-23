@@ -31,7 +31,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>\n</html>`;\nreturn { html };"
+        "jsCode": "const logs = $node[\"Fetch Metrics\"].json.stdout;\nconst html = `\n<html>\n<head><title>SDLC Health Dashboard</title></head>\n<body>\n<h1>Autonomous SDLC Health</h1>\n<pre>${logs}</pre>\n<p>Last Update: ${new Date().toISOString()}</p>\n<footer><a href='https://developer.puter.com'>Powered by Puter</a></footer><footer><a href='https://developer.puter.com'>Powered by Puter</a></footer></body>\n</html>`;\nreturn { html };"
       },
       "id": "generate-html",
       "name": "Generate HTML",
@@ -68,13 +68,13 @@
           ]
         }
       },
-      "id": "ddbe9e3f-4f59-4319-b31f-ebb1e72112aa",
+      "id": "303328ed-3979-4cbe-b3ea-0094389c01b8",
       "name": "Check: Fetch Metrics (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -84,7 +84,7 @@
           "waitForResults": true
         }
       },
-      "id": "aad93b16-1161-4e03-ace3-40f14cc57f27",
+      "id": "30358252-82b3-4bcf-9b9c-12753a72d9c9",
       "name": "Omniscient Fix: Fetch Metrics (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -104,13 +104,13 @@
           ]
         }
       },
-      "id": "79f93f8b-3e77-4d09-9ba4-494e90e8faae",
+      "id": "77ca9cfe-1ec8-442b-945f-6a594aae777b",
       "name": "Check: Generate HTML (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -120,7 +120,7 @@
           "waitForResults": true
         }
       },
-      "id": "a47d57b4-782d-4482-903b-6a1f66f87309",
+      "id": "311e828f-014c-4be1-8a9d-6f204069ef9d",
       "name": "Omniscient Fix: Generate HTML (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -140,13 +140,13 @@
           ]
         }
       },
-      "id": "ec1c1764-968a-42e4-8450-7c8d6068e22d",
+      "id": "07e826a3-748e-455c-9230-7d5518652475",
       "name": "Check: Save Dashboard (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -156,7 +156,7 @@
           "waitForResults": true
         }
       },
-      "id": "5d370136-df44-45df-bcd4-b6936c78ef1c",
+      "id": "55480dd0-a612-419a-9b31-bd7abf1794fb",
       "name": "Omniscient Fix: Save Dashboard (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -176,13 +176,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Fetch Metrics (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Fetch Metrics (P0)": {
@@ -216,13 +210,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Generate HTML (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Generate HTML (P0)": {
@@ -256,13 +244,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Save Dashboard (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Save Dashboard (P0)": {

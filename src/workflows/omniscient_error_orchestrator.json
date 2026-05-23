@@ -213,57 +213,6 @@
     }
   ],
   "connections": {
-    "Execute Workflow Trigger": {
-      "main": [
-        [
-          {
-            "node": "Check-conflict",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check-conflict": {
-      "main": [
-        [
-          {
-            "node": "Planning Fallback",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Error Classifier",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Error Classifier": {
-      "main": [
-        [
-          {
-            "node": "Parse Category",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse Category": {
-      "main": [
-        [
-          {
-            "node": "Route Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Route Error": {
       "main": [
         [
@@ -283,6 +232,33 @@
         [
           {
             "node": "Call Code Fixer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Error Classifier": {
+      "main": [
+        [
+          {
+            "node": "Parse Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Category": {
+      "main": [
+        [
+          {
+            "node": "Route Error",
             "type": "main",
             "index": 0
           }

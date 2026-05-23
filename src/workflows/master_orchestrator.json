@@ -74,13 +74,13 @@
           ]
         }
       },
-      "id": "92086387-031f-4659-9d30-5e8d5da74af2",
+      "id": "d49ab1a4-e001-4383-9627-ac02d918b1a5",
       "name": "Check: Get Arch Rules (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         -200,
-        -50
+        -100
       ]
     },
     {
@@ -90,7 +90,7 @@
           "waitForResults": true
         }
       },
-      "id": "ad37d4d7-1c95-43fa-9f15-8c4d0a3d41df",
+      "id": "f7b7558f-9a13-447b-a4b8-63caf77268f1",
       "name": "Omniscient Fix: Get Arch Rules (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -110,13 +110,13 @@
           ]
         }
       },
-      "id": "ca1fdbe6-afdc-4b88-a42c-bdfca3a0d49f",
+      "id": "e9bae82f-bfd5-4b61-8660-d4666394ea73",
       "name": "Check: Orchestrator Planning (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         0,
-        -50
+        -100
       ]
     },
     {
@@ -126,7 +126,7 @@
           "waitForResults": true
         }
       },
-      "id": "8c4224fd-22e9-4cac-ae16-4caccf17f4c1",
+      "id": "84479caf-2498-4a81-9774-76f11b7dd3cb",
       "name": "Omniscient Fix: Orchestrator Planning (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -146,13 +146,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Get Arch Rules (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Get Arch Rules (P0)": {
@@ -186,13 +180,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Orchestrator Planning (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Orchestrator Planning (P0)": {

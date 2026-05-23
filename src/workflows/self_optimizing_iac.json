@@ -75,13 +75,13 @@
           ]
         }
       },
-      "id": "9da36f35-43d7-4062-ab68-d7125bdf0dca",
+      "id": "580e97e0-0227-4264-a1e0-df91be05fee4",
       "name": "Check: Get Resource Usage (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -91,7 +91,7 @@
           "waitForResults": true
         }
       },
-      "id": "fe61ec0e-d7b8-4bd2-9d8e-b2b2a72cee3a",
+      "id": "85960661-cf50-426b-a5fe-d2d14b4b8657",
       "name": "Omniscient Fix: Get Resource Usage (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -111,13 +111,13 @@
           ]
         }
       },
-      "id": "39a0ed76-9e83-4a96-82d5-3bb19c871e02",
+      "id": "b5326b6d-5616-4604-8667-15f09b7851d0",
       "name": "Check: AI Optimizer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -127,7 +127,7 @@
           "waitForResults": true
         }
       },
-      "id": "31151f85-d2b4-4b9f-aa2f-db40d599de1e",
+      "id": "71119851-c6c2-48ca-9fe7-890636d548cb",
       "name": "Omniscient Fix: AI Optimizer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -147,13 +147,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Get Resource Usage (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Get Resource Usage (P0)": {
@@ -187,13 +181,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Optimizer (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Optimizer (P0)": {

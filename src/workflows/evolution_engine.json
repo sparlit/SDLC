@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "9df6d8f2-94ab-431c-989b-939129702f05",
+      "id": "eb87a64e-5c70-4989-bf85-c181edaabc39",
       "name": "Check: Read All Context (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "95b97a08-3d5f-4097-a4bd-d07513335ce4",
+      "id": "8626cc54-a6de-494b-964d-fa19a6592a1c",
       "name": "Omniscient Fix: Read All Context (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,13 +125,13 @@
           ]
         }
       },
-      "id": "2bf18711-0754-4e42-84c7-86dd2605ef27",
+      "id": "d99cb7b1-09e7-4150-8676-2dd9717884c6",
       "name": "Check: AI Evolve Arch (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         650,
-        -50
+        -100
       ]
     },
     {
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "33f29824-6815-4130-b1b5-d251e75d625b",
+      "id": "9869f573-bdc7-46b4-b5b9-3ef80be6bb50",
       "name": "Omniscient Fix: AI Evolve Arch (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,13 +161,13 @@
           ]
         }
       },
-      "id": "1998da8a-ecf7-4084-9cbd-50053cce9684",
+      "id": "368e2744-9b5a-4970-ad6b-2e0f54c819ca",
       "name": "Check: Update Arch (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         900,
-        -50
+        -100
       ]
     },
     {
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "fbe2897a-c170-4111-aed0-877239c0edff",
+      "id": "91574a23-18dc-4b42-9a58-04bbc569828d",
       "name": "Omniscient Fix: Update Arch (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -197,13 +197,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Read All Context (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Read All Context (P0)": {
@@ -237,13 +231,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Evolve Arch (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Evolve Arch (P0)": {
@@ -277,13 +265,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Update Arch (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Update Arch (P0)": {

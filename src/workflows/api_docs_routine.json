@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "82888bb8-b6f2-4432-9b3a-2aa383f286a8",
+      "id": "7e0bf479-2cbd-46e4-af0b-e6cd4010673b",
       "name": "Check: List Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "05570664-cf93-4ad6-8355-94aa45371d5a",
+      "id": "8245414e-4ee6-4f9f-b428-2d333fee7a8c",
       "name": "Omniscient Fix: List Files (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,13 +125,13 @@
           ]
         }
       },
-      "id": "62fdd85c-9d47-40a8-a51f-7769f95338f1",
+      "id": "2e7cdf42-306e-43be-af5a-091f7abb1c28",
       "name": "Check: AI Doc Generator (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         650,
-        -50
+        -100
       ]
     },
     {
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "77d8c614-da72-4d57-baad-f02ef9e70543",
+      "id": "b20e0664-8cde-48ec-93fb-50ef75700f26",
       "name": "Omniscient Fix: AI Doc Generator (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,13 +161,13 @@
           ]
         }
       },
-      "id": "cf0445ae-1291-4e29-be76-4469bc959e7d",
+      "id": "324f9e7d-3eae-4881-b2ce-7f22263d08c6",
       "name": "Check: Save Docs (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         900,
-        -50
+        -100
       ]
     },
     {
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "24971428-f09a-4d04-b00b-044e75bbdd6a",
+      "id": "fedaad56-baf7-4263-976d-439899ace43c",
       "name": "Omniscient Fix: Save Docs (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -197,13 +197,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: List Files (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: List Files (P0)": {
@@ -237,13 +231,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Doc Generator (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Doc Generator (P0)": {
@@ -277,13 +265,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Save Docs (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Save Docs (P0)": {

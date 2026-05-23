@@ -67,13 +67,13 @@
           ]
         }
       },
-      "id": "b9b99cea-49a2-46e1-a70a-610fc666bc14",
+      "id": "3cb54719-8b80-4312-bbfa-37084c77c5ae",
       "name": "Check: Legacy Scan (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -83,7 +83,7 @@
           "waitForResults": true
         }
       },
-      "id": "e3eac1a2-9003-4933-9418-1dbb8963fc35",
+      "id": "a8c31d0a-d9e8-4375-b64f-71aeb52ac878",
       "name": "Omniscient Fix: Legacy Scan (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -103,13 +103,13 @@
           ]
         }
       },
-      "id": "2cef29b1-ccf1-4f32-a9a4-eccb5f73c331",
+      "id": "3c80bf9c-a47e-43e6-8524-33afdc2c9562",
       "name": "Check: Arch Optimizer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -119,7 +119,7 @@
           "waitForResults": true
         }
       },
-      "id": "dd71b663-1b0e-404c-a20e-74322c69b0fc",
+      "id": "c4b2c2d0-0f82-4be4-b796-fed1788bf42e",
       "name": "Omniscient Fix: Arch Optimizer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -139,13 +139,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Legacy Scan (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Legacy Scan (P0)": {
@@ -179,13 +173,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Arch Optimizer (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Arch Optimizer (P0)": {

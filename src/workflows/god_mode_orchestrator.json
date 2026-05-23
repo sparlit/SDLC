@@ -53,13 +53,13 @@
           ]
         }
       },
-      "id": "ada8ab3a-4ae6-4058-a21f-fd31b4cea2ae",
+      "id": "cc364636-e62a-44e1-85b9-20e4c112a718",
       "name": "Check: Hardware Safety Check (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -69,7 +69,7 @@
           "waitForResults": true
         }
       },
-      "id": "d24638bc-0492-4d8e-9815-b5eebed395ae",
+      "id": "9fb33e40-5c37-48e5-8964-44a98e696efd",
       "name": "Omniscient Fix: Hardware Safety Check (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "cdb12812-6e03-43b3-9b12-1d1c74655322",
+      "id": "32e368d6-612f-44d8-816d-874fd67d045e",
       "name": "Check: Scout (Deep Analyze) (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "d51e65be-835b-458d-87ef-8f4399e517de",
+      "id": "3769f1d9-5e9e-4753-b613-f4030e112474",
       "name": "Omniscient Fix: Scout (Deep Analyze) (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,13 +125,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Hardware Safety Check (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Hardware Safety Check (P0)": {
@@ -165,13 +159,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Scout (Deep Analyze) (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Scout (Deep Analyze) (P0)": {
