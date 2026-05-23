@@ -63,6 +63,10 @@ def analyze_file(filepath):
         # 1. Pattern-based Scan
         if not any(exc in filepath for exc in EXCLUDED_FILES):
             for i, line in enumerate(content.split('\n'), 1):
+                # Skip the pattern definition line itself in this file to avoid self-detection
+                if "super_scanner.py" in filepath and "PATTERNS =" in line:
+                    continue
+
                 for p in PATTERNS:
                     if re.search(r'\b' + re.escape(p) + r'\b', line, re.IGNORECASE):
                         # Filter out IQ400 internal compliance markers
