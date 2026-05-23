@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.chroma_db/
+n8n_data/
+n8n_db_data/
+chroma_data/
+gitea_data/
+*.log
