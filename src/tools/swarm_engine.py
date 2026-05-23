@@ -8,12 +8,13 @@ PROJECT_PATH = os.getenv("PROJECT_PATH", os.path.abspath(os.path.join(os.path.di
 PROMPTS_FILE = os.path.join(PROJECT_PATH, "src/prompts/prompts.json")
 
 # High-availability free models from OpenRouter
-MODELS = [
+DEFAULT_MODELS = [
     "google/gemini-2.0-flash-001",
     "mistralai/mistral-7b-instruct:free",
     "openchat/openchat-7b:free",
     "huggingfaceh4/zephyr-7b-beta:free"
 ]
+MODELS = os.getenv("SWARM_MODELS", "").split(",") if os.getenv("SWARM_MODELS") else DEFAULT_MODELS
 
 # Resilient ChromaDB Persistence
 CHROMA_PATH = os.path.join(PROJECT_PATH, ".chroma_db")
@@ -52,11 +53,15 @@ async def call_llm(model: str, messages: List[Dict[str, str]], temperature=0.7) 
                     if response.status == 200:
                         data = await response.json()
                         return data['choices'][0]['message']['content']
-                    elif response.status == 429:
-                        # Exponential backoff on rate limits
-                        await asyncio.sleep(2 ** attempt)
-            except Exception:
-                pass
+                    else:
+                        error_text = await response.text()
+                        print(f"LLM Call Attempt {attempt+1} failed: {response.status} - {error_text}", file=sys.stderr)
+                        if response.status == 429:
+                            # Exponential backoff on rate limits
+                            await asyncio.sleep(2 ** attempt)
+            except Exception as e:
+                print(f"LLM Call Attempt {attempt+1} exception: {e}", file=sys.stderr)
+
             # Model rotation on failure
             model = random.choice(MODELS)
             payload["model"] = model
