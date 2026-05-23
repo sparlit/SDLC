@@ -68,13 +68,13 @@
           ]
         }
       },
-      "id": "5b9d6da5-9af5-41fd-9544-bfc0e8c67f00",
+      "id": "bf14f94c-0ed2-4744-9caa-3e05c918da5c",
       "name": "Check: Read Project Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -84,7 +84,7 @@
           "waitForResults": true
         }
       },
-      "id": "b2ddb4da-6919-4de2-80ab-b74143f5fe1d",
+      "id": "4b45ca81-7e49-4a8b-b986-fe05a85c0e7e",
       "name": "Omniscient Fix: Read Project Files (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -104,13 +104,13 @@
           ]
         }
       },
-      "id": "7c0f929a-225e-4f93-954c-dd09a607239c",
+      "id": "48ef2406-399d-4333-859a-71df65730229",
       "name": "Check: Chroma Upsert (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -120,7 +120,7 @@
           "waitForResults": true
         }
       },
-      "id": "6eca0711-b723-4206-98bb-fe86384b9a0a",
+      "id": "ee783d2d-79d4-4f63-96f7-49ea3400f994",
       "name": "Omniscient Fix: Chroma Upsert (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -140,13 +140,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Read Project Files (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Read Project Files (P0)": {
@@ -180,13 +174,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Chroma Upsert (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Chroma Upsert (P0)": {

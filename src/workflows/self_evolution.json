@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "27abd06a-747b-482c-a714-3f5f3c80a830",
+      "id": "dfc16767-bca2-4689-b83d-eecff4d43f2e",
       "name": "Check: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "be10fc1f-fdd9-4e5e-8154-a61ed09799b0",
+      "id": "dc3d4722-b030-4267-bf9c-81fcdb5c5430",
       "name": "Omniscient Fix: Read Performance Logs (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,13 +125,13 @@
           ]
         }
       },
-      "id": "ca94f69d-acdb-49ec-88a6-e6cb94948a04",
+      "id": "e7971ce2-864b-4b70-b965-cabdc479debf",
       "name": "Check: AI Evolve Prompts (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "13d6a29f-1fe3-4525-b13f-0a8a719f9938",
+      "id": "6112b8a6-85fc-4ad6-9935-bba82bd6eee5",
       "name": "Omniscient Fix: AI Evolve Prompts (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,13 +161,13 @@
           ]
         }
       },
-      "id": "efe99e89-cf1d-4e98-8685-6d477aed0546",
+      "id": "cf8e9512-4cd1-4f14-9890-0f864994ef11",
       "name": "Check: Update Prompts File (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "44171509-29e0-440d-90dc-6abbda743ea1",
+      "id": "45f27897-cb79-4992-b379-d17c8738d425",
       "name": "Omniscient Fix: Update Prompts File (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -197,13 +197,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Read Performance Logs (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Read Performance Logs (P0)": {
@@ -237,13 +231,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Evolve Prompts (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Evolve Prompts (P0)": {
@@ -277,13 +265,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Update Prompts File (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Update Prompts File (P0)": {

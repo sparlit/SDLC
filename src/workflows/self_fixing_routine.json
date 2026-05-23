@@ -132,13 +132,13 @@
           ]
         }
       },
-      "id": "4885ab6d-0f20-44be-8eab-fd0776746800",
+      "id": "38260819-ef38-4872-aa3c-a705e8ed1e97",
       "name": "Check: Get Workflow JSON (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -148,7 +148,7 @@
           "waitForResults": true
         }
       },
-      "id": "7046d627-408e-4f5f-abf5-8124e2527e15",
+      "id": "cb860811-6fed-4c80-b4ab-1fd6d2f6c122",
       "name": "Omniscient Fix: Get Workflow JSON (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -168,13 +168,13 @@
           ]
         }
       },
-      "id": "8850798d-00a1-4598-9f4f-6ceed472b6eb",
+      "id": "74925bca-2885-484f-8918-8246d0270a64",
       "name": "Check: AI Workflow Fixer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -184,7 +184,7 @@
           "waitForResults": true
         }
       },
-      "id": "f797be5b-3004-465b-bb87-415f5d61582f",
+      "id": "4b8c866f-6f92-4ed9-82ef-5ff6f3407e2b",
       "name": "Omniscient Fix: AI Workflow Fixer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -204,13 +204,13 @@
           ]
         }
       },
-      "id": "d40fd893-53df-4349-8a4d-f9a186be1289",
+      "id": "2a83a5e9-5232-48b7-a008-4788ebe9849e",
       "name": "Check: Parse Workflow Fix (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -220,7 +220,7 @@
           "waitForResults": true
         }
       },
-      "id": "c4271b07-56cd-4fa0-8200-59f38be4de52",
+      "id": "7fc459df-5da9-43aa-9951-fc3be910b79e",
       "name": "Omniscient Fix: Parse Workflow Fix (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -240,13 +240,13 @@
           ]
         }
       },
-      "id": "ef8db4ac-1517-4ed2-9b58-d259c251d4c8",
+      "id": "fa60f35f-c813-4b3d-a4d0-58b45e8e5c69",
       "name": "Check: Update Workflow (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1000,
-        -50
+        -100
       ]
     },
     {
@@ -256,7 +256,7 @@
           "waitForResults": true
         }
       },
-      "id": "ce7a4946-1160-4d3e-b9c3-e41e482209f2",
+      "id": "0c725aec-e1dc-40f0-9633-45f566e08128",
       "name": "Omniscient Fix: Update Workflow (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -276,13 +276,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Get Workflow JSON (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Get Workflow JSON (P0)": {
@@ -316,13 +310,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Workflow Fixer (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Workflow Fixer (P0)": {
@@ -356,13 +344,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Parse Workflow Fix (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Parse Workflow Fix (P0)": {
@@ -396,13 +378,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Update Workflow (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Update Workflow (P0)": {

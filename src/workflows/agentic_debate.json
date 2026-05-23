@@ -82,13 +82,13 @@
           ]
         }
       },
-      "id": "efacc555-dc72-4be6-87c1-0f719fb4aa9f",
+      "id": "0259e6f4-5d63-4d30-90d2-5300eb79ad49",
       "name": "Check: Agent Critic (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -98,7 +98,7 @@
           "waitForResults": true
         }
       },
-      "id": "22ee8390-4fd6-4a0d-bc26-46140355b399",
+      "id": "c6cce770-14b3-4c2f-9920-a87cf44ccb87",
       "name": "Omniscient Fix: Agent Critic (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -118,13 +118,13 @@
           ]
         }
       },
-      "id": "d24a5a63-2bb8-4fc6-81b7-91071ec6aa9b",
+      "id": "e84936bd-4dab-4fc6-93b8-11153a0a3a45",
       "name": "Check: Agent Finalizer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -134,7 +134,7 @@
           "waitForResults": true
         }
       },
-      "id": "7967c6e4-e05d-4f4c-a280-ea8b997c7240",
+      "id": "026b1119-b601-4646-8cd8-c20daec6c379",
       "name": "Omniscient Fix: Agent Finalizer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -154,13 +154,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Agent Critic (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Agent Critic (P0)": {
@@ -194,13 +188,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Agent Finalizer (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Agent Finalizer (P0)": {

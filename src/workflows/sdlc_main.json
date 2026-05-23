@@ -178,13 +178,13 @@
           ]
         }
       },
-      "id": "7bdb2e88-0909-4305-a5ca-23f24f88911d",
+      "id": "481b21ad-9ad3-4532-834e-e0ec165e8145",
       "name": "Check: Scan Project Files (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -194,7 +194,7 @@
           "waitForResults": true
         }
       },
-      "id": "1b8f61b8-6b06-47b0-8632-4955980b9a9b",
+      "id": "7f13d3ec-a837-4554-b754-9e3e4bab13f5",
       "name": "Omniscient Fix: Scan Project Files (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -214,13 +214,13 @@
           ]
         }
       },
-      "id": "466049a3-38cb-4cbf-8914-0a4076c949a2",
+      "id": "b03393f5-f7a3-4940-aa0b-6924f38dfc87",
       "name": "Check: Polyglot Detection (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -230,7 +230,7 @@
           "waitForResults": true
         }
       },
-      "id": "89fdb31e-f9f6-46df-8085-eb3ad8f081e2",
+      "id": "7d84cebb-3fdf-44ca-b796-0a8f541fc002",
       "name": "Omniscient Fix: Polyglot Detection (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -250,13 +250,13 @@
           ]
         }
       },
-      "id": "e90b606b-2f03-4c18-b2c3-f923cb613226",
+      "id": "5919904f-b4cd-4527-8ce5-a0c59c8fd4a1",
       "name": "Check: Is JS? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -150
+        -200
       ]
     },
     {
@@ -266,7 +266,7 @@
           "waitForResults": true
         }
       },
-      "id": "9a4860f5-7700-4290-a758-dfd91645eb2c",
+      "id": "e0cc9329-0765-4f05-8667-4be576eeafca",
       "name": "Omniscient Fix: Is JS? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -286,13 +286,13 @@
           ]
         }
       },
-      "id": "93d339f6-e925-47db-ad05-a347c23098e3",
+      "id": "39f94a7a-de01-489a-a1bd-edf50e0f95f7",
       "name": "Check: Is Python? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        50
+        0
       ]
     },
     {
@@ -302,7 +302,7 @@
           "waitForResults": true
         }
       },
-      "id": "3437ed8d-c9ca-451a-91d0-b383b6c159c6",
+      "id": "8cc2ceaa-789d-4abd-8aaa-9a3bf0fe4586",
       "name": "Omniscient Fix: Is Python? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -322,13 +322,13 @@
           ]
         }
       },
-      "id": "1e5049cc-0caf-485e-a1da-c5cd23985489",
+      "id": "b872b2cb-96df-401a-833f-2daaaca43f5f",
       "name": "Check: NPM Test & Audit (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1000,
-        -200
+        -250
       ]
     },
     {
@@ -338,7 +338,7 @@
           "waitForResults": true
         }
       },
-      "id": "78f7b799-857e-4295-889c-46a324f531ff",
+      "id": "c5b2fa9b-c141-43b4-98bd-38484830ad0e",
       "name": "Omniscient Fix: NPM Test & Audit (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -358,13 +358,13 @@
           ]
         }
       },
-      "id": "fb29320a-c7fd-4564-86c7-45459c066b72",
+      "id": "356377e5-7769-4f19-b878-aa3ef8a401ce",
       "name": "Check: Pytest & Bandit (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1000,
-        0
+        -50
       ]
     },
     {
@@ -374,7 +374,7 @@
           "waitForResults": true
         }
       },
-      "id": "d7cc839c-34a9-4622-b4dd-4bd7e169599e",
+      "id": "47ebb4e9-3541-490f-9038-863ca5e59e89",
       "name": "Omniscient Fix: Pytest & Bandit (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -394,13 +394,13 @@
           ]
         }
       },
-      "id": "a5f177ba-3265-4a63-a151-d543edb4c0c0",
+      "id": "7d9c0175-6c2f-45d1-98fa-2d834e8cad47",
       "name": "Check: AI SDLC Report (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1300,
-        -50
+        -100
       ]
     },
     {
@@ -410,7 +410,7 @@
           "waitForResults": true
         }
       },
-      "id": "242ff861-2cfb-4384-840b-dcc55deee5f3",
+      "id": "4ccfdfac-77e7-457b-90ff-a883bfbec222",
       "name": "Omniscient Fix: AI SDLC Report (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -430,13 +430,13 @@
           ]
         }
       },
-      "id": "5905ec0b-9f21-4a3f-8295-538de4df439a",
+      "id": "bd019e18-6fae-4c1b-962c-6c8e8b4a2bbe",
       "name": "Check: Trigger Infinite Cycle (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1500,
-        -50
+        -100
       ]
     },
     {
@@ -446,7 +446,7 @@
           "waitForResults": true
         }
       },
-      "id": "4f6c1425-6f2c-495e-921e-e0f56ae55e00",
+      "id": "7cb4faf8-bb3f-45f1-a93a-7e7c864d1d50",
       "name": "Omniscient Fix: Trigger Infinite Cycle (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -479,7 +479,7 @@
         ],
         [
           {
-            "node": "Check: Scan Project Files (P0)",
+            "node": "Polyglot Detection",
             "type": "main",
             "index": 0
           }
@@ -519,7 +519,12 @@
         ],
         [
           {
-            "node": "Check: Polyglot Detection (P0)",
+            "node": "Is JS?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is Python?",
             "type": "main",
             "index": 0
           }
@@ -559,7 +564,7 @@
         ],
         [
           {
-            "node": "Check: Is JS? (P0)",
+            "node": "NPM Test & Audit",
             "type": "main",
             "index": 0
           }
@@ -599,7 +604,7 @@
         ],
         [
           {
-            "node": "Check: Is Python? (P0)",
+            "node": "Pytest & Bandit",
             "type": "main",
             "index": 0
           }
@@ -639,7 +644,7 @@
         ],
         [
           {
-            "node": "Check: NPM Test & Audit (P0)",
+            "node": "AI SDLC Report",
             "type": "main",
             "index": 0
           }
@@ -679,7 +684,7 @@
         ],
         [
           {
-            "node": "Check: Pytest & Bandit (P0)",
+            "node": "AI SDLC Report",
             "type": "main",
             "index": 0
           }
@@ -719,7 +724,7 @@
         ],
         [
           {
-            "node": "Check: AI SDLC Report (P0)",
+            "node": "Trigger Infinite Cycle",
             "type": "main",
             "index": 0
           }
@@ -757,13 +762,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Scan Project Files",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Trigger Infinite Cycle (P0)": {

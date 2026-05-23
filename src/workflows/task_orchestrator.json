@@ -137,13 +137,13 @@
           ]
         }
       },
-      "id": "15bf0a76-7c1c-4293-a910-d34c550c6d56",
+      "id": "2b06c9c8-f59f-452d-a99a-d185b6380a32",
       "name": "Check: AI Planner (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -153,7 +153,7 @@
           "waitForResults": true
         }
       },
-      "id": "bcb41643-a905-41a9-b514-54364e48913b",
+      "id": "fe3b542d-a8b9-4369-8584-31eaa14ecc61",
       "name": "Omniscient Fix: AI Planner (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -173,13 +173,13 @@
           ]
         }
       },
-      "id": "0a13390f-3c67-4702-aa6f-1226d6e1a33e",
+      "id": "a880477c-ac88-4a20-8374-6e3ea50512a7",
       "name": "Check: Parse Plan (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -189,7 +189,7 @@
           "waitForResults": true
         }
       },
-      "id": "7caa9e82-3811-4652-aee0-7e22bfedcd77",
+      "id": "fb0e766c-a66b-4683-9377-be97e0218ffd",
       "name": "Omniscient Fix: Parse Plan (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -209,13 +209,13 @@
           ]
         }
       },
-      "id": "f7d84b82-1b48-4fca-9f87-b99b2ee0c707",
+      "id": "9fb06317-454a-4b07-88d0-f3cd606ce6e7",
       "name": "Check: AI Coder (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -225,7 +225,7 @@
           "waitForResults": true
         }
       },
-      "id": "5fc714fb-c0e7-4f56-bd6d-6cfa3962bc40",
+      "id": "df89c9ae-dfc3-46e2-a544-5131a67db808",
       "name": "Omniscient Fix: AI Coder (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -245,13 +245,13 @@
           ]
         }
       },
-      "id": "202b2a7e-4ee4-4c66-a986-919f45747900",
+      "id": "e89bc29b-de05-4afd-b0b4-fac78147cae3",
       "name": "Check: Extract Code (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1000,
-        -50
+        -100
       ]
     },
     {
@@ -261,7 +261,7 @@
           "waitForResults": true
         }
       },
-      "id": "52eced52-cdee-4609-bf12-59131b634f53",
+      "id": "a7a19a4c-e462-48ca-8f6a-529e164f7e2e",
       "name": "Omniscient Fix: Extract Code (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -281,13 +281,13 @@
           ]
         }
       },
-      "id": "fa69f02f-3c03-4eb6-8d40-8617195cbc01",
+      "id": "b4add856-45e1-4839-8c43-be19467ab442",
       "name": "Check: Write File (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1200,
-        -50
+        -100
       ]
     },
     {
@@ -297,7 +297,7 @@
           "waitForResults": true
         }
       },
-      "id": "10f99c94-7650-4a73-a5e5-1871b5dcf5a1",
+      "id": "fe7fe4ea-95f9-4392-940d-e1b994d62e06",
       "name": "Omniscient Fix: Write File (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -317,13 +317,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Planner (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Planner (P0)": {
@@ -357,13 +351,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Parse Plan (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Parse Plan (P0)": {
@@ -397,13 +385,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Coder (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Coder (P0)": {
@@ -437,13 +419,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Extract Code (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Extract Code (P0)": {
@@ -477,13 +453,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Write File (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Write File (P0)": {

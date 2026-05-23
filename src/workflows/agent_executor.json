@@ -23,7 +23,8 @@
       "position": [
         200,
         0
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -71,7 +72,8 @@
       "position": [
         600,
         -50
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -86,6 +88,223 @@
       "typeVersion": 1,
       "position": [
         800,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Encode Context\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "620dcf33-fbcc-410c-bb03-5ad38d8019fb",
+      "name": "Check: Encode Context (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "8aa55609-d6d8-4b92-8caf-82cfc657130f",
+      "name": "Omniscient Fix: Encode Context (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Execute Fractal Swarm\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "dc9f44a5-cdb6-4e10-86ee-24b8b7bae1ad",
+      "name": "Check: Execute Fractal Swarm (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "b0400c09-bfa1-4fad-b48e-904538004be8",
+      "name": "Omniscient Fix: Execute Fractal Swarm (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Format Output\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "7f2aa4d9-77d9-4e6a-a3f2-96303e2d209c",
+      "name": "Check: Format Output (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "a43bf755-b126-426a-b1bd-2016d1d4bae7",
+      "name": "Omniscient Fix: Format Output (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Check Swarm Error\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f1246de9-b2dd-4752-b06e-23eb26946132",
+      "name": "Check: Check Swarm Error (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -150
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "68c4782f-4d5b-4739-b3b1-d6c41c8af3ec",
+      "name": "Omniscient Fix: Check Swarm Error (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Check Swarm Error\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "2f673803-98ee-4a2f-bc34-0c48180ecde3",
+      "name": "Check: Check Swarm Error (P1)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "fdacabf1-3031-494b-9aa0-652dd7051460",
+      "name": "Omniscient Fix: Check Swarm Error (P1)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={ $node[\"Omniscient Fix\"].error !== undefined }",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "6281d622-03f3-4f62-8b0a-f849ec9399da",
+      "name": "Check: Omniscient Fix (P0)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "omniscient_error_orchestrator",
+        "options": {
+          "waitForResults": true
+        }
+      },
+      "id": "e04d5164-0da5-4a5d-9b97-4160cef9d563",
+      "name": "Omniscient Fix: Omniscient Fix (P0)",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1200,
         0
       ]
     }
@@ -102,7 +321,65 @@
         ]
       ]
     },
+    "Check: Encode Context (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Encode Context (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Fractal Swarm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Encode Context (P0)": {
+      "main": [
+        [
+          {
+            "node": "Encode Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Encode Context": {
+      "main": [
+        [
+          {
+            "node": "Check: Encode Context (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Execute Fractal Swarm (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Execute Fractal Swarm (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Swarm Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Execute Fractal Swarm (P0)": {
       "main": [
         [
           {
@@ -117,6 +394,69 @@
       "main": [
         [
           {
+            "node": "Check: Execute Fractal Swarm (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Format Output (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Format Output (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Omniscient Fix: Format Output (P0)": {
+      "main": [
+        [
+          {
+            "node": "Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Output": {
+      "main": [
+        [
+          {
+            "node": "Check: Format Output (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Check Swarm Error (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Check Swarm Error (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Omniscient Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Check Swarm Error (P0)": {
+      "main": [
+        [
+          {
             "node": "Check Swarm Error",
             "type": "main",
             "index": 0
@@ -124,11 +464,11 @@
         ]
       ]
     },
-    "Check Swarm Error": {
+    "Check: Check Swarm Error (P1)": {
       "main": [
         [
           {
-            "node": "Omniscient Fix",
+            "node": "Omniscient Fix: Check Swarm Error (P1)",
             "type": "main",
             "index": 0
           }
@@ -142,11 +482,69 @@
         ]
       ]
     },
+    "Omniscient Fix: Check Swarm Error (P1)": {
+      "main": [
+        [
+          {
+            "node": "Check Swarm Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Swarm Error": {
+      "main": [
+        [
+          {
+            "node": "Check: Check Swarm Error (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check: Check Swarm Error (P1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Omniscient Fix (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix: Omniscient Fix (P0)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Fractal Swarm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Omniscient Fix: Omniscient Fix (P0)": {
+      "main": [
+        [
+          {
+            "node": "Omniscient Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Omniscient Fix": {
       "main": [
         [
           {
-            "node": "Execute Fractal Swarm",
+            "node": "Check: Omniscient Fix (P0)",
             "type": "main",
             "index": 0
           }

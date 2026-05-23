@@ -53,13 +53,13 @@
           ]
         }
       },
-      "id": "3ff4f2ce-834a-4489-9407-b0935d0284d1",
+      "id": "bc13953d-809e-42ea-93eb-e98c7cfda5bf",
       "name": "Check: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -69,7 +69,7 @@
           "waitForResults": true
         }
       },
-      "id": "43f6c0d0-2165-4ab0-a329-3378158be670",
+      "id": "0ba7c40b-9a47-4af0-8e30-0b6dfe33878d",
       "name": "Omniscient Fix: Spawn Swarm (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "431a7a79-7495-43a4-bc50-4d2c0fa2c7bc",
+      "id": "9f09898a-70ec-4df9-9abf-64fe3edac283",
       "name": "Check: Execute Agent (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "9f07ab7b-7f3c-47f9-9a58-35b95bc34bb5",
+      "id": "2d7012fa-38c6-478c-8af6-4a6eced13294",
       "name": "Omniscient Fix: Execute Agent (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -136,13 +136,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Spawn Swarm (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Spawn Swarm (P0)": {
@@ -176,13 +170,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Execute Agent (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Execute Agent (P0)": {

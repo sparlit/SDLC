@@ -132,13 +132,13 @@
           ]
         }
       },
-      "id": "28521486-9fc1-420d-8d2b-ad8bfccb107a",
+      "id": "d2449151-ca69-43e9-b540-41b609a3a554",
       "name": "Check: Find Gaps/Placeholders (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -148,7 +148,7 @@
           "waitForResults": true
         }
       },
-      "id": "1ab05962-64aa-405b-8e9b-fe38bdb4c4b4",
+      "id": "a5cbabcd-bebc-4b9b-88bd-a8ed35df77df",
       "name": "Omniscient Fix: Find Gaps/Placeholders (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -168,13 +168,13 @@
           ]
         }
       },
-      "id": "ffd3b8ef-e65e-4967-9bfa-66edf75c4dd3",
+      "id": "d836d0c5-75b5-424f-8a40-3f63c5ff6b37",
       "name": "Check: AI Fix Generator (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -184,7 +184,7 @@
           "waitForResults": true
         }
       },
-      "id": "0dea9dc2-58f5-4ace-8b7d-808f9eb74311",
+      "id": "2a244599-8b02-4683-8cd5-4406f2ec3d3a",
       "name": "Omniscient Fix: AI Fix Generator (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -204,13 +204,13 @@
           ]
         }
       },
-      "id": "56d5d454-3a2d-4741-9db1-1daead23661f",
+      "id": "08af4e0f-924d-4c03-bcd4-58bbde162bc4",
       "name": "Check: Sanitize Fix (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -220,7 +220,7 @@
           "waitForResults": true
         }
       },
-      "id": "12adb07b-6490-442b-8838-3f7a12692737",
+      "id": "4f9ce5ce-0c18-454f-84c5-1bec8660f1e5",
       "name": "Omniscient Fix: Sanitize Fix (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -240,13 +240,13 @@
           ]
         }
       },
-      "id": "54697054-5eaa-4b94-848e-6762f00f9346",
+      "id": "08b5b76a-0b12-4be7-ac1b-19cb8c9655e5",
       "name": "Check: Apply Fix (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1000,
-        -50
+        -100
       ]
     },
     {
@@ -256,7 +256,7 @@
           "waitForResults": true
         }
       },
-      "id": "c308e1f5-de6b-41e2-b74f-5028b968b415",
+      "id": "a6049a0d-6ea5-4c92-a7a5-3092fd310b79",
       "name": "Omniscient Fix: Apply Fix (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -276,13 +276,13 @@
           ]
         }
       },
-      "id": "40b2a22b-1459-4f25-8cb0-f565d0983a48",
+      "id": "a9ecf58e-26b2-4053-b5ab-575e7e23fbec",
       "name": "Check: Git Commit & Push (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1200,
-        -50
+        -100
       ]
     },
     {
@@ -292,7 +292,7 @@
           "waitForResults": true
         }
       },
-      "id": "78bd7158-fcca-4d23-a300-4fb297afb845",
+      "id": "24227207-1971-4873-8c6f-4f8f53957a18",
       "name": "Omniscient Fix: Git Commit & Push (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -312,13 +312,13 @@
           ]
         }
       },
-      "id": "5a6df669-8931-4807-90d5-268313c92fc3",
+      "id": "e2c2b08c-4eb9-4fe0-951e-775081458f71",
       "name": "Check: Fix Failed Notification (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         1200,
-        150
+        100
       ]
     },
     {
@@ -328,7 +328,7 @@
           "waitForResults": true
         }
       },
-      "id": "ab407dcf-7f92-4634-ba92-bbd82c8b975e",
+      "id": "96219e69-fc72-48b5-a661-f7c3bd93af88",
       "name": "Omniscient Fix: Fix Failed Notification (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -339,6 +339,17 @@
     }
   ],
   "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Find Gaps/Placeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Check: Find Gaps/Placeholders (P0)": {
       "main": [
         [
@@ -350,7 +361,7 @@
         ],
         [
           {
-            "node": "Check: Find Gaps/Placeholders (P0)",
+            "node": "AI Fix Generator",
             "type": "main",
             "index": 0
           }
@@ -390,7 +401,7 @@
         ],
         [
           {
-            "node": "Check: AI Fix Generator (P0)",
+            "node": "Sanitize Fix",
             "type": "main",
             "index": 0
           }
@@ -430,7 +441,7 @@
         ],
         [
           {
-            "node": "Check: Sanitize Fix (P0)",
+            "node": "Apply Fix",
             "type": "main",
             "index": 0
           }
@@ -470,7 +481,7 @@
         ],
         [
           {
-            "node": "Check: Apply Fix (P0)",
+            "node": "Git Commit & Push",
             "type": "main",
             "index": 0
           }
@@ -508,13 +519,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Git Commit & Push (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Git Commit & Push (P0)": {
@@ -548,13 +553,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Fix Failed Notification (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Fix Failed Notification (P0)": {

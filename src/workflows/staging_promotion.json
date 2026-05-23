@@ -75,13 +75,13 @@
           ]
         }
       },
-      "id": "fb0c1529-f118-4368-8543-60da3a7a89de",
+      "id": "9601cccc-5cb7-4d6e-a5f6-12b004a84988",
       "name": "Check: Promote Trigger (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         200,
-        -50
+        -100
       ]
     },
     {
@@ -91,7 +91,7 @@
           "waitForResults": true
         }
       },
-      "id": "022fe665-2d28-42b2-be54-9f7fe884ba86",
+      "id": "7775f252-8c9e-4cda-b470-1d1213e5b179",
       "name": "Omniscient Fix: Promote Trigger (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -111,13 +111,13 @@
           ]
         }
       },
-      "id": "ae956577-5d35-409a-b28a-2af038578d66",
+      "id": "c592b45b-cb83-4167-905f-9eb2c281f9e5",
       "name": "Check: Verify Staging (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -127,7 +127,7 @@
           "waitForResults": true
         }
       },
-      "id": "fe6a7eb6-e3ee-40fb-b5aa-5ea176874e3d",
+      "id": "0ff67d22-9efa-4b0b-92f9-c5babd4779f7",
       "name": "Omniscient Fix: Verify Staging (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -147,13 +147,13 @@
           ]
         }
       },
-      "id": "9c3e11bd-e200-4630-9f34-b04214ec6e43",
+      "id": "db83709e-a222-4dc5-9e5e-16937fd07f8b",
       "name": "Check: Staging Passed? (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -163,7 +163,7 @@
           "waitForResults": true
         }
       },
-      "id": "57b30c15-9301-4adf-be80-9b0ba7b79d8a",
+      "id": "cf11007f-0e07-42f7-abd3-7e28db73be7d",
       "name": "Omniscient Fix: Staging Passed? (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -183,13 +183,13 @@
           ]
         }
       },
-      "id": "f78b94a2-0ce3-4ac8-acd1-8ab1c823a370",
+      "id": "d6042ca7-a52b-46c8-adcb-9153b8ab9f2a",
       "name": "Check: Promote to Prod (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -100
+        -150
       ]
     },
     {
@@ -199,7 +199,7 @@
           "waitForResults": true
         }
       },
-      "id": "77057959-07c0-4652-b98f-23fdeccf1d70",
+      "id": "3772d5f8-a79b-4866-a620-3fa5f7798072",
       "name": "Omniscient Fix: Promote to Prod (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -219,13 +219,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Promote Trigger (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Promote Trigger (P0)": {
@@ -259,13 +253,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Verify Staging (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Verify Staging (P0)": {
@@ -299,13 +287,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Staging Passed? (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Staging Passed? (P0)": {
@@ -339,13 +321,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Promote to Prod (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Promote to Prod (P0)": {

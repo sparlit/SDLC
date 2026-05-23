@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "6fa4d774-f949-4515-9acb-1254f573cbad",
+      "id": "c1d4ec31-b6da-4ab9-937d-06d81d17c1fa",
       "name": "Check: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         400,
-        -50
+        -100
       ]
     },
     {
@@ -105,7 +105,7 @@
           "waitForResults": true
         }
       },
-      "id": "b1e6e55b-7a2b-487a-b1c9-27cde9ce27b8",
+      "id": "71c0f67b-51d9-4126-a9b7-6de0cee212e2",
       "name": "Omniscient Fix: Get Recent Changes (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -125,13 +125,13 @@
           ]
         }
       },
-      "id": "00ef1544-a280-404c-beb3-e23f525594b6",
+      "id": "dac745ab-377e-4c7a-867e-cacfabba1cc7",
       "name": "Check: AI Summarizer (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         600,
-        -50
+        -100
       ]
     },
     {
@@ -141,7 +141,7 @@
           "waitForResults": true
         }
       },
-      "id": "69c83fa5-156b-476f-bd83-c1166ff801e3",
+      "id": "a18367dd-c843-47e4-9ae9-c38f600b5cb5",
       "name": "Omniscient Fix: AI Summarizer (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -161,13 +161,13 @@
           ]
         }
       },
-      "id": "4c57a66f-23ee-49e0-8fec-c6b5dc421b26",
+      "id": "2b66d33e-3c59-4ce0-97dc-e1efb418635d",
       "name": "Check: Update Documentation (P0)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
         800,
-        -50
+        -100
       ]
     },
     {
@@ -177,7 +177,7 @@
           "waitForResults": true
         }
       },
-      "id": "a2dfa808-ae71-4310-b56a-110a37c2b895",
+      "id": "7775932d-a013-4d64-bed6-c6875c018ca7",
       "name": "Omniscient Fix: Update Documentation (P0)",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
@@ -197,13 +197,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Get Recent Changes (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Get Recent Changes (P0)": {
@@ -237,13 +231,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: AI Summarizer (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: AI Summarizer (P0)": {
@@ -277,13 +265,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Check: Update Documentation (P0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Omniscient Fix: Update Documentation (P0)": {
