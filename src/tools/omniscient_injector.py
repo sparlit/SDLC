@@ -42,6 +42,7 @@ def clean_workflow_data(workflow):
     return workflow
 
 def inject(filepath):
+    fix_workflow_id = os.getenv("OMNISCIENT_FIX_WORKFLOW", "omniscient_error_orchestrator")
     try:
         with open(filepath, 'r') as f:
             workflow = json.load(f)
@@ -85,7 +86,7 @@ def inject(filepath):
                 "position": [pos_x + 200, pos_y + (i * 200) - 100]
             }
             fix_node = {
-                "parameters": {"workflowId": "omniscient_error_orchestrator", "options": {"waitForResults": True}},
+                "parameters": {"workflowId": fix_workflow_id, "options": {"waitForResults": True}},
                 "id": str(uuid.uuid4()), "name": fix_name, "type": "n8n-nodes-base.executeWorkflow", "typeVersion": 1,
                 "position": [pos_x + 400, pos_y + (i * 200)]
             }

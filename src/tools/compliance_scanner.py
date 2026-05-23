@@ -21,9 +21,12 @@ def check_compliance(path):
             sys.exit(1)
         else:
             print("COMPLIANCE PASS: All components are 100% FOSS.")
+    except FileNotFoundError:
+        print("CRITICAL: 'scancode' binary not found. Compliance check skipped (Dependency missing).", file=sys.stderr)
+        sys.exit(2)
     except Exception as e:
-        print(f"Error during compliance check: {e}")
-        sys.exit(0) # Default to pass if scancode fails to run
+        print(f"Error during compliance check: {e}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
     check_compliance(sys.argv[1])

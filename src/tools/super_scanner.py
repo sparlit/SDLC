@@ -8,12 +8,14 @@ PATTERNS = [
 ]
 
 # Exclusion list to prevent false positives in meta-tools, logs, and docs
-EXCLUDED_FILES = [
+DEFAULT_EXCLUSIONS = [
     "README.md", "STRESS_TEST_REPORT.md", "super_scanner.py", "TASK_LIST.md",
     "AUDIT_AND_FIX_LOG.md", "RUN_GUIDE.md", "omniscient_stress_tester.py",
     ".specify/memory/constitution.md", "deep_analyzer.py", "SDLC_LIFECYCLE.md",
     "test_env_example.py", "AUDIT_LOG.md"
 ]
+EXTRA_EXCLUSIONS = os.getenv("SCANNER_EXCLUDE", "").split(",") if os.getenv("SCANNER_EXCLUDE") else []
+EXCLUDED_FILES = DEFAULT_EXCLUSIONS + EXTRA_EXCLUSIONS
 
 class AdvancedScanner(ast.NodeVisitor):
     def __init__(self, filepath):
