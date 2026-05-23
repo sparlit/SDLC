@@ -56,7 +56,7 @@ def analyze_file(filepath):
 
     lines = content.split('\n')
     for line_no, line in enumerate(lines, 1):
-        if 'FIXME' in line or 'BUILD LATER' in line or 'FIX-LATER' in line:
+        if 'FIXME' in line or 'BUILD LATER' in line or 'FIX-LATER' in line or 'HACK' in line:
             # Filter out definitions of these strings in the tool itself
             if ('"FIXME"' in line or '"BUILD LATER"' in line or "'FIXME'" in line or "'BUILD LATER'" in line or 'PATTERNS =' in line):
                 continue
@@ -76,7 +76,8 @@ def analyze_file(filepath):
             auditor.visit(tree)
             findings.extend(auditor.findings)
         except Exception as e:
-            print(f"Error parsing {filepath}: {e}", file=sys.stderr)
+            # Report parsing errors as blind spots/gaps
+            findings.append(f"{filepath}:0 - Parse Error (Potential Blind Spot): {e}")
     return findings
 
 def scan_recursive(root):
