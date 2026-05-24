@@ -4,6 +4,26 @@ Welcome to the definitive guide for operating the IQ400 'Omniscient' Zenith engi
 
 ---
 
+## ⚡ Quick Start (Single Command)
+
+If you want to get up and running immediately with default settings:
+
+```bash
+chmod +x bootstrap.sh
+./bootstrap.sh
+```
+
+This script will:
+1. Create your `.env` file and initialize `PROJECT_PATH`.
+2. Install necessary Python dependencies.
+3. Inject self-healing logic into all workflows.
+4. Launch the entire Docker infrastructure.
+5. **Autonomously import** all workflows into your n8n instance.
+
+*Note: You will still need to manually add your `OPENROUTER_API_KEY` to the `.env` file after the script runs.*
+
+---
+
 ## 📋 0. Prerequisites
 
 Before starting, ensure your system meets these requirements:
