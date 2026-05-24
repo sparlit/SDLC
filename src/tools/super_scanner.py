@@ -1,4 +1,4 @@
-import os, sys, re, ast
+import os, sys, ast, re
 
 # Core patterns to detect technical debt and implementation gaps
 PATTERNS = [
@@ -61,7 +61,11 @@ def analyze_file(filepath):
             content = f.read()
 
         # 1. Pattern-based Scan
-        if not any(exc in filepath for exc in EXCLUDED_FILES):
+        # HARDENING: Only check exclusions if scanning multiple files (recursive)
+        # If target is a specific file, always scan it.
+        is_direct_target = os.environ.get("DIRECT_TARGET") == filepath
+
+        if is_direct_target or not any(exc in filepath for exc in EXCLUDED_FILES):
             for i, line in enumerate(content.split('\n'), 1):
                 # Skip the pattern definition line itself in this file to avoid self-detection
                 if "super_scanner.py" in filepath and "PATTERNS =" in line:
@@ -89,6 +93,10 @@ def analyze_file(filepath):
 
 def scan_recursive(root):
     all_findings = []
+    if os.path.isfile(root):
+        os.environ["DIRECT_TARGET"] = root
+        return analyze_file(root)
+
     for dirpath, dirnames, filenames in os.walk(root):
         # Ignore hidden directories and known artifacts
         dirnames[:] = [d for d in dirnames if not d.startswith('.') and d not in ['__pycache__', 'node_modules']]

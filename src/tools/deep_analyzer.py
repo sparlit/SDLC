@@ -1,5 +1,37 @@
 import os, sys, ast
 
+class ReturnFinder(ast.NodeVisitor):
+    """
+    Helper to find return statements in the current scope only.
+    It stops traversing when it hits nested function or class definitions.
+    """
+    def __init__(self):
+        self.has_return = False
+
+    def visit_Return(self, node):
+        self.has_return = True
+
+    def visit_Yield(self, node):
+        self.has_return = True
+
+    def visit_YieldFrom(self, node):
+        self.has_return = True
+
+    def visit_Raise(self, node):
+        self.has_return = True
+
+    def visit_FunctionDef(self, node):
+        # Do not enter nested functions
+        pass
+
+    def visit_AsyncFunctionDef(self, node):
+        # Do not enter nested functions
+        pass
+
+    def visit_ClassDef(self, node):
+        # Do not enter nested classes
+        pass
+
 class LogicAuditor(ast.NodeVisitor):
     def __init__(self, filepath):
         self.filepath = filepath
@@ -18,19 +50,16 @@ class LogicAuditor(ast.NodeVisitor):
     def _check_dead_ends(self, node):
         """
         Detects 'Dead Ends': Functions that are not constructors and lack return statements
-        or have unhandled control flow paths.
+        or have unhandled control flow paths within their own scope.
         """
         if node.name.startswith('__') and node.name.endswith('__'):
             return # Skip special methods
 
-        has_return = False
-        for subnode in ast.walk(node):
-            if isinstance(subnode, (ast.Return, ast.Yield, ast.YieldFrom, ast.Raise)):
-                has_return = True
-                break
+        finder = ReturnFinder()
+        for stmt in node.body:
+            finder.visit(stmt)
 
-        # If it's a non-empty function but has no return/yield/raise
-        if not has_return and len(node.body) > 0:
+        if not finder.has_return and len(node.body) > 0:
             # Check if it's just a simple setter or print-like function
             is_simple = any(isinstance(s, (ast.Assign, ast.Expr)) for s in node.body)
             if not is_simple:
@@ -57,7 +86,6 @@ def analyze_file(filepath):
     lines = content.split('\n')
     for line_no, line in enumerate(lines, 1):
         if 'FIXME' in line or 'BUILD LATER' in line or 'FIX-LATER' in line or 'HACK' in line:
-            # Filter out definitions of these strings in the tool itself
             if ('"FIXME"' in line or '"BUILD LATER"' in line or "'FIXME'" in line or "'BUILD LATER'" in line or 'PATTERNS =' in line):
                 continue
             findings.append(f"{filepath}:{line_no} - Incomplete logic marker found")
@@ -65,23 +93,24 @@ def analyze_file(filepath):
     if filepath.endswith('.py'):
         try:
             tree = ast.parse(content)
-            # 1. Check for empty implementations
             for node in ast.walk(tree):
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     if len(node.body) == 1 and isinstance(node.body[0], ast.Pass):
                         findings.append(f"{filepath}:{node.lineno} - Empty function (Stub)")
 
-            # 2. Check for logical gaps (Dead Ends/Blind Spots)
             auditor = LogicAuditor(filepath)
             auditor.visit(tree)
             findings.extend(auditor.findings)
         except Exception as e:
-            # Report parsing errors as blind spots/gaps
-            findings.append(f"{filepath}:0 - Parse Error (Potential Blind Spot): {e}")
+            findings.append(f"{filepath}:0 - Parse Error: {e}")
     return findings
 
 def scan_recursive(root):
     total = []
+    # HARDENING: Handle single file targets
+    if os.path.isfile(root):
+        return analyze_file(root)
+
     for dirpath, _, filenames in os.walk(root):
         if any(x in dirpath for x in ['node_modules', '.git']): continue
         for f in filenames:
