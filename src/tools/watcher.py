@@ -2,10 +2,9 @@ import sys
 import time
 import os
 import subprocess
-import base64
 import json
 import tempfile
-from threading import BoundedSemaphore
+from threading import Thread, BoundedSemaphore
 
 try:
     from watchdog.observers import Observer
@@ -21,56 +20,77 @@ SECURITY_SCANNER = os.path.join(PROJECT_ROOT, "src/tools/security_scanner.py")
 DEEP_ANALYZER = os.path.join(PROJECT_ROOT, "src/tools/deep_analyzer.py")
 SWARM_ENGINE = os.path.join(PROJECT_ROOT, "src/tools/swarm_engine.py")
 
-# Guardrail: Limit concurrent swarm processes to avoid fork bombs and excessive API costs
+# Guardrail: Limit concurrent swarm processes
 MAX_CONCURRENT_SWARMS = 2
 swarm_semaphore = BoundedSemaphore(MAX_CONCURRENT_SWARMS)
+
+def run_background_swarm(filepath, report, temp_path):
+    """Execution wrapper to ensure semaphore release after process completion."""
+    try:
+        print(f"IQ400 Watcher: Initializing Swarm remediation for {filepath}...")
+        # Synchronous wait for the background process
+        process = subprocess.run(
+            [sys.executable, SWARM_ENGINE, "error_fixing", f"@{temp_path}"],
+            capture_output=True,
+            text=True
+        )
+        if process.returncode == 0:
+            print(f"IQ400 Watcher: Swarm remediation SUCCESS for {filepath}")
+        else:
+            print(f"IQ400 Watcher: Swarm remediation FAILED for {filepath}: {process.stderr}", file=sys.stderr)
+    except Exception as e:
+        print(f"IQ400 Watcher: Critical failure in background swarm: {e}", file=sys.stderr)
+    finally:
+        # Release resource
+        swarm_semaphore.release()
+        # Clean up context file
+        if os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except:
+                pass
 
 class SDLCWatcherHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.is_directory:
             return
-        # Only watch source files
         if event.src_path.endswith(('.py', '.js', '.json', '.tf')):
-            if "STRATEGIC_OMNISCIENT_AUDIT" in event.src_path or "AUDIT_LOG" in event.src_path:
+            # Ignore audit reports and design docs to prevent loops
+            if any(x in event.src_path for x in ["STRATEGIC", "AUDIT", "REPORT", "BLUEPRINT", "PLAN", "DESIGN"]):
                 return
 
-            # Simple debounce: wait a moment for the save to complete
-            time.sleep(0.5)
-            print(f"IQ400 Watcher: Change detected in {event.src_path}. Triggering Full-Spectrum Audit...")
+            time.sleep(1.0) # Debounce
             self.run_full_audit(event.src_path)
 
     def run_full_audit(self, filepath):
         all_issues = []
 
-        # 1. Structural Scan (super_scanner)
+        # 1. Structural Scan
         res_super = subprocess.run([sys.executable, SUPER_SCANNER, filepath], capture_output=True, text=True)
         if "No implementation gaps detected" not in res_super.stdout:
             all_issues.append(f"Structural Gaps:\n{res_super.stdout}")
 
-        # 2. Security Scan (security_scanner)
+        # 2. Security Scan
         res_sec = subprocess.run([sys.executable, SECURITY_SCANNER, filepath], capture_output=True, text=True)
         if "PASS" not in res_sec.stdout:
             all_issues.append(f"Security Vulnerabilities:\n{res_sec.stdout}")
 
-        # 3. Logic Scan (deep_analyzer)
+        # 3. Logic Scan
         res_logic = subprocess.run([sys.executable, DEEP_ANALYZER, filepath], capture_output=True, text=True)
         if "fully operational" not in res_logic.stdout:
-            all_issues.append(f"Logic Gaps (Dead Ends/Blind Spots):\n{res_logic.stdout}")
+            all_issues.append(f"Logic Gaps:\n{res_logic.stdout}")
 
         if all_issues:
-            aggregated_report = "\n---\n".join(all_issues)
-            print(f"IQ400 Watcher: Issues detected in {filepath}. Initializing Swarm remediation...")
-            self.trigger_remediation(filepath, aggregated_report)
+            self.trigger_remediation(filepath, "\n---\n".join(all_issues))
         else:
-            print(f"IQ400 Watcher: {filepath} verified clean (PASS).")
+            print(f"IQ400 Watcher: {filepath} verified clean.")
 
     def trigger_remediation(self, filepath, report):
         if not swarm_semaphore.acquire(blocking=False):
-            print(f"IQ400 Watcher: Max concurrent swarms reached. Skipping remediation for {filepath} to maintain stability.")
+            print(f"IQ400 Watcher: Max concurrent swarms reached. Skipping {filepath}.")
             return
 
         try:
-            # Prepare context
             context = {
                 "file": filepath,
                 "audit_report": report,
@@ -78,23 +98,15 @@ class SDLCWatcherHandler(FileSystemEventHandler):
                 "action": "autonomous_fix"
             }
 
-            # Pass context via temporary file to avoid shell argument length limits (ARG_MAX)
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tf:
-                json.dump(context, tf)
-                temp_path = tf.name
+            fd, temp_path = tempfile.mkstemp(suffix='.json', prefix='swarm_ctx_')
+            with os.fdopen(fd, 'w') as f:
+                json.dump(context, f)
 
-            # Dispatch swarm engine (it should be updated to accept a file path)
-            # For backward compatibility, we will pass the file path prefixed with @
-            subprocess.Popen(
-                [sys.executable, SWARM_ENGINE, "error_fixing", f"@{temp_path}"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-            print(f"IQ400 Watcher: Swarm engine dispatched for {filepath} (Context: {temp_path})")
-        finally:
-            # Note: In a real implementation, the semaphore should be released
-            # when the background process finishes. This simple version
-            # releases immediately to allow the next file change.
+            # Spawn a thread to manage the lifecycle of the swarm process
+            Thread(target=run_background_swarm, args=(filepath, report, temp_path)).start()
+            print(f"IQ400 Watcher: Swarm engine dispatched for {filepath} in background.")
+        except Exception as e:
+            print(f"IQ400 Watcher: Failed to trigger remediation: {e}", file=sys.stderr)
             swarm_semaphore.release()
 
 if __name__ == "__main__":
@@ -103,8 +115,7 @@ if __name__ == "__main__":
     observer = Observer()
     observer.schedule(event_handler, path, recursive=True)
     observer.start()
-    print(f"IQ400 Watcher (v2.0): Monitoring {path} for stubs, security flaws, and logical gaps...")
-    print(f"Concurrency Limit: {MAX_CONCURRENT_SWARMS}")
+    print(f"IQ400 Watcher (v3.0): Monitoring {path}...")
     try:
         while True:
             time.sleep(1)

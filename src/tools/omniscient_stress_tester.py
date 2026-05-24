@@ -20,8 +20,13 @@ CHAOS_TEMPLATES = [
 ]
 
 def log_report(message):
-    with open(REPORT_PATH, "a") as f:
-        f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n")
+    """Logs a message to the stress test report and stdout."""
+    try:
+        with open(REPORT_PATH, "a") as f:
+            f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n")
+        print(message)
+    except Exception as e:
+        print(f"Error writing to log: {e}", file=sys.stderr)
 
 def run_scanner():
     result = subprocess.run(

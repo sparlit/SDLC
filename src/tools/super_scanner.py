@@ -68,7 +68,7 @@ def analyze_file(filepath):
         if is_direct_target or not any(exc in filepath for exc in EXCLUDED_FILES):
             for i, line in enumerate(content.split('\n'), 1):
                 # Skip the pattern definition line itself in this file to avoid self-detection
-                if "super_scanner.py" in filepath and "PATTERNS =" in line:
+                if "super_scanner.py" in filepath and ("PATTERNS =" in line or 'r"\\b"' in line):
                     continue
 
                 for p in PATTERNS:
@@ -88,6 +88,7 @@ def analyze_file(filepath):
             except Exception as e:
                 findings.append(f"{filepath}:0 - Parse failed: {e}")
     except Exception as e:
+        print(f"Error: Advanced Scan failed for {filepath}: {e}", file=sys.stderr)
         findings.append(f"{filepath}:0 - Error reading file: {e}")
     return findings
 

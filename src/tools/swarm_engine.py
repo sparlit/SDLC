@@ -21,9 +21,10 @@ CHROMA_PATH = os.path.join(PROJECT_PATH, ".chroma_db")
 if not os.path.exists(CHROMA_PATH):
     try:
         os.makedirs(CHROMA_PATH, exist_ok=True)
-    except Exception:
+    except Exception as e:
         # Fallback to temp if project path is read-only
         import tempfile
+        print(f"Warning: Failed to create ChromaDB path at {CHROMA_PATH}: {e}. Falling back to temp.", file=sys.stderr)
         CHROMA_PATH = os.path.join(tempfile.gettempdir(), "iq400_chroma_db")
         os.makedirs(CHROMA_PATH, exist_ok=True)
 
@@ -35,7 +36,8 @@ def load_system_prompt(role: str) -> str:
         with open(PROMPTS_FILE, 'r') as f:
             prompts = json.load(f)
             return prompts.get("system_prompts", {}).get(role, prompts["system_prompts"].get("development", ""))
-    except Exception:
+    except Exception as e:
+        print(f"Warning: Failed to load system prompt for {role}: {e}", file=sys.stderr)
         return "You are a professional software engineer."
 
 async def call_llm(model: str, messages: List[Dict[str, str]], temperature=0.7) -> str:
@@ -113,10 +115,17 @@ async def main():
 
     stage = sys.argv[1]
     try:
-        # Prevent shell injection by using base64 for complex context
-        context_json = base64.b64decode(sys.argv[2]).decode('utf-8')
-        context = json.loads(context_json)
-    except Exception:
+        raw_context = sys.argv[2]
+        if raw_context.startswith('@'):
+            # Load context from file
+            with open(raw_context[1:], 'r') as f:
+                context = json.load(f)
+        else:
+            # Prevent shell injection by using base64 for complex context
+            context_json = base64.b64decode(raw_context).decode('utf-8')
+            context = json.loads(context_json)
+    except Exception as e:
+        print(f"Error: Failed to load context: {e}", file=sys.stderr)
         sys.exit(1)
 
     result = await FractalSwarm(stage, context).run_swarm()

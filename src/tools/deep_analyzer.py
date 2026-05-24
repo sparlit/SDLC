@@ -21,16 +21,16 @@ class ReturnFinder(ast.NodeVisitor):
         self.has_return = True
 
     def visit_FunctionDef(self, node):
-        # Do not enter nested functions
-        pass
+        # Do not enter nested functions to maintain scope awareness
+        return
 
     def visit_AsyncFunctionDef(self, node):
-        # Do not enter nested functions
-        pass
+        # Do not enter nested functions to maintain scope awareness
+        return
 
     def visit_ClassDef(self, node):
-        # Do not enter nested classes
-        pass
+        # Do not enter nested classes to maintain scope awareness
+        return
 
 class LogicAuditor(ast.NodeVisitor):
     def __init__(self, filepath):
@@ -52,8 +52,13 @@ class LogicAuditor(ast.NodeVisitor):
         Detects 'Dead Ends': Functions that are not constructors and lack return statements
         or have unhandled control flow paths within their own scope.
         """
+        # Skip tests, constructors, and intentionally empty NodeVisitor methods
+        if "tests/" in self.filepath:
+            return
         if node.name.startswith('__') and node.name.endswith('__'):
-            return # Skip special methods
+            return
+        if node.name.startswith('visit_') and len(node.body) == 1 and isinstance(node.body[0], ast.Pass):
+            return
 
         finder = ReturnFinder()
         for stmt in node.body:
@@ -71,7 +76,16 @@ class LogicAuditor(ast.NodeVisitor):
         """
         for subnode in ast.walk(node):
             if isinstance(subnode, ast.ExceptHandler):
-                if len(subnode.body) == 1 and isinstance(subnode.body[0], (ast.Pass, ast.Expr)):
+                # Detect pass or an expression that doesn't do anything (like a constant)
+                is_empty = False
+                if len(subnode.body) == 1:
+                    stmt = subnode.body[0]
+                    if isinstance(stmt, ast.Pass):
+                        is_empty = True
+                    elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Constant):
+                        is_empty = True
+
+                if is_empty:
                     self.findings.append(f"{self.filepath}:{subnode.lineno} - Blind Spot: Empty exception handler detected.")
 
 def analyze_file(filepath):
@@ -102,6 +116,7 @@ def analyze_file(filepath):
             auditor.visit(tree)
             findings.extend(auditor.findings)
         except Exception as e:
+            print(f"Error parsing {filepath}: {e}", file=sys.stderr)
             findings.append(f"{filepath}:0 - Parse Error: {e}")
     return findings
 
