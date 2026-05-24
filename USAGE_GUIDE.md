@@ -8,9 +8,15 @@ Welcome to the definitive guide for operating the IQ400 'Omniscient' Zenith engi
 
 If you want to get up and running immediately with default settings:
 
+### 🐧 Linux / macOS
 ```bash
 chmod +x bootstrap.sh
 ./bootstrap.sh
+```
+
+### 🪟 Windows (PowerShell)
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; .\bootstrap.ps1
 ```
 
 This script will:
